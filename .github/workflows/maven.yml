@@ -25,4 +25,4 @@ jobs:
       run: mvn -B package --file pom.xml
       
     - name: Run code analysis
-      run: mvn sonar:sonar
+      run: mvn sonar:sonar -Dsonar.projectKey=pos-my_boot-rest-api-interview -Dsonar.organization=pos-my -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_LOGIN }}
