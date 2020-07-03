@@ -14,4 +14,13 @@ Full list of dependencies can be found in [pom.xml][1].
   - Each implementation should be equipped with unit tests
   - Integration tests are require to demonstrate API usages
   
+## Nice to Have:
+It will be an advantage for candidates to demonstrate the following:
+
+  - proper usage of Http Methods and REST practices
+  - understanding of [SOLID Principle][2]
+  - understanding of Design patterns
+  - understanding of TDD and BDD
+    
 [1]: pom.xml
+[2]: https://en.wikipedia.org/wiki/SOLID
