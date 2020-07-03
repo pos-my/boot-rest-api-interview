@@ -28,6 +28,6 @@ jobs:
       run: mvn -B package --file pom.xml
       
     - name: Run code analysis
-      run: mvn sonar:sonar -Dsonar.projectKey=pos-my_boot-rest-api-interview -Dsonar.organization=pos-my -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_LOGIN }}
+      run: mvn sonar:sonar -Dsonar.projectKey=pos-my_boot-rest-api-interview -Dsonar.organization=pos-my -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Dsonar.coverage.jacoco.xmlReportPaths=target/surefire-reports/TEST-*.xml
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
