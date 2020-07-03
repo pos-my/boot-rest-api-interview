@@ -28,6 +28,6 @@ jobs:
       run: mvn -B package --file pom.xml
       
     - name: Run code analysis
-      run: mvn test sonar:sonar -Dsonar.projectKey=pos-my_boot-rest-api-interview -Dsonar.organization=pos-my -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Dsonar.junit.reportPaths=target/surefire-reports/TEST-*.xml
+      run: mvn sonar:sonar -Dsonar.projectKey=pos-my_boot-rest-api-interview -Dsonar.organization=pos-my -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_LOGIN }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
