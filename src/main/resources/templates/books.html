@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Book Manager</title>
+</head>
+<body>
+<div align="center">	
+	<div sec:authorize="isAuthenticated()">
+		Welcome <b><span sec:authentication="name">Username</span></b>
+		&nbsp;
+		<i><span sec:authentication="principal.authorities"></span></i>
+	</div>
+		
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Logout" />
+	</form>
+	
+	<h1>Book Manager</h1>
+	<div sec:authorize="hasAuthority('LIBRARIAN')">
+		<a th:href="@{'/create-book'}">Create New Book</a>
+	</div>
+	
+	<br/><br/>
+	<table border="1" cellpadding="10">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Code</th>
+				<th>Title</th>
+				<th>Status</th>
+				
+				<th sec:authorize="hasAnyAuthority('LIBRARIAN','MEMBER')">Actions</th>				
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="book : ${listBooks}">
+				<td th:text="${book.id}">ID</td>
+				<td th:text="${book.code}">Code</td>
+				<td th:text="${book.title}">Title</td>
+				<td th:text="${book.status}">Status</td>
+				
+				<td sec:authorize="hasAuthority('LIBRARIAN')">
+					<a th:href="@{'/update-book/' + ${book.id}}">Update</a>			
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<form action="#" th:action="@{'/books/delete/' + ${book.id}}" method="post">
+						<button type="submit">Delete</button>
+					</form>
+				</td>
+				<td sec:authorize="hasAuthority('MEMBER')">
+					<div th:if="${#strings.equals(book.status, 'AVAILABLE')}">
+						<form action="#" th:action="@{'/books/borrow/' + ${book.id}}" method="post">
+							<button type="submit">Borrow</button>
+						</form>
+					</div>
+					<div th:if="${#strings.equals(book.status, 'BORROWED')}">
+						<form action="#" th:action="@{'/books/return/' + ${book.id}}" method="post">
+							<button type="submit">Return</button>
+						</form>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>

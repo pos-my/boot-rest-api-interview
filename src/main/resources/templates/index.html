@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Book Rental</title>
+</head>
+<body>
+<div align="center">	
+	<div sec:authorize="isAuthenticated()">
+		Welcome <b><span sec:authentication="name">Username</span></b>
+		&nbsp;
+		<i><span sec:authentication="principal.authorities"></span></i>
+	</div>
+		
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Logout" />
+	</form>
+	
+	<h1>Book Manager</h1>
+	<div>
+		<a th:href="@{'/view-books'}">Book Listing</a>
+	</div>
+	
+	<br/><br/>
+	
+	<h1>User Manager</h1>
+	<div>
+		<a th:href="@{'/view-users'}">User Listing</a>
+	</div>
+</div>
+</body>
+</html>
