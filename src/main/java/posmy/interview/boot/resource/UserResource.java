@@ -6,9 +6,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.sun.istack.internal.NotNull;
 
 import posmy.interview.boot.dto.UserDto;
 import posmy.interview.boot.service.UserService;
@@ -21,19 +18,19 @@ public class UserResource {
 	private UserService userService;
 	
 	@PostMapping("/new")
-	public String createNewUser(@NotNull @ModelAttribute("user") UserDto userDto) {
+	public String createNewUser(@ModelAttribute("user") UserDto userDto) {
 		userService.saveUser(userDto);
 		return "redirect:/view-users";
 	}
 
 	@PostMapping("/update")
-	public String updateUser(@NotNull @ModelAttribute("user") UserDto userDto) {
+	public String updateUser(@ModelAttribute("user") UserDto userDto) {
 		userService.updateUser(userDto);
 		return "redirect:/view-users";
 	}
 
 	@PostMapping("/delete/{id}")
-	public String deleteUser(@NotNull @PathVariable Long id) {
+	public String deleteUser(@PathVariable Long id) {
 		userService.deleteUserById(id);
 		return "redirect:/view-users";
 	}
