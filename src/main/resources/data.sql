@@ -10,8 +10,9 @@ insert into ROLES (ID, NAME) values(4, 'TEST');
 insert into USERS (ID, NAME, USERNAME, PASSWORD, ENABLED) values(1, 'Alex',  'alex', '$2a$10$.tP2OH3dEG0zms7vek4ated5AiQ.EGkncii0OpCcGq4bckS9NOULu', 1);
 -- Login with username = john, password = john
 insert into USERS (ID, NAME, USERNAME, PASSWORD, ENABLED) values(2, 'John', 'john', '$2a$10$E2UPv7arXmp3q0LzVzCBNeb4B4AtbTAGjkefVDnSztOwE7Gix6kea', 1);
+-- Login with username = alextest, password = alex
 insert into USERS (ID, NAME, USERNAME, PASSWORD, ENABLED) values(3, 'Alex-test',  'alextest', '$2a$10$.tP2OH3dEG0zms7vek4ated5AiQ.EGkncii0OpCcGq4bckS9NOULu', 1);
--- Login with username = john, password = john
+-- Login with username = johntest, password = john
 insert into USERS (ID, NAME, USERNAME, PASSWORD, ENABLED) values(4, 'John-test', 'johntest', '$2a$10$E2UPv7arXmp3q0LzVzCBNeb4B4AtbTAGjkefVDnSztOwE7Gix6kea', 1);
 
 

@@ -34,6 +34,12 @@ public class AppResource {
 		ModelAndView mav = new ModelAndView("index");
 		return mav;
 	}
+	
+	@GetMapping("/403")
+	public ModelAndView forbiddenPage(Model model) {
+		ModelAndView mav = new ModelAndView("403");
+		return mav;
+	}
 
 	@GetMapping("/view-books")
 	public ModelAndView viewBookPage(Model model) {
