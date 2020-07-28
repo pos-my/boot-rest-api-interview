@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import posmy.interview.boot.model.Book.BookStatus;
 
 @Entity
 @Data
@@ -38,7 +37,9 @@ public class Role implements Serializable {
 	
 	public enum RoleName {
 		LIBRARIAN("Librarian"),
-		MEMBER("Member");
+		MEMBER("Member"),
+		ADMIN("ADMIN"),
+		TEST("TEST");
 		
 		private String displayValue;
 		

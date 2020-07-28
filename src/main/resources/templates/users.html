@@ -49,7 +49,7 @@
 				<td th:text="${user.enabled}">Enabled</td>
 				
 				<td sec:authorize="hasAnyAuthority('LIBRARIAN','MEMBER')">
-					<a th:href="@{'/update-user/' + ${user.id}}">Update</a>			
+					<a sec:authorize="hasAuthority('LIBRARIAN')" th:href="@{'/update-user/' + ${user.id}}">Update</a>			
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<form sec:authorize="hasAnyAuthority('LIBRARIAN','MEMBER')" action="#" th:action="@{'/users/delete/' + ${user.id}}" method="post">
 						<button type="submit">Delete</button>
