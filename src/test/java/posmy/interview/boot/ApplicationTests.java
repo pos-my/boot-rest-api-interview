@@ -1,30 +1,38 @@
 package posmy.interview.boot;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 class ApplicationTests {
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private WebApplicationContext context;
+
+    private MockMvc mvc;
+
+    @BeforeEach
+    void setup() {
+        mvc = webAppContextSetup(context).apply(springSecurity()).build();
+    }
 
     @Test
     @DisplayName("Users must be authorized in order to perform actions")
-    void contextLoads() {
-        var response = restTemplate.getForEntity("/", String.class);
-
-        assertThat(response)
-                .extracting(ResponseEntity::getStatusCode)
-                .isEqualTo(FORBIDDEN);
+    void contextLoads() throws Exception {
+        mvc.perform(get("/"))
+                .andExpect(status().isUnauthorized());
     }
 
 }
