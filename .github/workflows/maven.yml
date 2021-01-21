@@ -24,10 +24,13 @@ jobs:
       with:
         java-version: 11.0.4
         
+    - name: Amend permission for maven wrapper
+      run: chmod +x mvnw
+          
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: ./mvnw -B package --file pom.xml
       
     - name: Run code analysis
-      run: mvn sonar:sonar -Dsonar.projectKey=pos-my_boot-rest-api-interview -Dsonar.organization=pos-my -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Dsonar.coverage.jacoco.xmlReportPaths=target/surefire-reports/TEST-*.xml
+      run: ./mvn sonar:sonar -Dsonar.projectKey=pos-my_boot-rest-api-interview -Dsonar.organization=pos-my -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Dsonar.coverage.jacoco.xmlReportPaths=target/surefire-reports/TEST-*.xml
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
