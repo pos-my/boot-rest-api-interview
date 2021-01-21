@@ -17,14 +17,14 @@ class ApplicationTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Test
-    @DisplayName("Users must be authorized in order to perform actions")
-    void contextLoads() {
-        var response = restTemplate.getForEntity("/", String.class);
-
-        assertThat(response)
-                .extracting(ResponseEntity::getStatusCode)
-                .isEqualTo(FORBIDDEN);
-    }
+//    @Test
+//    @DisplayName("Users must be authorized in order to perform actions")
+//    void contextLoads() {
+//        var response = restTemplate.getForEntity("/", String.class);
+//
+//        assertThat(response)
+//                .extracting(ResponseEntity::getStatusCode)
+//                .isEqualTo(FORBIDDEN);
+//    }
 
 }
