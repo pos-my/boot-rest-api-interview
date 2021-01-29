@@ -1,4 +1,4 @@
-# Java Interview Assignment ![Java CI with Maven](https://github.com/pos-my/boot-rest-api-interview/workflows/Java%20CI%20with%20Maven/badge.svg)
+# Java Interview Assignment ![Java CI with Maven](https://github.com/pos-my/boot-rest-api-interview/workflows/Java%20CI%20with%20Maven/badge.svg) ![CodeQL](https://github.com/pos-my/boot-rest-api-interview/workflows/CodeQL/badge.svg)
 Spring Boot application that will be used by our candidates to implement interview assignment.
 
 ## Dependencies
