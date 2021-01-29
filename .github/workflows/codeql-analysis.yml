@@ -38,7 +38,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Setup JDK
-      uses: actions/setp-java@1
+      uses: actions/setup-java@1
       with:
         java-version: 11
         
