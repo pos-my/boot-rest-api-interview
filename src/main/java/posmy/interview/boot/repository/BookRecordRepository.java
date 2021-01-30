@@ -6,5 +6,5 @@ import posmy.interview.boot.entity.BookRecordEntity;
 
 @Repository
 public interface BookRecordRepository extends JpaRepository<BookRecordEntity, Long> {
-    BookRecordEntity findByMemberIdAndBookId(long memberId, long bookId);
+    BookRecordEntity findByUserIdAndBookId(long memberId, long bookId);
 }

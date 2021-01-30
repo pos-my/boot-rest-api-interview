@@ -14,8 +14,8 @@ public class BookRecordEntity {
     @Column(name = "ID")
     private long id;
 
-    @Column(name = "MEMBER_ID")
-    private long memberId;
+    @Column(name = "USER_ID")
+    private long userId;
 
     @Column(name = "BOOK_ID")
     private long bookId;

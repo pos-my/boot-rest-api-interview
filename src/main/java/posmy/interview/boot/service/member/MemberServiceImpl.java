@@ -47,7 +47,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member getMember(long memberId) throws NoDataFoundException {
         log.info("Get member by id {}", memberId);
-        log.info("Name of Member: {}", SecurityContextHolder.getContext().getAuthentication().getName());
         MemberEntity memberEntity = memberRepository.findById(memberId).orElseThrow(() -> new NoDataFoundException("Member not found"));
         return modelMapper.map(memberEntity, Member.class);
     }

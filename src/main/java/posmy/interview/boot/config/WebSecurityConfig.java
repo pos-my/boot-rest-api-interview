@@ -1,23 +1,45 @@
 package posmy.interview.boot.config;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import posmy.interview.boot.enums.Roles;
+import posmy.interview.boot.service.user.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsServiceImpl();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("member").password("{noop}member").roles(Roles.MEMBER.name())
-                .and()
-                .withUser("librarian").password("{noop}librarian").roles(Roles.MEMBER.name(), Roles.LIBRARIAN.name());
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authenticationProvider());
     }
 
     @Override
@@ -25,14 +47,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic()
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/book/**").hasRole(Roles.MEMBER.name())
-                .antMatchers(HttpMethod.POST, "/api/book-record").hasRole(Roles.MEMBER.name())
-                .antMatchers(HttpMethod.GET, "/api/book", "/api/member",  "/api/librarian").hasRole(Roles.LIBRARIAN.name())
-                .antMatchers(HttpMethod.POST, "/api/book", "/api/member", "/api/librarian").hasRole(Roles.LIBRARIAN.name())
-                .antMatchers(HttpMethod.PUT, "/api/book", "/api/member", "/api/librarian").hasRole(Roles.LIBRARIAN.name())
-                .antMatchers(HttpMethod.DELETE, "/api/book", "/api/member", "/api/librarian").hasRole(Roles.LIBRARIAN.name())
-                .antMatchers(HttpMethod.PATCH, "/api/book", "/api/member", "/api/librarian").hasRole(Roles.LIBRARIAN.name())
-                .antMatchers("/h2/**").permitAll();
+                .antMatchers("/api/book", "/api/member",  "/api/librarian").hasAuthority(Roles.LIBRARIAN.name())
+                .antMatchers(HttpMethod.GET, "/api/book/**").hasAuthority(Roles.MEMBER.name())
+                .antMatchers(HttpMethod.POST, "/api/book-record").hasAuthority(Roles.MEMBER.name())
+                .antMatchers(HttpMethod.DELETE, "/api/user").hasAuthority(Roles.MEMBER.name())
+                .antMatchers(HttpMethod.DELETE, "/api/user/**").hasAuthority(Roles.LIBRARIAN.name())
+                .antMatchers(HttpMethod.GET, "/api/user/**").hasAuthority(Roles.LIBRARIAN.name())
+                .antMatchers(HttpMethod.PATCH, "/api/user").hasAuthority(Roles.LIBRARIAN.name())
+                .antMatchers(HttpMethod.POST, "/api/user").permitAll()
+                .antMatchers("/h2/**").permitAll()
+                .anyRequest().authenticated();
         http.csrf().disable();
         http.headers().frameOptions().disable();
     }
