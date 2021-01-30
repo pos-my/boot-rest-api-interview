@@ -31,7 +31,7 @@ class ApplicationTests {
     @Test
     @DisplayName("Users must be authorized in order to perform actions")
     void contextLoads() throws Exception {
-        mvc.perform(get("/"))
+        mvc.perform(get("/api/book"))
                 .andExpect(status().isUnauthorized());
     }
 
