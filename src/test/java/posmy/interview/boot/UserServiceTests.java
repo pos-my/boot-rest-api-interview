@@ -16,6 +16,8 @@ import posmy.interview.boot.repository.UsersRepository;
 import posmy.interview.boot.service.user.UserService;
 import posmy.interview.boot.service.user.UserServiceImpl;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -58,5 +60,14 @@ public class UserServiceTests {
         when(rolesRepository.findByName(any(String.class))).thenReturn(new RolesEntity());
         UsersEntity usersEntity = userService.registerNewUser(createUserRequest);
         assertThat(usersEntity).isNotNull();
+    }
+
+    @Test
+    void should_return_user() throws Exception {
+        UsersEntity expectedUserEntity = new UsersEntity();
+        expectedUserEntity.setUsername("testUser");
+        when(usersRepository.findById(any(Long.class))).thenReturn(Optional.of(expectedUserEntity));
+        UsersEntity usersEntity = userService.getUser(any(Long.class));
+        assertThat(usersEntity.getUsername()).isEqualTo(expectedUserEntity.getUsername());
     }
 }
