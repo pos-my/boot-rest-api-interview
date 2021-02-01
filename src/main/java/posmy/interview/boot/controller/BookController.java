@@ -23,12 +23,8 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping(value = "/{bookId}")
-    public ResponseEntity<Book> getBook(@PathVariable long bookId) {
-        try {
-            return ResponseEntity.ok(bookService.getBook(bookId));
-        } catch (NoDataFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book Not Found", e);
-        }
+    public ResponseEntity<Book> getBook(@PathVariable long bookId) throws NoDataFoundException {
+        return ResponseEntity.ok(bookService.getBook(bookId));
     }
 
     @GetMapping(value = "/available")

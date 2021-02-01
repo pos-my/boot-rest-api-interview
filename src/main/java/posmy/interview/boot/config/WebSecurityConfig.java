@@ -1,6 +1,5 @@
 package posmy.interview.boot.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,7 +15,6 @@ import posmy.interview.boot.service.user.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -47,13 +45,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/book", "/api/member",  "/api/librarian").hasAuthority(Roles.LIBRARIAN.name())
-                .antMatchers(HttpMethod.GET, "/api/book/**").hasAuthority(Roles.MEMBER.name())
-                .antMatchers(HttpMethod.POST, "/api/book-record").hasAuthority(Roles.MEMBER.name())
-                .antMatchers(HttpMethod.DELETE, "/api/user").hasAuthority(Roles.MEMBER.name())
-                .antMatchers(HttpMethod.DELETE, "/api/user/**").hasAuthority(Roles.LIBRARIAN.name())
-                .antMatchers(HttpMethod.GET, "/api/user/**").hasAuthority(Roles.LIBRARIAN.name())
-                .antMatchers(HttpMethod.PATCH, "/api/user").hasAuthority(Roles.LIBRARIAN.name())
+                .antMatchers("/api/book", "/api/member",  "/api/librarian").hasAnyAuthority(Roles.LIBRARIAN.name())
+                .antMatchers(HttpMethod.GET, "/api/book/**").hasAnyAuthority(Roles.MEMBER.name())
+                .antMatchers(HttpMethod.POST, "/api/book-record").hasAnyAuthority(Roles.MEMBER.name())
+                .antMatchers(HttpMethod.DELETE, "/api/user").hasAnyAuthority(Roles.MEMBER.name())
+                .antMatchers(HttpMethod.DELETE, "/api/user/**").hasAnyAuthority(Roles.LIBRARIAN.name())
+                .antMatchers(HttpMethod.GET, "/api/user/**").hasAnyAuthority(Roles.LIBRARIAN.name())
+                .antMatchers(HttpMethod.PATCH, "/api/user").hasAnyAuthority(Roles.LIBRARIAN.name())
                 .antMatchers(HttpMethod.POST, "/api/user").permitAll()
                 .antMatchers("/h2/**").permitAll()
                 .anyRequest().authenticated();
