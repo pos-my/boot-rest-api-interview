@@ -35,5 +35,11 @@ It will be an advantage for candidates to demonstrate the following:
   - understanding of Design patterns
   - understanding of TDD and BDD
     
+## Submission:
+Candidates can submit their assignments via:
+  - [Pull Request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) (preferred)
+  - Cloud storage of their choice
+  - Email
+
 [1]: pom.xml
 [2]: https://en.wikipedia.org/wiki/SOLID
