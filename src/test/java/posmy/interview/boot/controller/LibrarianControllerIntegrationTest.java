@@ -34,17 +34,17 @@ public class LibrarianControllerIntegrationTest {
     }
 
     @Test
-    public void getWithMemberAuthorizationThenReturnSuccess() {
+    public void getWithMemberAuthorizationThenForbidden() {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION,
-                authorizationToken("user001:pass"));
+                authorizationToken("user002:pass"));
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
                 absoluteUrl("/get"),
                 HttpMethod.GET,
                 httpEntity,
                 String.class);
-        assertThat(responseEntity.getBody()).isEqualTo("success");
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 
     @Test
