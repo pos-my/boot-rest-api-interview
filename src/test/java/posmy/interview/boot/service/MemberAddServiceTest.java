@@ -5,11 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import posmy.interview.boot.enums.MyRole;
 import posmy.interview.boot.error.CreateDuplicateUserException;
@@ -22,11 +23,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MemberAddServiceTest {
 
-    @Spy
-    private final InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
+    private final InMemoryUserDetailsManager inMemoryUserDetailsManager = spy(new InMemoryUserDetailsManager());
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @InjectMocks
-    private MemberAddService memberAddService;
+    private final MemberAddService memberAddService = new MemberAddService(inMemoryUserDetailsManager, passwordEncoder);
 
     @Captor
     private final ArgumentCaptor<UserDetails> userDetailsCaptor = ArgumentCaptor.forClass(UserDetails.class);
@@ -44,6 +44,7 @@ class MemberAddServiceTest {
     @Test
     void whenMemberAddThenSuccess() {
         UserDetails expectedUser = User.withUsername(request.getUser())
+                .passwordEncoder(passwordEncoder::encode)
                 .password(request.getPass())
                 .roles(MyRole.MEMBER.name())
                 .build();
@@ -52,8 +53,12 @@ class MemberAddServiceTest {
         verify(inMemoryUserDetailsManager, times(1))
                 .createUser(userDetailsCaptor.capture());
         assertThat(userDetailsCaptor.getValue())
-                .usingRecursiveComparison()
+                .usingRecursiveComparison().ignoringFields("password")
                 .isEqualTo(expectedUser);
+        assertThat(passwordEncoder.matches(
+                request.getPass(),
+                userDetailsCaptor.getValue().getPassword()))
+                .isTrue();
     }
 
     @Test
