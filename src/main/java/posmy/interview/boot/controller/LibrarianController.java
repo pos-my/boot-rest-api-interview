@@ -27,22 +27,22 @@ public class LibrarianController {
         this.bookDeleteService = bookDeleteService;
     }
 
-    @GetMapping("/get")
+    @GetMapping
     public String get() {
         return "success";
     }
 
-    @PostMapping("/book/add")
+    @PostMapping("/book")
     public Book bookAdd(@RequestBody @Validated BookAddRequest request) {
         return bookAddService.execute(request);
     }
 
-    @PutMapping("/book/put")
+    @PutMapping("/book")
     public Book bookPut(@RequestBody @Validated BookPutRequest request) {
         return bookPutService.execute(request);
     }
 
-    @DeleteMapping("book/delete/{id}")
+    @DeleteMapping("book/{id}")
     public void bookDelete(@PathVariable("id") String id) {
         bookDeleteService.execute(
                 BookDeleteRequest.builder()

@@ -69,7 +69,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
         HttpEntity<MemberAddRequest> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/member/add"),
+                absoluteUrl("/member"),
                 HttpMethod.POST,
                 httpEntity,
                 String.class);
@@ -92,7 +92,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
         HttpEntity<MemberAddRequest> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/member/add"),
+                absoluteUrl("/member"),
                 HttpMethod.POST,
                 httpEntity,
                 String.class);
@@ -117,7 +117,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
         HttpEntity<MemberPatchRequest> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/member/patch/" + existingUser.getUsername()),
+                absoluteUrl("/member/" + existingUser.getUsername()),
                 HttpMethod.PATCH,
                 httpEntity,
                 String.class);
@@ -147,7 +147,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
         HttpEntity<MemberPatchRequest> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/member/patch/" + existingUser.getUsername()),
+                absoluteUrl("/member/" + existingUser.getUsername()),
                 HttpMethod.PATCH,
                 httpEntity,
                 String.class);
@@ -177,7 +177,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
         HttpEntity<MemberPatchRequest> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/member/patch/" + existingUser.getUsername()),
+                absoluteUrl("/member/" + existingUser.getUsername()),
                 HttpMethod.PATCH,
                 httpEntity,
                 String.class);

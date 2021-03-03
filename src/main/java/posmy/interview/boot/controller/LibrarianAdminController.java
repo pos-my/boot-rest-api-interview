@@ -22,17 +22,17 @@ public class LibrarianAdminController {
         this.memberPatchService = memberPatchService;
     }
 
-    @GetMapping("/member/get")
+    @GetMapping("/member")
     public String get() {
         return "success";
     }
 
-    @PostMapping("/member/add")
+    @PostMapping("/member")
     public EmptyResponse memberAdd(@RequestBody @Validated MemberAddRequest request) {
         return memberAddService.execute(request);
     }
 
-    @PatchMapping("/member/patch/{user}")
+    @PatchMapping("/member/{user}")
     public EmptyResponse memberAdd(@PathVariable("user") String user,
                                    @RequestBody @Validated MemberPatchRequest request) {
         request.setUser(user);

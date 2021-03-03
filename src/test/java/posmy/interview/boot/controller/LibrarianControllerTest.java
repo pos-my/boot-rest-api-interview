@@ -58,7 +58,7 @@ public class LibrarianControllerTest {
         when(bookAddService.execute(request))
                 .thenReturn(new Book());
 
-        mockMvc.perform(post("/v1/librarian/book/add")
+        mockMvc.perform(post("/v1/librarian/book")
                         .characterEncoding(StandardCharsets.UTF_8.name())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(request))
@@ -83,7 +83,7 @@ public class LibrarianControllerTest {
                 .imageUrl("http://image")
                 .build();
 
-        mockMvc.perform(post("/v1/librarian/book/add")
+        mockMvc.perform(post("/v1/librarian/book")
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -105,7 +105,7 @@ public class LibrarianControllerTest {
         when(bookPutService.execute(request))
                 .thenReturn(new Book());
 
-        mockMvc.perform(put("/v1/librarian/book/put")
+        mockMvc.perform(put("/v1/librarian/book")
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -126,7 +126,7 @@ public class LibrarianControllerTest {
                 .status(BookStatus.AVAILABLE)
                 .build();
 
-        mockMvc.perform(put("/v1/librarian/book/put")
+        mockMvc.perform(put("/v1/librarian/book")
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -145,7 +145,7 @@ public class LibrarianControllerTest {
                 .status(BookStatus.BORROWED)
                 .build();
 
-        mockMvc.perform(put("/v1/librarian/book/put")
+        mockMvc.perform(put("/v1/librarian/book")
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -164,7 +164,7 @@ public class LibrarianControllerTest {
                 .status(null)
                 .build();
 
-        mockMvc.perform(put("/v1/librarian/book/put")
+        mockMvc.perform(put("/v1/librarian/book")
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -180,7 +180,7 @@ public class LibrarianControllerTest {
                 .id(deleteId)
                 .build();
 
-        mockMvc.perform(delete("/v1/librarian/book/delete/" + deleteId)
+        mockMvc.perform(delete("/v1/librarian/book/" + deleteId)
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -196,7 +196,7 @@ public class LibrarianControllerTest {
                 .id(deleteId)
                 .build();
 
-        mockMvc.perform(delete("/v1/librarian/book/delete/" + deleteId)
+        mockMvc.perform(delete("/v1/librarian/book/" + deleteId)
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())

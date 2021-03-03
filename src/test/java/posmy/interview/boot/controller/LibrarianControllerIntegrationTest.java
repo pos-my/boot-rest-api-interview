@@ -46,7 +46,7 @@ public class LibrarianControllerIntegrationTest {
     public void getWithLibrarianAuthorizationThenReturnSuccess() {
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/get"),
+                absoluteUrl(""),
                 HttpMethod.GET,
                 httpEntity,
                 String.class);
@@ -60,7 +60,7 @@ public class LibrarianControllerIntegrationTest {
                 List.of(authorizationToken("user002:pass")));
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/get"),
+                absoluteUrl(""),
                 HttpMethod.GET,
                 httpEntity,
                 String.class);
@@ -73,7 +73,7 @@ public class LibrarianControllerIntegrationTest {
         headers.remove(HttpHeaders.AUTHORIZATION);
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/get"),
+                absoluteUrl(""),
                 HttpMethod.GET,
                 httpEntity,
                 String.class);
@@ -87,7 +87,7 @@ public class LibrarianControllerIntegrationTest {
                 List.of("anyInvalid"));
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/get"),
+                absoluteUrl(""),
                 HttpMethod.GET,
                 httpEntity,
                 String.class);
@@ -108,7 +108,7 @@ public class LibrarianControllerIntegrationTest {
 
         HttpEntity<BookAddRequest> httpEntity = new HttpEntity<>(bookAddRequest, headers);
         ResponseEntity<Book> responseEntity = restTemplate.exchange(
-                absoluteUrl("/book/add"),
+                absoluteUrl("/book"),
                 HttpMethod.POST,
                 httpEntity,
                 Book.class);
@@ -139,7 +139,7 @@ public class LibrarianControllerIntegrationTest {
 
         HttpEntity<BookPutRequest> httpEntity = new HttpEntity<>(bookPutRequest, headers);
         ResponseEntity<Book> responseEntity = restTemplate.exchange(
-                absoluteUrl("/book/put"),
+                absoluteUrl("/book"),
                 HttpMethod.PUT,
                 httpEntity,
                 Book.class);
@@ -166,7 +166,7 @@ public class LibrarianControllerIntegrationTest {
 
         HttpEntity<BookPutRequest> httpEntity = new HttpEntity<>(bookPutRequest, headers);
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
-                        absoluteUrl("/book/put"),
+                        absoluteUrl("/book"),
                         HttpMethod.PUT,
                         httpEntity,
                         Void.class);
@@ -187,7 +187,7 @@ public class LibrarianControllerIntegrationTest {
 
         HttpEntity<BookPutRequest> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/book/delete/" + deleteId),
+                absoluteUrl("/book/" + deleteId),
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class);
@@ -207,7 +207,7 @@ public class LibrarianControllerIntegrationTest {
 
         HttpEntity<BookPutRequest> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/book/delete/" + deleteId),
+                absoluteUrl("/book/" + deleteId),
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class);

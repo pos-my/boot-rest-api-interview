@@ -26,7 +26,7 @@ public class MemberControllerIntegrationTest {
                 authorizationToken("user002:pass"));
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/get"),
+                absoluteUrl(""),
                 HttpMethod.GET,
                 httpEntity,
                 String.class);
@@ -40,7 +40,7 @@ public class MemberControllerIntegrationTest {
                 authorizationToken("user001:pass"));
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/get"),
+                absoluteUrl(""),
                 HttpMethod.GET,
                 httpEntity,
                 String.class);
@@ -52,7 +52,7 @@ public class MemberControllerIntegrationTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/get"),
+                absoluteUrl(""),
                 HttpMethod.GET,
                 httpEntity,
                 String.class);
@@ -66,7 +66,7 @@ public class MemberControllerIntegrationTest {
                 "anyInvalid");
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/get"),
+                absoluteUrl(""),
                 HttpMethod.GET,
                 httpEntity,
                 String.class);

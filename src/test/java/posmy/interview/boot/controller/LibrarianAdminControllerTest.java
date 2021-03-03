@@ -51,7 +51,7 @@ class LibrarianAdminControllerTest {
                 .pass("pass")
                 .build();
 
-        mockMvc.perform(post("/v1/librarian/admin/member/add")
+        mockMvc.perform(post("/v1/librarian/admin/member")
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -69,7 +69,7 @@ class LibrarianAdminControllerTest {
                 .pass("pass")
                 .build();
 
-        mockMvc.perform(post("/v1/librarian/admin/member/add")
+        mockMvc.perform(post("/v1/librarian/admin/member")
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -87,7 +87,7 @@ class LibrarianAdminControllerTest {
                 .pass(null)
                 .build();
 
-        mockMvc.perform(post("/v1/librarian/admin/member/add")
+        mockMvc.perform(post("/v1/librarian/admin/member")
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -109,7 +109,7 @@ class LibrarianAdminControllerTest {
                 .user(user)
                 .build();
 
-        mockMvc.perform(patch("/v1/librarian/admin/member/patch/" + user)
+        mockMvc.perform(patch("/v1/librarian/admin/member/" + user)
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -128,7 +128,7 @@ class LibrarianAdminControllerTest {
                 .value("newUser001")
                 .build();
 
-        mockMvc.perform(patch("/v1/librarian/admin/member/patch/" + user)
+        mockMvc.perform(patch("/v1/librarian/admin/member/" + user)
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))

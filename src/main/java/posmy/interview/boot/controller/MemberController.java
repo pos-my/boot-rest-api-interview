@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/v1/member", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MemberController {
 
-    @GetMapping("/get")
+    @GetMapping
     public String get() {
         return "success";
     }

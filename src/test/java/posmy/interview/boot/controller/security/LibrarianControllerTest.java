@@ -30,7 +30,7 @@ public class LibrarianControllerTest {
     @WithMockUser(roles = "LIBRARIAN")
     @DisplayName("Users with role LIBRARIAN are authorized to perform LIBRARIAN actions")
     void librarianCallLibrarian() throws Exception {
-        mvc.perform(get("/v1/librarian/get"))
+        mvc.perform(get("/v1/librarian"))
                 .andExpect(status().isOk());
     }
 
@@ -38,7 +38,7 @@ public class LibrarianControllerTest {
     @WithMockUser(roles = "MEMBER")
     @DisplayName("Users with role MEMBER are not authorized to perform LIBRARIAN actions")
     void memberCallLibrarian() throws Exception {
-        mvc.perform(get("/v1/librarian/get"))
+        mvc.perform(get("/v1/librarian"))
                 .andExpect(status().isForbidden());
     }
 }
