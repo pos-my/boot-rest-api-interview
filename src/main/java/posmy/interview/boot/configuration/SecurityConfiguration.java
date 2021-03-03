@@ -32,9 +32,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/librarian/**")
+                .antMatchers("/v1/librarian/**")
                     .hasRole(MyRole.LIBRARIAN.name())
-                .antMatchers("/member/**")
+                .antMatchers("/v1/member/**")
                     .hasRole(MyRole.MEMBER.name())
                 .antMatchers("/h2-console", "/console/**")
                     .permitAll()

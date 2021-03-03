@@ -80,6 +80,6 @@ public class MemberControllerIntegrationTest {
     }
 
     private String absoluteUrl(String path) {
-        return "http://localhost:" + port + "/member" + path;
+        return "http://localhost:" + port + "/v1/member" + path;
     }
 }

@@ -1,4 +1,4 @@
-package posmy.interview.boot.controller;
+package posmy.interview.boot.controller.security;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ public class MemberControllerTest {
     @WithMockUser(roles = "MEMBER")
     @DisplayName("Users with role MEMBER are authorized to perform MEMBER actions")
     void memberCallMember() throws Exception {
-        mvc.perform(get("/member/get"))
+        mvc.perform(get("/v1/member/get"))
                 .andExpect(status().isOk());
     }
 
@@ -38,7 +38,7 @@ public class MemberControllerTest {
     @WithMockUser(roles = "LIBRARIAN")
     @DisplayName("Users with role LIBRARIAN are not authorized to perform MEMBER actions")
     void librarianCallMember() throws Exception {
-        mvc.perform(get("/member/get"))
+        mvc.perform(get("/v1/member/get"))
                 .andExpect(status().isForbidden());
     }
 }
