@@ -1,21 +1,24 @@
 package posmy.interview.boot.controller;
 
-import org.junit.jupiter.api.*;
+import io.vavr.control.Try;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import posmy.interview.boot.entity.MyUser;
 import posmy.interview.boot.enums.MemberPatchField;
 import posmy.interview.boot.enums.MyRole;
 import posmy.interview.boot.model.request.MemberAddRequest;
 import posmy.interview.boot.model.request.MemberPatchRequest;
+import posmy.interview.boot.repos.MyUserRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -31,7 +34,7 @@ public class LibrarianAdminControllerIntegrationTest {
     private int port;
 
     @Autowired
-    private InMemoryUserDetailsManager inMemoryUserDetailsManager;
+    private MyUserRepository myUserRepository;
 
     private HttpHeaders headers;
 
@@ -52,8 +55,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
     @AfterEach
     void teardown() {
-        if (inMemoryUserDetailsManager.userExists(existingUsername))
-            inMemoryUserDetailsManager.deleteUser(existingUsername);
+        Try.run(() -> myUserRepository.deleteByUsername(existingUsername));
     }
 
     @Test
@@ -62,9 +64,10 @@ public class LibrarianAdminControllerIntegrationTest {
         MemberAddRequest request = MemberAddRequest.builder()
                 .user("user100")
                 .pass("pass100")
+                .email("abc@abc.co")
                 .build();
 
-        assertThat(inMemoryUserDetailsManager.userExists(request.getUser()))
+        assertThat(myUserRepository.existsByUsername(request.getUser()))
                 .isFalse();
 
         HttpEntity<MemberAddRequest> httpEntity = new HttpEntity<>(request, headers);
@@ -74,20 +77,20 @@ public class LibrarianAdminControllerIntegrationTest {
                 httpEntity,
                 String.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(inMemoryUserDetailsManager.userExists(request.getUser()))
+        assertThat(myUserRepository.existsByUsername(request.getUser()))
                 .isTrue();
     }
 
     @Test
     @DisplayName("Users with role LIBRARIAN add Duplicate MEMBER")
     public void givenDuplicateUserWhenAdminMemberAddThenError() {
-        UserDetails existingUser = setupExistingUser();
+        MyUser existingUser = setupExistingUser();
         MemberAddRequest request = MemberAddRequest.builder()
                 .user(existingUser.getUsername())
                 .pass(existingUser.getPassword())
                 .build();
 
-        assertThat(inMemoryUserDetailsManager.userExists(request.getUser()))
+        assertThat(myUserRepository.existsByUsername(request.getUser()))
                 .isTrue();
 
         HttpEntity<MemberAddRequest> httpEntity = new HttpEntity<>(request, headers);
@@ -102,7 +105,7 @@ public class LibrarianAdminControllerIntegrationTest {
     @Test
     @DisplayName("Users with role LIBRARIAN patch MEMBER username")
     public void whenAdminMemberPatchUsernameThenSuccess() {
-        UserDetails existingUser = setupExistingUser();
+        MyUser existingUser = setupExistingUser();
         String oldUsername = existingUser.getUsername();
         String newUsername = oldUsername + "_NEW";
         MemberPatchRequest request = MemberPatchRequest.builder()
@@ -110,9 +113,9 @@ public class LibrarianAdminControllerIntegrationTest {
                 .value(newUsername)
                 .build();
 
-        assertThat(inMemoryUserDetailsManager.userExists(oldUsername))
+        assertThat(myUserRepository.existsByUsername(oldUsername))
                 .isTrue();
-        assertThat(inMemoryUserDetailsManager.userExists(newUsername))
+        assertThat(myUserRepository.existsByUsername(newUsername))
                 .isFalse();
 
         HttpEntity<MemberPatchRequest> httpEntity = new HttpEntity<>(request, headers);
@@ -122,16 +125,16 @@ public class LibrarianAdminControllerIntegrationTest {
                 httpEntity,
                 String.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(inMemoryUserDetailsManager.userExists(oldUsername))
+        assertThat(myUserRepository.existsByUsername(oldUsername))
                 .isFalse();
-        assertThat(inMemoryUserDetailsManager.userExists(newUsername))
+        assertThat(myUserRepository.existsByUsername(newUsername))
                 .isTrue();
     }
 
     @Test
     @DisplayName("Users with role LIBRARIAN patch MEMBER password")
     public void whenAdminMemberPatchPasswordThenSuccess() {
-        UserDetails existingUser = setupExistingUser();
+        MyUser existingUser = setupExistingUser();
         String newPassword = existingPassword + "_NEW";
         MemberPatchRequest request = MemberPatchRequest.builder()
                 .field(MemberPatchField.PASS.name().toLowerCase())
@@ -140,10 +143,10 @@ public class LibrarianAdminControllerIntegrationTest {
 
         assertTrue(passwordEncoder.matches(
                 existingPassword,
-                inMemoryUserDetailsManager.loadUserByUsername(existingUser.getUsername()).getPassword()));
+                myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow().getPassword()));
         assertFalse(passwordEncoder.matches(
                 newPassword,
-                inMemoryUserDetailsManager.loadUserByUsername(existingUser.getUsername()).getPassword()));
+                myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow().getPassword()));
 
         HttpEntity<MemberPatchRequest> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
@@ -154,26 +157,26 @@ public class LibrarianAdminControllerIntegrationTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertFalse(passwordEncoder.matches(
                 existingPassword,
-                inMemoryUserDetailsManager.loadUserByUsername(existingUser.getUsername()).getPassword()));
+                myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow().getPassword()));
         assertTrue(passwordEncoder.matches(
                 newPassword,
-                inMemoryUserDetailsManager.loadUserByUsername(existingUser.getUsername()).getPassword()));
+                myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow().getPassword()));
     }
 
     @Test
     @DisplayName("Users with role LIBRARIAN patch MEMBER role")
     public void whenAdminMemberPatchRoleThenSuccess() {
-        UserDetails existingUser = setupExistingUser();
-        String newRole = MyRole.LIBRARIAN.name();
+        MyUser existingUser = setupExistingUser();
+        MyRole newRole = MyRole.LIBRARIAN;
         MemberPatchRequest request = MemberPatchRequest.builder()
                 .field(MemberPatchField.ROLE.name().toLowerCase())
-                .value(newRole)
+                .value(newRole.name())
                 .build();
 
-        String existingRole = inMemoryUserDetailsManager.loadUserByUsername(existingUser.getUsername())
-                .getAuthorities().iterator().next().getAuthority();
+        String existingRole = myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow()
+                .getAuthority();
         assertThat(existingRole)
-                .isEqualTo("ROLE_" + MyRole.MEMBER.name());
+                .isEqualTo(MyRole.MEMBER.authority);
 
         HttpEntity<MemberPatchRequest> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
@@ -182,19 +185,18 @@ public class LibrarianAdminControllerIntegrationTest {
                 httpEntity,
                 String.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        String patchedRole = inMemoryUserDetailsManager.loadUserByUsername(existingUser.getUsername())
-                .getAuthorities().iterator().next().getAuthority();
-        assertThat(patchedRole).isEqualTo("ROLE_" + newRole);
+        String patchedRole = myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow()
+                .getAuthority();
+        assertThat(patchedRole).isEqualTo(newRole.authority);
     }
 
-    private UserDetails setupExistingUser() {
-        UserDetails userDetails = User.withUsername(existingUsername)
-                .passwordEncoder(passwordEncoder::encode)
-                .password(existingPassword)
-                .roles(MyRole.MEMBER.name())
+    private MyUser setupExistingUser() {
+        MyUser user = MyUser.builder()
+                .username(existingUsername)
+                .password(passwordEncoder.encode(existingPassword))
+                .authority(MyRole.MEMBER.authority)
                 .build();
-        inMemoryUserDetailsManager.createUser(userDetails);
-        return userDetails;
+        return myUserRepository.save(user);
     }
 
     private String authorizationToken(String userPass) {

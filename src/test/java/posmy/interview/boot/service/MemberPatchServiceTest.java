@@ -7,15 +7,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import posmy.interview.boot.entity.MyUser;
 import posmy.interview.boot.enums.MemberPatchField;
 import posmy.interview.boot.enums.MyRole;
 import posmy.interview.boot.error.InvalidMemberPatchFieldException;
 import posmy.interview.boot.model.request.MemberPatchRequest;
+import posmy.interview.boot.repos.MyUserRepository;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,26 +26,26 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MemberPatchServiceTest {
 
-    private final InMemoryUserDetailsManager inMemoryUserDetailsManager = mock(InMemoryUserDetailsManager.class);
+    private final MyUserRepository myUserRepository = mock(MyUserRepository.class);
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private final MemberPatchService memberPatchService =
-            new MemberPatchService(inMemoryUserDetailsManager, passwordEncoder);
+            new MemberPatchService(myUserRepository, passwordEncoder);
 
     @Captor
-    private final ArgumentCaptor<UserDetails> userDetailsCaptor = ArgumentCaptor.forClass(UserDetails.class);
+    private final ArgumentCaptor<MyUser> userCaptor = ArgumentCaptor.forClass(MyUser.class);
 
-    private UserDetails existingUser;
+    private MyUser existingUser;
     private MemberPatchRequest request;
 
 
     @BeforeEach
     void setup() {
         String user = "user001";
-        existingUser = User.withUsername(user)
-                .passwordEncoder(passwordEncoder::encode)
-                .password("pass")
-                .roles(MyRole.MEMBER.name())
+        existingUser = MyUser.builder()
+                .username(user)
+                .password(passwordEncoder.encode("pass"))
+                .authority(MyRole.MEMBER.authority)
                 .build();
         request = MemberPatchRequest.builder()
                 .user(user)
@@ -59,21 +60,19 @@ class MemberPatchServiceTest {
 
     @Test
     void givenFieldUserThenUpdateUsername() {
-        UserDetails expectedUser = User.withUserDetails(existingUser)
+        MyUser expectedUser = existingUser.toBuilder()
                 .username(request.getValue())
                 .build();
 
-        when(inMemoryUserDetailsManager.loadUserByUsername(request.getUser()))
-                .thenReturn(existingUser);
+        when(myUserRepository.findByUsername(request.getUser()))
+                .thenReturn(Optional.of(existingUser));
 
         memberPatchService.execute(request);
-        verify(inMemoryUserDetailsManager, times(1))
-                .loadUserByUsername(request.getUser());
-        verify(inMemoryUserDetailsManager, times(1))
-                .deleteUser(request.getUser());
-        verify(inMemoryUserDetailsManager, times(1))
-                .createUser(userDetailsCaptor.capture());
-        assertThat(userDetailsCaptor.getValue())
+        verify(myUserRepository, times(1))
+                .findByUsername(request.getUser());
+        verify(myUserRepository, times(1))
+                .save(userCaptor.capture());
+        assertThat(userCaptor.getValue())
                 .usingRecursiveComparison()
                 .isEqualTo(expectedUser);
     }
@@ -84,42 +83,41 @@ class MemberPatchServiceTest {
         request.setField(MemberPatchField.PASS.name());
         request.setValue(newPass);
 
-        UserDetails expectedUser = User.withUserDetails(existingUser)
-                .passwordEncoder(passwordEncoder::encode)
-                .password(request.getValue())
+        MyUser expectedUser = existingUser.toBuilder()
+                .password(passwordEncoder.encode(request.getValue()))
                 .build();
 
-        when(inMemoryUserDetailsManager.loadUserByUsername(request.getUser()))
-                .thenReturn(existingUser);
+        when(myUserRepository.findByUsername(request.getUser()))
+                .thenReturn(Optional.of(existingUser));
 
         memberPatchService.execute(request);
-        verify(inMemoryUserDetailsManager, times(1))
-                .updateUser(userDetailsCaptor.capture());
-        assertThat(userDetailsCaptor.getValue())
+        verify(myUserRepository, times(1))
+                .save(userCaptor.capture());
+        assertThat(userCaptor.getValue())
                 .usingRecursiveComparison().ignoringFields("password")
                 .isEqualTo(expectedUser);
         assertTrue(passwordEncoder.matches(
                 newPass,
-                userDetailsCaptor.getValue().getPassword()));
+                userCaptor.getValue().getPassword()));
     }
 
     @Test
     void givenFieldRoleThenUpdateRole() {
-        String newRole = MyRole.LIBRARIAN.name();
+        MyRole newRole = MyRole.LIBRARIAN;
         request.setField(MemberPatchField.ROLE.name());
-        request.setValue(newRole);
+        request.setValue(newRole.name());
 
-        UserDetails expectedUser = User.withUserDetails(existingUser)
-                .roles(newRole)
+        MyUser expectedUser = existingUser.toBuilder()
+                .authority(newRole.authority)
                 .build();
 
-        when(inMemoryUserDetailsManager.loadUserByUsername(request.getUser()))
-                .thenReturn(existingUser);
+        when(myUserRepository.findByUsername(request.getUser()))
+                .thenReturn(Optional.of(existingUser));
 
         memberPatchService.execute(request);
-        verify(inMemoryUserDetailsManager, times(1))
-                .updateUser(userDetailsCaptor.capture());
-        assertThat(userDetailsCaptor.getValue())
+        verify(myUserRepository, times(1))
+                .save(userCaptor.capture());
+        assertThat(userCaptor.getValue())
                 .usingRecursiveComparison()
                 .isEqualTo(expectedUser);
     }
@@ -130,8 +128,8 @@ class MemberPatchServiceTest {
 
         assertThrows(InvalidMemberPatchFieldException.class,
                 () -> memberPatchService.execute(request));
-        verify(inMemoryUserDetailsManager, times(0))
-                .loadUserByUsername(anyString());
+        verify(myUserRepository, times(0))
+                .findByUsername(anyString());
     }
 
     @Test
@@ -140,12 +138,12 @@ class MemberPatchServiceTest {
         request.setField(MemberPatchField.ROLE.name());
         request.setValue(newRole);
 
-        when(inMemoryUserDetailsManager.loadUserByUsername(request.getUser()))
-                .thenReturn(existingUser);
+        when(myUserRepository.findByUsername(request.getUser()))
+                .thenReturn(Optional.of(existingUser));
 
         assertThrows(IllegalArgumentException.class,
                 () -> memberPatchService.execute(request));
-        verify(inMemoryUserDetailsManager, times(0))
-                .updateUser(any());
+        verify(myUserRepository, times(0))
+                .save(any());
     }
 }

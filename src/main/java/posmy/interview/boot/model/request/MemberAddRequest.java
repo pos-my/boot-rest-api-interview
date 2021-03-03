@@ -17,4 +17,6 @@ public class MemberAddRequest {
 
     @NotBlank
     private String pass;
+
+    private String email;
 }

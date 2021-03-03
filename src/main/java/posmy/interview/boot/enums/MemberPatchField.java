@@ -1,11 +1,10 @@
 package posmy.interview.boot.enums;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import posmy.interview.boot.entity.MyUser;
 import posmy.interview.boot.error.InvalidMemberPatchFieldException;
 import posmy.interview.boot.model.request.MemberPatchRequest;
+import posmy.interview.boot.repos.MyUserRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,34 +12,28 @@ import java.util.Map;
 public enum MemberPatchField {
     USER {
         @Override
-        public void patch(MemberPatchRequest request, InMemoryUserDetailsManager manager, PasswordEncoder passwordEncoder) {
-            UserDetails existingUser = manager.loadUserByUsername(request.getUser());
-            manager.deleteUser(request.getUser());
-            UserDetails patchedUser = User.withUserDetails(existingUser)
-                    .username(request.getValue())
-                    .build();
-            manager.createUser(patchedUser);
+        public void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder) {
+            MyUser existingUser = repos.findByUsername(request.getUser()).orElseThrow();
+            existingUser.setUsername(request.getValue());
+            repos.save(existingUser);
         }
     },
     PASS {
         @Override
-        public void patch(MemberPatchRequest request, InMemoryUserDetailsManager manager, PasswordEncoder passwordEncoder) {
-            UserDetails existingUser = manager.loadUserByUsername(request.getUser());
-            UserDetails patchedUser = User.withUserDetails(existingUser)
-                    .passwordEncoder(passwordEncoder::encode)
-                    .password(request.getValue())
-                    .build();
-            manager.updateUser(patchedUser);
+        public void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder) {
+            MyUser existingUser = repos.findByUsername(request.getUser()).orElseThrow();
+            existingUser.setPassword(passwordEncoder.encode(request.getValue()));
+            repos.save(existingUser);
         }
     },
     ROLE {
         @Override
-        public void patch(MemberPatchRequest request, InMemoryUserDetailsManager manager, PasswordEncoder passwordEncoder) {
-            UserDetails existingUser = manager.loadUserByUsername(request.getUser());
-            UserDetails patchedUser = User.withUserDetails(existingUser)
-                    .roles(Enum.valueOf(MyRole.class, request.getValue().toUpperCase()).name())
-                    .build();
-            manager.updateUser(patchedUser);
+        public void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder) {
+            MyUser existingUser = repos.findByUsername(request.getUser()).orElseThrow();
+            existingUser.setAuthority(
+                    Enum.valueOf(MyRole.class, request.getValue().toUpperCase())
+                            .authority);
+            repos.save(existingUser);
         }
     };
 
@@ -58,5 +51,5 @@ public enum MemberPatchField {
         }
     }
 
-    public abstract void patch(MemberPatchRequest request, InMemoryUserDetailsManager manager, PasswordEncoder passwordEncoder);
+    public abstract void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder);
 }

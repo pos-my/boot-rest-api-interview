@@ -1,40 +1,38 @@
 package posmy.interview.boot.service;
 
-import io.vavr.control.Try;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
+import posmy.interview.boot.entity.MyUser;
 import posmy.interview.boot.enums.MyRole;
 import posmy.interview.boot.error.CreateDuplicateUserException;
 import posmy.interview.boot.model.request.MemberAddRequest;
 import posmy.interview.boot.model.response.EmptyResponse;
+import posmy.interview.boot.repos.MyUserRepository;
 
 @Service
 public class MemberAddService implements BaseService<MemberAddRequest, EmptyResponse> {
 
-    private final InMemoryUserDetailsManager inMemoryUserDetailsManager;
+    private final MyUserRepository myUserRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public MemberAddService(InMemoryUserDetailsManager inMemoryUserDetailsManager,
+    public MemberAddService(MyUserRepository myUserRepository,
                             @Qualifier("passwordEncoder") PasswordEncoder passwordEncoder) {
-        this.inMemoryUserDetailsManager = inMemoryUserDetailsManager;
+        this.myUserRepository = myUserRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public EmptyResponse execute(MemberAddRequest request) {
-        UserDetails userDetails = User.withUsername(request.getUser())
-                .passwordEncoder(passwordEncoder::encode)
-                .password(request.getPass())
-                .roles(MyRole.MEMBER.name())
+        if (myUserRepository.existsByUsername(request.getUser()))
+            throw new CreateDuplicateUserException(request.getUser());
+        MyUser user = MyUser.builder()
+                .username(request.getUser())
+                .password(passwordEncoder.encode(request.getPass()))
+                .authority(MyRole.MEMBER.authority)
+                .email(request.getEmail())
                 .build();
-        Try.run(() -> inMemoryUserDetailsManager.createUser(userDetails))
-                .onFailure(IllegalArgumentException.class,
-                        ex -> { throw new CreateDuplicateUserException(request.getUser(), ex); })
-                .get();
+        myUserRepository.save(user);
         return new EmptyResponse();
     }
 }

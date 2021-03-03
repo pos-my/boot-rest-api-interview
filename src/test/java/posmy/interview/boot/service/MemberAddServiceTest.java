@@ -6,29 +6,31 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import posmy.interview.boot.entity.MyUser;
 import posmy.interview.boot.enums.MyRole;
 import posmy.interview.boot.error.CreateDuplicateUserException;
 import posmy.interview.boot.model.request.MemberAddRequest;
+import posmy.interview.boot.repos.MyUserRepository;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MemberAddServiceTest {
 
-    private final InMemoryUserDetailsManager inMemoryUserDetailsManager = spy(new InMemoryUserDetailsManager());
+    private final MyUserRepository myUserRepository = mock(MyUserRepository.class);
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    private final MemberAddService memberAddService = new MemberAddService(inMemoryUserDetailsManager, passwordEncoder);
+    private final MemberAddService memberAddService = new MemberAddService(myUserRepository, passwordEncoder);
 
     @Captor
-    private final ArgumentCaptor<UserDetails> userDetailsCaptor = ArgumentCaptor.forClass(UserDetails.class);
+    private final ArgumentCaptor<MyUser> myUserCaptor = ArgumentCaptor.forClass(MyUser.class);
 
     private MemberAddRequest request;
 
@@ -37,37 +39,41 @@ class MemberAddServiceTest {
         request = MemberAddRequest.builder()
                 .user("user001")
                 .pass("pass")
+                .email("abc@abc.co")
                 .build();
     }
 
     @Test
     void whenMemberAddThenSuccess() {
-        UserDetails expectedUser = User.withUsername(request.getUser())
-                .passwordEncoder(passwordEncoder::encode)
-                .password(request.getPass())
-                .roles(MyRole.MEMBER.name())
+        MyUser expectedUser = MyUser.builder()
+                .username(request.getUser())
+                .password(passwordEncoder.encode(request.getPass()))
+                .authority(MyRole.MEMBER.authority)
+                .email(request.getEmail())
                 .build();
 
+        when(myUserRepository.existsByUsername(request.getUser()))
+                .thenReturn(false);
+
         memberAddService.execute(request);
-        verify(inMemoryUserDetailsManager, times(1))
-                .createUser(userDetailsCaptor.capture());
-        assertThat(userDetailsCaptor.getValue())
+        verify(myUserRepository, times(1))
+                .save(myUserCaptor.capture());
+        assertThat(myUserCaptor.getValue())
                 .usingRecursiveComparison().ignoringFields("password")
                 .isEqualTo(expectedUser);
-        assertThat(passwordEncoder.matches(
+        assertTrue(passwordEncoder.matches(
                 request.getPass(),
-                userDetailsCaptor.getValue().getPassword()))
-                .isTrue();
+                myUserCaptor.getValue().getPassword()));
     }
 
     @Test
     void givenDuplicateUserWhenMemberAddThenThrowCreateDuplicateUserException() {
-        when(inMemoryUserDetailsManager.userExists(request.getUser()))
+        when(myUserRepository.existsByUsername(request.getUser()))
                 .thenReturn(true);
 
         assertThrows(CreateDuplicateUserException.class,
                 () -> memberAddService.execute(request));
-        verify(inMemoryUserDetailsManager, times(1))
-                .createUser(userDetailsCaptor.capture());
+        verify(myUserRepository, times(0))
+                .save(myUserCaptor.capture());
     }
 }
