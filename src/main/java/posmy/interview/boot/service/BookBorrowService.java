@@ -25,19 +25,31 @@ public class BookBorrowService implements BaseService<BookBorrowRequest, EmptyRe
     @Override
     @Transactional
     public EmptyResponse execute(BookBorrowRequest request) {
-        Book book = bookRepository.findById(request.getBookId()).orElseThrow();
-        if (book.getStatus().equals(BookStatus.BORROWED))
-            throw new BookUnavailableException(request.getBookId());
-        BorrowRecord record = BorrowRecord.builder()
-                .username(request.getUsername())
-                .build();
-        List<BorrowRecord> existingRecords = book.getBorrowRecords();
-        if (existingRecords == null)
-            existingRecords = new ArrayList<>();
-        existingRecords.add(0, record);
-        book.setBorrowRecords(existingRecords);
+        Book book = validateBook(request.getBookId());
+        populateBookBorrowRecords(book, request.getUsername());
         book.setStatus(BookStatus.BORROWED);
         bookRepository.save(book);
         return new EmptyResponse();
+    }
+
+    private Book validateBook(String id) {
+        Book book = bookRepository.findById(id).orElseThrow();
+        if (book.getStatus().equals(BookStatus.BORROWED))
+            throw new BookUnavailableException(id);
+        return book;
+    }
+
+    private void populateBookBorrowRecords(Book book, String username) {
+        List<BorrowRecord> existingRecords = book.getBorrowRecords();
+        if (existingRecords == null)
+            existingRecords = new ArrayList<>();
+        existingRecords.add(0, newRecord(username));
+        book.setBorrowRecords(existingRecords);
+    }
+
+    private BorrowRecord newRecord(String username) {
+        return BorrowRecord.builder()
+                .username(username)
+                .build();
     }
 }
