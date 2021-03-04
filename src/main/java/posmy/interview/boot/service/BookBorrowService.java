@@ -24,7 +24,6 @@ public class BookBorrowService implements BaseService<BookBorrowRequest, EmptyRe
 
     @Override
     @Transactional
-    //TODO
     public EmptyResponse execute(BookBorrowRequest request) {
         Book book = bookRepository.findById(request.getBookId()).orElseThrow();
         if (book.getStatus().equals(BookStatus.BORROWED))
@@ -35,7 +34,7 @@ public class BookBorrowService implements BaseService<BookBorrowRequest, EmptyRe
         List<BorrowRecord> existingRecords = book.getBorrowRecords();
         if (existingRecords == null)
             existingRecords = new ArrayList<>();
-        existingRecords.add(record);
+        existingRecords.add(0, record);
         book.setBorrowRecords(existingRecords);
         book.setStatus(BookStatus.BORROWED);
         bookRepository.save(book);

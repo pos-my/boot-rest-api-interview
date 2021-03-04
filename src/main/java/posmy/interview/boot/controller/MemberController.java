@@ -5,10 +5,12 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import posmy.interview.boot.model.request.BookBorrowRequest;
 import posmy.interview.boot.model.request.BookGetRequest;
+import posmy.interview.boot.model.request.BookReturnRequest;
 import posmy.interview.boot.model.response.BookGetResponse;
 import posmy.interview.boot.model.response.EmptyResponse;
 import posmy.interview.boot.service.BookBorrowService;
 import posmy.interview.boot.service.BookGetService;
+import posmy.interview.boot.service.BookReturnService;
 
 import java.security.Principal;
 
@@ -18,11 +20,14 @@ public class MemberController {
 
     private final BookGetService bookGetService;
     private final BookBorrowService bookBorrowService;
+    private final BookReturnService bookReturnService;
 
     public MemberController(BookGetService bookGetService,
-                            BookBorrowService bookBorrowService) {
+                            BookBorrowService bookBorrowService,
+                            BookReturnService bookReturnService) {
         this.bookGetService = bookGetService;
         this.bookBorrowService = bookBorrowService;
+        this.bookReturnService = bookReturnService;
     }
 
     @GetMapping
@@ -46,5 +51,15 @@ public class MemberController {
                 .username(principal.getName())
                 .build();
         return bookBorrowService.execute(request);
+    }
+
+    @PatchMapping("/book/return/{id}")
+    public EmptyResponse bookReturn(@PathVariable("id") String id,
+                                    Principal principal) {
+        BookReturnRequest request = BookReturnRequest.builder()
+                .bookId(id)
+                .username(principal.getName())
+                .build();
+        return bookReturnService.execute(request);
     }
 }

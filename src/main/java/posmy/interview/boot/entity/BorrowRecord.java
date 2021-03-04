@@ -24,6 +24,9 @@ public class BorrowRecord implements Comparable<BorrowRecord> {
 
     private Long returnTimestamp;
 
+    @Builder.Default
+    private Boolean isReturn = Boolean.FALSE;
+
     @PrePersist
     public void borrowTimestampOn() {
         this.borrowTimestamp = System.currentTimeMillis();

@@ -18,6 +18,7 @@ import posmy.interview.boot.model.request.*;
 import posmy.interview.boot.model.response.BookGetResponse;
 import posmy.interview.boot.service.BookBorrowService;
 import posmy.interview.boot.service.BookGetService;
+import posmy.interview.boot.service.BookReturnService;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
@@ -37,6 +38,8 @@ public class MemberControllerTest {
     private BookGetService bookGetService;
     @Mock
     private BookBorrowService bookBorrowService;
+    @Mock
+    private BookReturnService bookReturnService;
 
     @InjectMocks
     private MemberController controller;
@@ -94,6 +97,28 @@ public class MemberControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
         verify(bookBorrowService, times(1))
+                .execute(expectedRequest);
+    }
+
+    @Test
+    void whenBookReturnThenSuccess() throws Exception {
+        Principal principal = mock(Principal.class);
+        String bookId = "book001-1";
+        String username = "user001";
+        when(principal.getName())
+                .thenReturn(username);
+        BookReturnRequest expectedRequest = BookReturnRequest.builder()
+                .bookId(bookId)
+                .username(username)
+                .build();
+
+        mockMvc.perform(patch("/v1/member/book/return/" + bookId)
+                .principal(principal)
+                .characterEncoding(StandardCharsets.UTF_8.name())
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+        verify(bookReturnService, times(1))
                 .execute(expectedRequest);
     }
 

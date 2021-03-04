@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.control.Try;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class MemberControllerIntegrationTest {
 
         headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION,
-                authorizationToken("user002:pass"));
+                authorizationToken(Constants.DEFAULT_MEMBER_USERNAME + ":" + Constants.DEFAULT_MEMBER_PASSWORD));
     }
     private void resetUsersWithDefault() {
         Try.run(() -> myUserRepository.deleteAll());
@@ -154,7 +155,6 @@ public class MemberControllerIntegrationTest {
                 String.class,
                 "4", "2");
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        System.out.println(responseEntity.getBody());
         JsonNode jsonNode = new ObjectMapper().readTree(responseEntity.getBody());
         assertTrue(jsonNode.at("/page/content").isArray());
         assertEquals(4, jsonNode.at("/page/number").intValue());
@@ -176,9 +176,9 @@ public class MemberControllerIntegrationTest {
                 String.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(borrowRecordRepository.findAll().size()).isNotZero();
-        assertThat(bookRepository.findById(existingBook.getId()).orElseThrow().getStatus())
+        assertThat(findBookById(existingBook.getId()).getStatus())
                 .isEqualTo(BookStatus.BORROWED);
-        assertThat(bookRepository.findById(existingBook.getId()).orElseThrow().getBorrowRecords())
+        assertThat(findBookById(existingBook.getId()).getBorrowRecords())
                 .isNotEmpty();
         bookRepository.deleteAll();
         borrowRecordRepository.deleteAll();
@@ -196,10 +196,78 @@ public class MemberControllerIntegrationTest {
                 String.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(borrowRecordRepository.findAll().size()).isEqualTo(2);
-        assertThat(bookRepository.findById(existingBook.getId()).orElseThrow().getBorrowRecords().size())
+        assertThat(findBookById(existingBook.getId()).getBorrowRecords().size())
                 .isEqualTo(2);
         bookRepository.deleteAll();
         borrowRecordRepository.deleteAll();
+    }
+
+    @Test
+    public void borrowBookAndReturnSuccess() {
+        Book existingBook = setupExistingBook();
+
+        borrow(existingBook, 0);
+        returnBook(existingBook, 0);
+        borrow(existingBook, 1);
+        returnBook(existingBook, 1);
+        borrow(existingBook, 2);
+        returnBook(existingBook, 2);
+
+        assertThat(borrowRecordRepository.findAll().size()).isEqualTo(3);
+        assertThat(findBookById(existingBook.getId()).getBorrowRecords().size())
+                .isEqualTo(3);
+        findBookById(existingBook.getId()).getBorrowRecords()
+                .forEach(borrowRecord -> {
+                    assertTrue(borrowRecord.getIsReturn());
+                    assertTrue(borrowRecord.getReturnTimestamp() > 0L);
+                    assertTrue(StringUtils.equals(borrowRecord.getUsername(), Constants.DEFAULT_MEMBER_USERNAME));
+                });
+
+        bookRepository.deleteAll();
+        borrowRecordRepository.deleteAll();
+    }
+
+    private void borrow(Book existingBook, int time) {
+        assertThat(borrowRecordRepository.findAll().size()).isEqualTo(time);
+        HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> responseBorrow = restTemplate.exchange(
+                absoluteUrl("/book/borrow/" + existingBook.getId()),
+                HttpMethod.PATCH,
+                httpEntity,
+                String.class);
+        assertThat(responseBorrow.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(borrowRecordRepository.findAll().size()).isEqualTo(time + 1);
+        assertThat(findBookById(existingBook.getId()).getStatus())
+                .isEqualTo(BookStatus.BORROWED);
+        assertThat(findBookById(existingBook.getId()).getBorrowRecords().size())
+                .isEqualTo(time + 1);
+    }
+
+    private void returnBook(Book existingBook, int time) {
+        assertThat(findBookById(existingBook.getId()).getBorrowRecords().get(0).getIsReturn())
+                .isFalse();
+        assertThat(findBookById(existingBook.getId()).getBorrowRecords().get(0).getReturnTimestamp())
+                .isNull();
+        HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> responseReturn = restTemplate.exchange(
+                absoluteUrl("/book/return/" + existingBook.getId()),
+                HttpMethod.PATCH,
+                httpEntity,
+                String.class);
+        assertThat(responseReturn.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(borrowRecordRepository.findAll().size()).isEqualTo(time + 1);
+        assertThat(findBookById(existingBook.getId()).getStatus())
+                .isEqualTo(BookStatus.AVAILABLE);
+        assertThat(findBookById(existingBook.getId()).getBorrowRecords().size())
+                .isEqualTo(time + 1);
+        assertThat(findBookById(existingBook.getId()).getBorrowRecords().get(0).getIsReturn())
+                .isTrue();
+        assertThat(findBookById(existingBook.getId()).getBorrowRecords().get(0).getReturnTimestamp())
+                .isNotNull();
+    }
+
+    private Book findBookById(String id) {
+        return bookRepository.findById(id).orElseThrow();
     }
 
     private void setupBooks(int size) {

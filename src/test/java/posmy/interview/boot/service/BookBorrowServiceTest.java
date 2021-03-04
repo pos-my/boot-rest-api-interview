@@ -62,6 +62,7 @@ class BookBorrowServiceTest {
     void givenIdAndUsernameThenUpdateBookStatusBorrowedAndRecord() {
         BorrowRecord expectedRecord = BorrowRecord.builder()
                 .username(request.getUsername())
+                .isReturn(false)
                 .build();
         Book expectedBook = existingBook.toBuilder()
                 .status(BookStatus.BORROWED)
@@ -82,13 +83,6 @@ class BookBorrowServiceTest {
     @Test
     void givenBookUnavailableThenThrowBookUnavailableException() {
         existingBook.setStatus(BookStatus.BORROWED);
-        BorrowRecord expectedRecord = BorrowRecord.builder()
-                .username(request.getUsername())
-                .build();
-        Book expectedBook = existingBook.toBuilder()
-                .status(BookStatus.BORROWED)
-                .borrowRecords(new ArrayList<>(List.of(expectedRecord)))
-                .build();
 
         when(bookRepository.findById(request.getBookId()))
                 .thenReturn(Optional.of(existingBook));
