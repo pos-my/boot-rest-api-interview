@@ -24,15 +24,23 @@ public class MemberAddService implements BaseService<MemberAddRequest, EmptyResp
 
     @Override
     public EmptyResponse execute(MemberAddRequest request) {
-        if (myUserRepository.existsByUsername(request.getUser()))
-            throw new CreateDuplicateUserException(request.getUser());
-        MyUser user = MyUser.builder()
+        validateDuplicateUser(request.getUser());
+        MyUser user = buildMemberUser(request);
+        myUserRepository.save(user);
+        return new EmptyResponse();
+    }
+
+    private void validateDuplicateUser(String username) {
+        if (myUserRepository.existsByUsername(username))
+            throw new CreateDuplicateUserException(username);
+    }
+
+    private MyUser buildMemberUser(MemberAddRequest request) {
+        return MyUser.builder()
                 .username(request.getUser())
                 .password(passwordEncoder.encode(request.getPass()))
                 .authority(MyRole.MEMBER.authority)
                 .email(request.getEmail())
                 .build();
-        myUserRepository.save(user);
-        return new EmptyResponse();
     }
 }

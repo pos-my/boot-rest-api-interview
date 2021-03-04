@@ -1,7 +1,6 @@
 package posmy.interview.boot.service;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import posmy.interview.boot.entity.Book;
 import posmy.interview.boot.model.request.BookGetRequest;
@@ -21,7 +20,7 @@ public class BookGetService implements BaseService<BookGetRequest, BookGetRespon
     public BookGetResponse execute(BookGetRequest request) {
         Page<Book> page = bookRepository.findAll(request.getPageable());
         return BookGetResponse.builder()
-                .page(new PageImpl<>(page.getContent(), page.getPageable(), page.getTotalElements()))
+                .page(page)
                 .build();
     }
 }
