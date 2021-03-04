@@ -127,6 +127,9 @@ class MemberPatchServiceTest {
     void givenInvalidFieldThenThrow() {
         request.setField("invalid");
 
+        when(myUserRepository.findById(request.getId()))
+                .thenReturn(Optional.of(existingUser));
+
         assertThrows(InvalidMemberPatchFieldException.class,
                 () -> memberPatchService.execute(request));
         verify(myUserRepository, times(0))

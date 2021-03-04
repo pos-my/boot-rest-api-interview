@@ -39,6 +39,7 @@ public class BorrowRecord implements Comparable<BorrowRecord> {
 
     @Override
     public int compareTo(BorrowRecord o) {
+        // DESC order
         if (this.borrowTimestamp > o.borrowTimestamp)
             return -1;
         else if (this.borrowTimestamp < o.borrowTimestamp)

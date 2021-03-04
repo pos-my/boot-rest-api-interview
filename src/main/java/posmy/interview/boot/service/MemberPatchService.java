@@ -2,6 +2,7 @@ package posmy.interview.boot.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import posmy.interview.boot.entity.MyUser;
 import posmy.interview.boot.enums.MemberPatchField;
 import posmy.interview.boot.model.request.MemberPatchRequest;
 import posmy.interview.boot.model.response.EmptyResponse;
@@ -24,8 +25,19 @@ public class MemberPatchService implements BaseService<MemberPatchRequest, Empty
     @Override
     @Transactional
     public EmptyResponse execute(MemberPatchRequest request) {
-        MemberPatchField.lookup(request.getField())
-                .patch(request, myUserRepository, passwordEncoder);
+        MyUser existingUser = findUserByIdOrThrow(request.getId());
+        MyUser patchedUser = patchUser(existingUser, request);
+        myUserRepository.save(patchedUser);
         return new EmptyResponse();
+    }
+
+    private MyUser findUserByIdOrThrow(Long id) {
+        return myUserRepository.findById(id)
+                .orElseThrow();
+    }
+
+    private MyUser patchUser(MyUser user, MemberPatchRequest request) {
+        return MemberPatchField.lookup(request.getField())
+                .patch(user, request.getValue(), passwordEncoder);
     }
 }

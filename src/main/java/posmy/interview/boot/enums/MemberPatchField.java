@@ -3,8 +3,6 @@ package posmy.interview.boot.enums;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import posmy.interview.boot.entity.MyUser;
 import posmy.interview.boot.error.InvalidMemberPatchFieldException;
-import posmy.interview.boot.model.request.MemberPatchRequest;
-import posmy.interview.boot.repos.MyUserRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,28 +10,25 @@ import java.util.Map;
 public enum MemberPatchField {
     USER {
         @Override
-        public void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder) {
-            MyUser existingUser = repos.findById(request.getId()).orElseThrow();
-            existingUser.setUsername(request.getValue());
-            repos.save(existingUser);
+        public MyUser patch(MyUser user, String value, PasswordEncoder passwordEncoder) {
+            user.setUsername(value);
+            return user;
         }
     },
     PASS {
         @Override
-        public void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder) {
-            MyUser existingUser = repos.findById(request.getId()).orElseThrow();
-            existingUser.setPassword(passwordEncoder.encode(request.getValue()));
-            repos.save(existingUser);
+        public MyUser patch(MyUser user, String value, PasswordEncoder passwordEncoder) {
+            user.setPassword(passwordEncoder.encode(value));
+            return user;
         }
     },
     ROLE {
         @Override
-        public void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder) {
-            MyUser existingUser = repos.findById(request.getId()).orElseThrow();
-            existingUser.setAuthority(
-                    Enum.valueOf(MyRole.class, request.getValue().toUpperCase())
+        public MyUser patch(MyUser user, String value, PasswordEncoder passwordEncoder) {
+            user.setAuthority(
+                    Enum.valueOf(MyRole.class, value.toUpperCase())
                             .authority);
-            repos.save(existingUser);
+            return user;
         }
     };
 
@@ -51,5 +46,5 @@ public enum MemberPatchField {
         }
     }
 
-    public abstract void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder);
+    public abstract MyUser patch(MyUser user, String value, PasswordEncoder passwordEncoder);
 }

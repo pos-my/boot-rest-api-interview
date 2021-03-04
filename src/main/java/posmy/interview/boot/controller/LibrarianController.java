@@ -44,9 +44,9 @@ public class LibrarianController {
 
     @DeleteMapping("book/{id}")
     public void bookDelete(@PathVariable("id") String id) {
-        bookDeleteService.execute(
-                BookDeleteRequest.builder()
-                        .id(id)
-                        .build());
+        BookDeleteRequest request = BookDeleteRequest.builder()
+                .id(id)
+                .build();
+        bookDeleteService.execute(request);
     }
 }
