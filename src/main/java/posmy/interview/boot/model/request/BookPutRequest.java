@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class BookPutRequest {
+public class BookPutRequest implements BaseRequest {
     @NotBlank
     private String id;
 

@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class BookAddRequest {
+public class BookAddRequest implements BaseRequest {
     @NotBlank
     private String name;
 

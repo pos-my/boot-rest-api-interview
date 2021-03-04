@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class BookDeleteRequest {
+public class BookDeleteRequest implements BaseRequest {
     private String id;
 }

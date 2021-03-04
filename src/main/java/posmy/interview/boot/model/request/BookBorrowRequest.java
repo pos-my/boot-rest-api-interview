@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class BookBorrowRequest {
+public class BookBorrowRequest implements BaseRequest {
     private String bookId;
     private String username;
 }

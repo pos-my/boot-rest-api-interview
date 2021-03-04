@@ -10,6 +10,6 @@ import org.springframework.data.domain.Pageable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class BookGetRequest {
+public class BookGetRequest implements BaseRequest {
     private Pageable pageable;
 }

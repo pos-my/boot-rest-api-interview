@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class MemberAddRequest {
+public class MemberAddRequest implements BaseRequest {
     @NotBlank
     private String user;
 
