@@ -9,6 +9,7 @@ import posmy.interview.boot.model.request.MemberPatchRequest;
 import posmy.interview.boot.model.response.EmptyResponse;
 import posmy.interview.boot.model.response.MemberGetResponse;
 import posmy.interview.boot.service.MemberAddService;
+import posmy.interview.boot.service.MemberDeleteService;
 import posmy.interview.boot.service.MemberGetService;
 import posmy.interview.boot.service.MemberPatchService;
 
@@ -19,13 +20,16 @@ public class LibrarianAdminController {
     private final MemberAddService memberAddService;
     private final MemberPatchService memberPatchService;
     private final MemberGetService memberGetService;
+    private final MemberDeleteService memberDeleteService;
 
     public LibrarianAdminController(MemberAddService memberAddService,
                                     MemberPatchService memberPatchService,
-                                    MemberGetService memberGetService) {
+                                    MemberGetService memberGetService,
+                                    MemberDeleteService memberDeleteService) {
         this.memberAddService = memberAddService;
         this.memberPatchService = memberPatchService;
         this.memberGetService = memberGetService;
+        this.memberDeleteService = memberDeleteService;
     }
 
     @GetMapping("/member")
@@ -38,10 +42,15 @@ public class LibrarianAdminController {
         return memberAddService.execute(request);
     }
 
-    @PatchMapping("/member/{user}")
-    public EmptyResponse memberAdd(@PathVariable("user") String user,
+    @PatchMapping("/member/{id}")
+    public EmptyResponse memberAdd(@PathVariable("id") Long id,
                                    @RequestBody @Validated MemberPatchRequest request) {
-        request.setUser(user);
+        request.setId(id);
         return memberPatchService.execute(request);
+    }
+
+    @DeleteMapping("/member/{id}")
+    public EmptyResponse memberDelete(@PathVariable("id") Long id) {
+        return memberDeleteService.execute(id);
     }
 }

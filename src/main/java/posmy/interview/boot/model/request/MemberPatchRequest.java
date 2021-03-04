@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Builder(toBuilder = true)
 public class MemberPatchRequest {
 
-    private String user;
+    private Long id;
 
     @NotBlank
     private String field;

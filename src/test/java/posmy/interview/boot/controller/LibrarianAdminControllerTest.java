@@ -15,6 +15,7 @@ import posmy.interview.boot.model.request.MemberAddRequest;
 import posmy.interview.boot.model.request.MemberPatchRequest;
 import posmy.interview.boot.model.response.MemberGetResponse;
 import posmy.interview.boot.service.MemberAddService;
+import posmy.interview.boot.service.MemberDeleteService;
 import posmy.interview.boot.service.MemberGetService;
 import posmy.interview.boot.service.MemberPatchService;
 
@@ -38,6 +39,8 @@ class LibrarianAdminControllerTest {
     private MemberPatchService memberPatchService;
     @Mock
     private MemberGetService memberGetService;
+    @Mock
+    private MemberDeleteService memberDeleteService;
 
     @InjectMocks
     private LibrarianAdminController controller;
@@ -105,16 +108,16 @@ class LibrarianAdminControllerTest {
 
     @Test
     void whenMemberPatchThenSuccess() throws Exception {
-        String user = "user001";
+        Long id = 1L;
         MemberPatchRequest request = MemberPatchRequest.builder()
                 .field(MemberPatchField.USER.name().toLowerCase())
                 .value("newUser001")
                 .build();
         MemberPatchRequest expectedRequest = request.toBuilder()
-                .user(user)
+                .id(id)
                 .build();
 
-        mockMvc.perform(patch("/v1/librarian/admin/member/" + user)
+        mockMvc.perform(patch("/v1/librarian/admin/member/" + id)
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -127,13 +130,13 @@ class LibrarianAdminControllerTest {
 
     @Test
     void givenBlankFieldWhenMemberPatchThenError() throws Exception {
-        String user = "user001";
+        long id = 1L;
         MemberPatchRequest request = MemberPatchRequest.builder()
                 .field(null)
                 .value("newUser001")
                 .build();
 
-        mockMvc.perform(patch("/v1/librarian/admin/member/" + user)
+        mockMvc.perform(patch("/v1/librarian/admin/member/" + id)
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -165,5 +168,17 @@ class LibrarianAdminControllerTest {
                 .andExpect(jsonPath("$.members[0].email", equalTo("abc@abc.com")));
         verify(memberGetService, times(1))
                 .execute(any());
+    }
+
+    @Test
+    void givenIdWhenMemberDeleteThenSuccess() throws Exception {
+        long id = 12345L;
+
+        mockMvc.perform(delete("/v1/librarian/admin/member/" + id)
+                .characterEncoding(StandardCharsets.UTF_8.name()))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+        verify(memberDeleteService, times(1))
+                .execute(id);
     }
 }

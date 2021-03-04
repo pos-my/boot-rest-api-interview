@@ -13,7 +13,7 @@ public enum MemberPatchField {
     USER {
         @Override
         public void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder) {
-            MyUser existingUser = repos.findByUsername(request.getUser()).orElseThrow();
+            MyUser existingUser = repos.findById(request.getId()).orElseThrow();
             existingUser.setUsername(request.getValue());
             repos.save(existingUser);
         }
@@ -21,7 +21,7 @@ public enum MemberPatchField {
     PASS {
         @Override
         public void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder) {
-            MyUser existingUser = repos.findByUsername(request.getUser()).orElseThrow();
+            MyUser existingUser = repos.findById(request.getId()).orElseThrow();
             existingUser.setPassword(passwordEncoder.encode(request.getValue()));
             repos.save(existingUser);
         }
@@ -29,7 +29,7 @@ public enum MemberPatchField {
     ROLE {
         @Override
         public void patch(MemberPatchRequest request, MyUserRepository repos, PasswordEncoder passwordEncoder) {
-            MyUser existingUser = repos.findByUsername(request.getUser()).orElseThrow();
+            MyUser existingUser = repos.findById(request.getId()).orElseThrow();
             existingUser.setAuthority(
                     Enum.valueOf(MyRole.class, request.getValue().toUpperCase())
                             .authority);

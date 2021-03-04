@@ -41,14 +41,15 @@ class MemberPatchServiceTest {
 
     @BeforeEach
     void setup() {
-        String user = "user001";
+        Long id = 1L;
         existingUser = MyUser.builder()
-                .username(user)
+                .id(id)
+                .username("user001")
                 .password(passwordEncoder.encode("pass"))
                 .authority(MyRole.MEMBER.authority)
                 .build();
         request = MemberPatchRequest.builder()
-                .user(user)
+                .id(id)
                 .field(MemberPatchField.USER.name().toLowerCase())
                 .value("newUser001")
                 .build();
@@ -64,12 +65,12 @@ class MemberPatchServiceTest {
                 .username(request.getValue())
                 .build();
 
-        when(myUserRepository.findByUsername(request.getUser()))
+        when(myUserRepository.findById(request.getId()))
                 .thenReturn(Optional.of(existingUser));
 
         memberPatchService.execute(request);
         verify(myUserRepository, times(1))
-                .findByUsername(request.getUser());
+                .findById(request.getId());
         verify(myUserRepository, times(1))
                 .save(userCaptor.capture());
         assertThat(userCaptor.getValue())
@@ -87,7 +88,7 @@ class MemberPatchServiceTest {
                 .password(passwordEncoder.encode(request.getValue()))
                 .build();
 
-        when(myUserRepository.findByUsername(request.getUser()))
+        when(myUserRepository.findById(request.getId()))
                 .thenReturn(Optional.of(existingUser));
 
         memberPatchService.execute(request);
@@ -111,7 +112,7 @@ class MemberPatchServiceTest {
                 .authority(newRole.authority)
                 .build();
 
-        when(myUserRepository.findByUsername(request.getUser()))
+        when(myUserRepository.findById(request.getId()))
                 .thenReturn(Optional.of(existingUser));
 
         memberPatchService.execute(request);
@@ -138,7 +139,7 @@ class MemberPatchServiceTest {
         request.setField(MemberPatchField.ROLE.name());
         request.setValue(newRole);
 
-        when(myUserRepository.findByUsername(request.getUser()))
+        when(myUserRepository.findById(request.getId()))
                 .thenReturn(Optional.of(existingUser));
 
         assertThrows(IllegalArgumentException.class,

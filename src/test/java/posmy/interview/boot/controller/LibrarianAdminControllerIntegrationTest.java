@@ -41,8 +41,6 @@ public class LibrarianAdminControllerIntegrationTest {
 
     private HttpHeaders headers;
 
-    private final String defaultLibrarianUsername = "user001";
-    private final String defaultLibrarianPassword = "pass";
     private final String existingUsername = "user999";
     private final String existingPassword = "pass";
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -132,7 +130,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
         HttpEntity<MemberPatchRequest> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/member/" + existingUser.getUsername()),
+                absoluteUrl("/member/" + existingUser.getId()),
                 HttpMethod.PATCH,
                 httpEntity,
                 String.class);
@@ -155,24 +153,24 @@ public class LibrarianAdminControllerIntegrationTest {
 
         assertTrue(passwordEncoder.matches(
                 existingPassword,
-                myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow().getPassword()));
+                myUserRepository.findById(existingUser.getId()).orElseThrow().getPassword()));
         assertFalse(passwordEncoder.matches(
                 newPassword,
-                myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow().getPassword()));
+                myUserRepository.findById(existingUser.getId()).orElseThrow().getPassword()));
 
         HttpEntity<MemberPatchRequest> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/member/" + existingUser.getUsername()),
+                absoluteUrl("/member/" + existingUser.getId()),
                 HttpMethod.PATCH,
                 httpEntity,
                 String.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertFalse(passwordEncoder.matches(
                 existingPassword,
-                myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow().getPassword()));
+                myUserRepository.findById(existingUser.getId()).orElseThrow().getPassword()));
         assertTrue(passwordEncoder.matches(
                 newPassword,
-                myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow().getPassword()));
+                myUserRepository.findById(existingUser.getId()).orElseThrow().getPassword()));
     }
 
     @Test
@@ -185,19 +183,19 @@ public class LibrarianAdminControllerIntegrationTest {
                 .value(newRole.name())
                 .build();
 
-        String existingRole = myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow()
+        String existingRole = myUserRepository.findById(existingUser.getId()).orElseThrow()
                 .getAuthority();
         assertThat(existingRole)
                 .isEqualTo(MyRole.MEMBER.authority);
 
         HttpEntity<MemberPatchRequest> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                absoluteUrl("/member/" + existingUser.getUsername()),
+                absoluteUrl("/member/" + existingUser.getId()),
                 HttpMethod.PATCH,
                 httpEntity,
                 String.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        String patchedRole = myUserRepository.findByUsername(existingUser.getUsername()).orElseThrow()
+        String patchedRole = myUserRepository.findById(existingUser.getId()).orElseThrow()
                 .getAuthority();
         assertThat(patchedRole).isEqualTo(newRole.authority);
     }
@@ -218,6 +216,45 @@ public class LibrarianAdminControllerIntegrationTest {
                 .usingRecursiveComparison()
                 .isEqualTo(expectedResponse);
     }
+
+    @Test
+    @DisplayName("Users with role LIBRARIAN delete MEMBER")
+    public void whenAdminMemberDeleteByIdThenSuccess() {
+        MyUser existingUser = setupExistingUser();
+
+        assertThat(myUserRepository.existsById(existingUser.getId()))
+                .isTrue();
+
+        HttpEntity<Void> httpEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(
+                absoluteUrl("/member/" + existingUser.getId()),
+                HttpMethod.DELETE,
+                httpEntity,
+                Void.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(myUserRepository.existsById(existingUser.getId()))
+                .isFalse();
+    }
+
+    @Test
+    @DisplayName("Users with role LIBRARIAN delete non-existing MEMBER")
+    public void givenNonExistingIdWhenAdminMemberDeleteUserByIdThenDoNothing() {
+        Long deleteId = 999L;
+
+        assertThat(myUserRepository.existsById(deleteId))
+                .isFalse();
+
+        HttpEntity<Void> httpEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(
+                absoluteUrl("/member/" + deleteId),
+                HttpMethod.DELETE,
+                httpEntity,
+                Void.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(myUserRepository.existsById(deleteId))
+                .isFalse();
+    }
+
     private MemberGetResponse setupGetExistingWithExpected() {
         MyUser existingUser1 = setupExistingUser(
                 "userGet001", "passGet001", MyRole.MEMBER.authority);
