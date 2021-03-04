@@ -192,9 +192,6 @@ class LibrarianControllerTest {
     @Test
     void givenBlankIdWhenBookDeleteThenError() throws Exception {
         String deleteId = "";
-        BookDeleteRequest request = BookDeleteRequest.builder()
-                .id(deleteId)
-                .build();
 
         mockMvc.perform(delete("/v1/librarian/book/" + deleteId)
                 .characterEncoding(StandardCharsets.UTF_8.name())

@@ -55,10 +55,6 @@ class MemberPatchServiceTest {
                 .build();
     }
 
-    @AfterEach
-    void teardown() {
-    }
-
     @Test
     void givenFieldUserThenUpdateUsername() {
         MyUser expectedUser = existingUser.toBuilder()

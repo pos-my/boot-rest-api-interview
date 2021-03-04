@@ -108,7 +108,7 @@ class LibrarianAdminControllerTest {
 
     @Test
     void whenMemberPatchThenSuccess() throws Exception {
-        Long id = 1L;
+        long id = 1L;
         MemberPatchRequest request = MemberPatchRequest.builder()
                 .field(MemberPatchField.USER.name().toLowerCase())
                 .value("newUser001")

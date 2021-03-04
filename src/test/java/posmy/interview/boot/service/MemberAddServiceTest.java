@@ -14,8 +14,6 @@ import posmy.interview.boot.error.CreateDuplicateUserException;
 import posmy.interview.boot.model.request.MemberAddRequest;
 import posmy.interview.boot.repos.MyUserRepository;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;

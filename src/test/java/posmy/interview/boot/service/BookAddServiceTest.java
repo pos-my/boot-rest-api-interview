@@ -55,7 +55,6 @@ class BookAddServiceTest {
                 .build();
 
         bookAddService.execute(request);
-
         verify(bookRepository, times(1))
                 .save(bookCaptor.capture());
         assertThat(bookCaptor.getValue())

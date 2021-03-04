@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @SpringBootTest
-class LibrarianControllerTest {
+class MemberControllerSecurityTest {
     @Autowired
     private WebApplicationContext context;
 
@@ -27,18 +27,18 @@ class LibrarianControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "LIBRARIAN")
-    @DisplayName("Users with role LIBRARIAN are authorized to perform LIBRARIAN actions")
-    void librarianCallLibrarian() throws Exception {
-        mvc.perform(get("/v1/librarian"))
+    @WithMockUser(roles = "MEMBER")
+    @DisplayName("Users with role MEMBER are authorized to perform MEMBER actions")
+    void memberCallMember() throws Exception {
+        mvc.perform(get("/v1/member"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(roles = "MEMBER")
-    @DisplayName("Users with role MEMBER are not authorized to perform LIBRARIAN actions")
-    void memberCallLibrarian() throws Exception {
-        mvc.perform(get("/v1/librarian"))
+    @WithMockUser(roles = "LIBRARIAN")
+    @DisplayName("Users with role LIBRARIAN are not authorized to perform MEMBER actions")
+    void librarianCallMember() throws Exception {
+        mvc.perform(get("/v1/member"))
                 .andExpect(status().isForbidden());
     }
 }

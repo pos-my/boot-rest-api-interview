@@ -1,4 +1,4 @@
-package posmy.interview.boot.controller;
+package posmy.interview.boot.controller.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

@@ -1,4 +1,4 @@
-package posmy.interview.boot.controller;
+package posmy.interview.boot.controller.integration;
 
 import io.vavr.control.Try;
 import org.junit.jupiter.api.BeforeEach;
