@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 import posmy.interview.boot.entity.MyUser;
 import posmy.interview.boot.enums.MyRole;
 import posmy.interview.boot.repos.MyUserRepository;
+import posmy.interview.boot.util.Constants;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -50,14 +51,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady() {
         MyUser defaultLibrarian = MyUser.builder()
-                .username("user001")
-                .password(passwordEncoder().encode("pass"))
+                .username(Constants.DEFAULT_LIBRARIAN_USERNAME)
+                .password(passwordEncoder().encode(Constants.DEFAULT_LIBRARIAN_PASSWORD))
                 .authority(MyRole.LIBRARIAN.authority)
                 .enabled(true)
                 .build();
         MyUser defaultMember = MyUser.builder()
-                .username("user002")
-                .password(passwordEncoder().encode("pass"))
+                .username(Constants.DEFAULT_MEMBER_USERNAME)
+                .password(passwordEncoder().encode(Constants.DEFAULT_MEMBER_PASSWORD))
                 .authority(MyRole.MEMBER.authority)
                 .enabled(true)
                 .build();

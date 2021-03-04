@@ -1,7 +1,6 @@
 package posmy.interview.boot.controller;
 
 import io.vavr.control.Try;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,10 +17,14 @@ import posmy.interview.boot.enums.MemberPatchField;
 import posmy.interview.boot.enums.MyRole;
 import posmy.interview.boot.model.request.MemberAddRequest;
 import posmy.interview.boot.model.request.MemberPatchRequest;
+import posmy.interview.boot.model.response.MemberGetResponse;
 import posmy.interview.boot.repos.MyUserRepository;
+import posmy.interview.boot.util.Constants;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -38,6 +41,8 @@ public class LibrarianAdminControllerIntegrationTest {
 
     private HttpHeaders headers;
 
+    private final String defaultLibrarianUsername = "user001";
+    private final String defaultLibrarianPassword = "pass";
     private final String existingUsername = "user999";
     private final String existingPassword = "pass";
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -45,17 +50,24 @@ public class LibrarianAdminControllerIntegrationTest {
 
     @BeforeEach
     void setup() {
+        resetUsersWithDefaultLibrarian();
+
         restTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
         headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION,
-                authorizationToken("user001:pass"));
+                authorizationToken(
+                        Constants.DEFAULT_LIBRARIAN_USERNAME + ":" + Constants.DEFAULT_LIBRARIAN_PASSWORD));
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
     }
-
-    @AfterEach
-    void teardown() {
-        Try.run(() -> myUserRepository.deleteByUsername(existingUsername));
+    private void resetUsersWithDefaultLibrarian() {
+        Try.run(() -> myUserRepository.deleteAll());
+        MyUser defaultLibrarian = MyUser.builder()
+                .username(Constants.DEFAULT_LIBRARIAN_USERNAME)
+                .password(passwordEncoder.encode(Constants.DEFAULT_LIBRARIAN_PASSWORD))
+                .authority(MyRole.LIBRARIAN.authority)
+                .build();
+        myUserRepository.save(defaultLibrarian);
     }
 
     @Test
@@ -190,11 +202,69 @@ public class LibrarianAdminControllerIntegrationTest {
         assertThat(patchedRole).isEqualTo(newRole.authority);
     }
 
+    @Test
+    @DisplayName("Users with role LIBRARIAN get all MEMBER")
+    public void whenAdminMemberGetThenSuccess() {
+        MemberGetResponse expectedResponse = setupGetExistingWithExpected();
+
+        HttpEntity<MemberAddRequest> httpEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<MemberGetResponse> responseEntity = restTemplate.exchange(
+                absoluteUrl("/member"),
+                HttpMethod.GET,
+                httpEntity,
+                MemberGetResponse.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody())
+                .usingRecursiveComparison()
+                .isEqualTo(expectedResponse);
+    }
+    private MemberGetResponse setupGetExistingWithExpected() {
+        MyUser existingUser1 = setupExistingUser(
+                "userGet001", "passGet001", MyRole.MEMBER.authority);
+        MyUser existingUser2 = setupExistingUser(
+                "userGet002", "passGet002", MyRole.MEMBER.authority);
+        MyUser existingUser3 = setupExistingUser(
+                "userGet003", "passGet003", MyRole.LIBRARIAN.authority);
+        MyUser existingUser4 = setupExistingUser(
+                "userGet004", "passGet004", MyRole.MEMBER.authority);
+        assertThat(myUserRepository.existsByUsername(existingUser1.getUsername()))
+                .isTrue();
+        assertThat(myUserRepository.existsByUsername(existingUser2.getUsername()))
+                .isTrue();
+        assertThat(myUserRepository.existsByUsername(existingUser3.getUsername()))
+                .isTrue();
+        assertThat(myUserRepository.existsByUsername(existingUser4.getUsername()))
+                .isTrue();
+
+        MemberGetResponse.UserDetailsDto member1 = MemberGetResponse.UserDetailsDto.builder()
+                .id(existingUser1.getId())
+                .username(existingUser1.getUsername())
+                .email(existingUser1.getEmail())
+                .build();
+        MemberGetResponse.UserDetailsDto member2 = MemberGetResponse.UserDetailsDto.builder()
+                .id(existingUser2.getId())
+                .username(existingUser2.getUsername())
+                .email(existingUser2.getEmail())
+                .build();
+        MemberGetResponse.UserDetailsDto member3 = MemberGetResponse.UserDetailsDto.builder()
+                .id(existingUser4.getId())
+                .username(existingUser4.getUsername())
+                .email(existingUser4.getEmail())
+                .build();
+        return MemberGetResponse.builder()
+                .members(new ArrayList<>(List.of(member1, member2, member3)))
+                .build();
+    }
+
     private MyUser setupExistingUser() {
+        return setupExistingUser(existingUsername, existingPassword, MyRole.MEMBER.authority);
+    }
+
+    private MyUser setupExistingUser(String username, String password, String authority) {
         MyUser user = MyUser.builder()
-                .username(existingUsername)
-                .password(passwordEncoder.encode(existingPassword))
-                .authority(MyRole.MEMBER.authority)
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .authority(authority)
                 .build();
         return myUserRepository.save(user);
     }

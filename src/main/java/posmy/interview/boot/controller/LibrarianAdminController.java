@@ -3,10 +3,13 @@ package posmy.interview.boot.controller;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import posmy.interview.boot.model.request.EmptyRequest;
 import posmy.interview.boot.model.request.MemberAddRequest;
 import posmy.interview.boot.model.request.MemberPatchRequest;
 import posmy.interview.boot.model.response.EmptyResponse;
+import posmy.interview.boot.model.response.MemberGetResponse;
 import posmy.interview.boot.service.MemberAddService;
+import posmy.interview.boot.service.MemberGetService;
 import posmy.interview.boot.service.MemberPatchService;
 
 @RestController
@@ -15,16 +18,19 @@ public class LibrarianAdminController {
 
     private final MemberAddService memberAddService;
     private final MemberPatchService memberPatchService;
+    private final MemberGetService memberGetService;
 
     public LibrarianAdminController(MemberAddService memberAddService,
-                                    MemberPatchService memberPatchService) {
+                                    MemberPatchService memberPatchService,
+                                    MemberGetService memberGetService) {
         this.memberAddService = memberAddService;
         this.memberPatchService = memberPatchService;
+        this.memberGetService = memberGetService;
     }
 
     @GetMapping("/member")
-    public String get() {
-        return "success";
+    public MemberGetResponse memberGet() {
+        return memberGetService.execute(new EmptyRequest());
     }
 
     @PostMapping("/member")

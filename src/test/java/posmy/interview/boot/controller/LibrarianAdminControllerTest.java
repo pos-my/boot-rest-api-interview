@@ -13,17 +13,20 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import posmy.interview.boot.enums.MemberPatchField;
 import posmy.interview.boot.model.request.MemberAddRequest;
 import posmy.interview.boot.model.request.MemberPatchRequest;
+import posmy.interview.boot.model.response.MemberGetResponse;
 import posmy.interview.boot.service.MemberAddService;
+import posmy.interview.boot.service.MemberGetService;
 import posmy.interview.boot.service.MemberPatchService;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +36,8 @@ class LibrarianAdminControllerTest {
     private MemberAddService memberAddService;
     @Mock
     private MemberPatchService memberPatchService;
+    @Mock
+    private MemberGetService memberGetService;
 
     @InjectMocks
     private LibrarianAdminController controller;
@@ -136,6 +141,29 @@ class LibrarianAdminControllerTest {
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
         verify(memberPatchService, times(0))
+                .execute(any());
+    }
+
+    @Test
+    void whenMemberGetThenReturnAllMembers() throws Exception {
+        MemberGetResponse response = MemberGetResponse.builder()
+                .members(List.of(new MemberGetResponse.UserDetailsDto(
+                        1L, "user001", "abc@abc.com")))
+                .build();
+
+        when(memberGetService.execute(any()))
+                .thenReturn(response);
+
+        mockMvc.perform(get("/v1/librarian/admin/member")
+                .characterEncoding(StandardCharsets.UTF_8.name())
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.members").isArray())
+                .andExpect(jsonPath("$.members[0].id", equalTo(1)))
+                .andExpect(jsonPath("$.members[0].username", equalTo("user001")))
+                .andExpect(jsonPath("$.members[0].email", equalTo("abc@abc.com")));
+        verify(memberGetService, times(1))
                 .execute(any());
     }
 }

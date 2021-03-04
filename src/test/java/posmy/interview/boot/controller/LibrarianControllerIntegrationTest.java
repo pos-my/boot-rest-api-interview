@@ -1,5 +1,6 @@
 package posmy.interview.boot.controller;
 
+import io.vavr.control.Try;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,11 +9,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import posmy.interview.boot.entity.Book;
+import posmy.interview.boot.entity.MyUser;
 import posmy.interview.boot.enums.BookStatus;
+import posmy.interview.boot.enums.MyRole;
 import posmy.interview.boot.model.request.BookAddRequest;
 import posmy.interview.boot.model.request.BookPutRequest;
 import posmy.interview.boot.repos.BookRepository;
+import posmy.interview.boot.repos.MyUserRepository;
+import posmy.interview.boot.util.Constants;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -29,6 +35,10 @@ public class LibrarianControllerIntegrationTest {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private MyUserRepository myUserRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private HttpHeaders headers;
 
@@ -36,9 +46,26 @@ public class LibrarianControllerIntegrationTest {
 
     @BeforeEach
     void setup() {
+        resetUsersWithDefault();
+
         headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION,
                 authorizationToken("user001:pass"));
+    }
+    private void resetUsersWithDefault() {
+        Try.run(() -> myUserRepository.deleteAll());
+        MyUser defaultLibrarian = MyUser.builder()
+                .username(Constants.DEFAULT_LIBRARIAN_USERNAME)
+                .password(passwordEncoder.encode(Constants.DEFAULT_LIBRARIAN_PASSWORD))
+                .authority(MyRole.LIBRARIAN.authority)
+                .build();
+        MyUser defaultMember = MyUser.builder()
+                .username(Constants.DEFAULT_MEMBER_USERNAME)
+                .password(passwordEncoder.encode(Constants.DEFAULT_MEMBER_PASSWORD))
+                .authority(MyRole.MEMBER.authority)
+                .build();
+        myUserRepository.save(defaultLibrarian);
+        myUserRepository.save(defaultMember);
     }
 
     @Test

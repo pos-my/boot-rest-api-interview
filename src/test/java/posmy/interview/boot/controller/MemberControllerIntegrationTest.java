@@ -1,10 +1,18 @@
 package posmy.interview.boot.controller;
 
+import io.vavr.control.Try;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import posmy.interview.boot.entity.MyUser;
+import posmy.interview.boot.enums.MyRole;
+import posmy.interview.boot.repos.MyUserRepository;
+import posmy.interview.boot.util.Constants;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -17,7 +25,32 @@ public class MemberControllerIntegrationTest {
     @LocalServerPort
     private int port;
 
+    @Autowired
+    private MyUserRepository myUserRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private final TestRestTemplate restTemplate = new TestRestTemplate();
+
+    @BeforeEach
+    void setup() {
+        resetUsersWithDefault();
+    }
+    private void resetUsersWithDefault() {
+        Try.run(() -> myUserRepository.deleteAll());
+        MyUser defaultLibrarian = MyUser.builder()
+                .username(Constants.DEFAULT_LIBRARIAN_USERNAME)
+                .password(passwordEncoder.encode(Constants.DEFAULT_LIBRARIAN_PASSWORD))
+                .authority(MyRole.LIBRARIAN.authority)
+                .build();
+        MyUser defaultMember = MyUser.builder()
+                .username(Constants.DEFAULT_MEMBER_USERNAME)
+                .password(passwordEncoder.encode(Constants.DEFAULT_MEMBER_PASSWORD))
+                .authority(MyRole.MEMBER.authority)
+                .build();
+        myUserRepository.save(defaultLibrarian);
+        myUserRepository.save(defaultMember);
+    }
 
     @Test
     public void getWithMemberAuthorizationThenReturnSuccess() {
