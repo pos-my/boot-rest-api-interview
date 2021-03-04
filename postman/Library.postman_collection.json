@@ -1,0 +1,494 @@
+{
+	"info": {
+		"_postman_id": "13392543-afa7-4ff9-8d85-0c889109bddb",
+		"name": "Library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Librarian",
+			"item": [
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "MemberAdd",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "user001",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "pass",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"user\": \"user004\",\n    \"pass\": \"pass\",\n    \"email\": \"abc@abc.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/v1/librarian/admin/member",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"librarian",
+										"admin",
+										"member"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "MemberPatch",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "user001",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "pass",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"field\": \"role\",\n    \"value\": \"librarian\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/v1/librarian/admin/member/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"librarian",
+										"admin",
+										"member",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "MemberGet",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "user001",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "pass",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/v1/librarian/admin/member",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"librarian",
+										"admin",
+										"member"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "MemberDelete",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "user001",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "pass",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/v1/librarian/admin/member/4",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"librarian",
+										"admin",
+										"member",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "BookAdd",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "pass",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "user001",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Book 3 of Narnia\",\n    \"desc\": \"The 3rd book of Narnia Series\",\n    \"imageUrl\": \"http://www.image.com/image003\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/librarian/book",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"librarian",
+								"book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookPut",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user001",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "pass",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"2aad1c40-926a-4853-8115-f1247add0ec7\",\n    \"name\": \"Book 2 of Narnia\",\n    \"desc\": \"The 2nd book of Narnia Series\",\n    \"imageUrl\": \"http://www.image.com/image002\",\n    \"status\": \"BORROWED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/librarian/book",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"librarian",
+								"book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookDelete",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user001",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "pass",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/v1/librarian/book/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"librarian",
+								"book",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Member",
+			"item": [
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "SelfDelete",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "pass005",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "user005",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/v1/member/admin/self",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"member",
+										"admin",
+										"self"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "HealthCheck",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user002",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "pass",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/v1/member",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"member"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookGet",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user002",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "pass",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/v1/member/book?page=0&size=100",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"member",
+								"book"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookBorrow",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user002",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "pass",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/v1/member/book/borrow/{{borrow_book_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"member",
+								"book",
+								"borrow",
+								"{{borrow_book_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookReturn",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user002",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "pass",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/v1/member/book/return/{{return_book_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"member",
+								"book",
+								"return",
+								"{{return_book_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
