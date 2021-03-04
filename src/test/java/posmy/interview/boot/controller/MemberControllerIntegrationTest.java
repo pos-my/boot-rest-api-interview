@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class MemberControllerIntegrationTest {
+class MemberControllerIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -77,7 +77,7 @@ public class MemberControllerIntegrationTest {
     }
 
     @Test
-    public void getWithMemberAuthorizationThenReturnSuccess() {
+    void getWithMemberAuthorizationThenReturnSuccess() {
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
                 absoluteUrl(""),
@@ -88,7 +88,7 @@ public class MemberControllerIntegrationTest {
     }
 
     @Test
-    public void getWithLibrarianAuthorizationThenReturnSuccess() {
+    void getWithLibrarianAuthorizationThenReturnSuccess() {
         headers.replace(HttpHeaders.AUTHORIZATION,
                 List.of(authorizationToken("user001:pass")));
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
@@ -101,7 +101,7 @@ public class MemberControllerIntegrationTest {
     }
 
     @Test
-    public void getWithoutAuthorizationThenUnauthorized() {
+    void getWithoutAuthorizationThenUnauthorized() {
         headers.remove(HttpHeaders.AUTHORIZATION);
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
@@ -113,7 +113,7 @@ public class MemberControllerIntegrationTest {
     }
 
     @Test
-    public void getWithInvalidAuthorizationThenUnauthorized() {
+    void getWithInvalidAuthorizationThenUnauthorized() {
         headers.replace(HttpHeaders.AUTHORIZATION,
                 List.of("anyInvalid"));
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
@@ -126,7 +126,7 @@ public class MemberControllerIntegrationTest {
     }
 
     @Test
-    public void getBookWithPagingThenReturnPageOfBook() throws JsonProcessingException {
+    void getBookWithPagingThenReturnPageOfBook() throws JsonProcessingException {
         setupBooks(5);
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
@@ -145,7 +145,7 @@ public class MemberControllerIntegrationTest {
     }
 
     @Test
-    public void getBookWithPagingExceedsTotalPagesThenReturnEmptyPage() throws JsonProcessingException {
+    void getBookWithPagingExceedsTotalPagesThenReturnEmptyPage() throws JsonProcessingException {
         setupBooks(5);
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
@@ -165,7 +165,7 @@ public class MemberControllerIntegrationTest {
     }
 
     @Test
-    public void borrowBookWithIdThenSuccess() {
+    void borrowBookWithIdThenSuccess() {
         Book existingBook = setupExistingBook();
         assertThat(borrowRecordRepository.findAll().size()).isZero();
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
@@ -185,7 +185,7 @@ public class MemberControllerIntegrationTest {
     }
 
     @Test
-    public void borrowBookWithIdWithNonEmptyRecordsThenSuccess() {
+    void borrowBookWithIdWithNonEmptyRecordsThenSuccess() {
         Book existingBook = setupExistingBookWithRecords();
         assertThat(borrowRecordRepository.findAll().size()).isEqualTo(1);
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
@@ -203,7 +203,7 @@ public class MemberControllerIntegrationTest {
     }
 
     @Test
-    public void borrowBookAndReturnSuccess() {
+    void borrowBookAndReturnSuccess() {
         Book existingBook = setupExistingBook();
 
         borrow(existingBook, 0);

@@ -29,7 +29,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LibrarianControllerIntegrationTest {
+class LibrarianControllerIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -71,7 +71,7 @@ public class LibrarianControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN are authorized to perform LIBRARIAN actions")
-    public void getWithLibrarianAuthorizationThenReturnSuccess() {
+    void getWithLibrarianAuthorizationThenReturnSuccess() {
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
                 absoluteUrl(""),
@@ -83,7 +83,7 @@ public class LibrarianControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role MEMBER are not authorized to perform LIBRARIAN actions")
-    public void getWithMemberAuthorizationThenForbidden() {
+    void getWithMemberAuthorizationThenForbidden() {
         headers.replace(HttpHeaders.AUTHORIZATION,
                 List.of(authorizationToken("user002:pass")));
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
@@ -97,7 +97,7 @@ public class LibrarianControllerIntegrationTest {
 
     @Test
     @DisplayName("Users without authorization token are not authorized to perform LIBRARIAN actions")
-    public void getWithoutAuthorizationThenUnauthorized() {
+    void getWithoutAuthorizationThenUnauthorized() {
         headers.remove(HttpHeaders.AUTHORIZATION);
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
@@ -110,7 +110,7 @@ public class LibrarianControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with invalid authorization token are not authorized to perform LIBRARIAN actions")
-    public void getWithInvalidAuthorizationThenUnauthorized() {
+    void getWithInvalidAuthorizationThenUnauthorized() {
         headers.replace(HttpHeaders.AUTHORIZATION,
                 List.of("anyInvalid"));
         HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
@@ -124,7 +124,7 @@ public class LibrarianControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN add book")
-    public void bookAddGivenNameThenSaveNewBook() {
+    void bookAddGivenNameThenSaveNewBook() {
         BookAddRequest bookAddRequest = BookAddRequest.builder()
                 .name("book name")
                 .desc(null)
@@ -150,7 +150,7 @@ public class LibrarianControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN update book")
-    public void bookPutThenUpdateExistingBook() {
+    void bookPutThenUpdateExistingBook() {
         Book existingBook = setupExistingBook();
         BookPutRequest bookPutRequest = BookPutRequest.builder()
                 .id(existingBook.getId())
@@ -185,7 +185,7 @@ public class LibrarianControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN update non-existing book will get error 10000")
-    public void bookPutGivenInvalidIdThenError10000() {
+    void bookPutGivenInvalidIdThenError10000() {
         BookPutRequest bookPutRequest = BookPutRequest.builder()
                 .id(UUID.randomUUID().toString())
                 .name("Book 001 NEW")
@@ -208,7 +208,7 @@ public class LibrarianControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN delete book")
-    public void bookDeleteThenDeleteExistingBook() {
+    void bookDeleteThenDeleteExistingBook() {
         Book existingBook = setupExistingBook();
         String deleteId = existingBook.getId();
 
@@ -229,7 +229,7 @@ public class LibrarianControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN delete non-existing book")
-    public void bookDeleteGivenNonExistingIdThenDoNothing() {
+    void bookDeleteGivenNonExistingIdThenDoNothing() {
         String deleteId = UUID.randomUUID().toString();
 
         assertThat(bookRepository.findById(deleteId))

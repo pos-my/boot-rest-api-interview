@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class LibrarianControllerTest {
+class LibrarianControllerTest {
     @Mock
     private BookAddService bookAddService;
     @Mock

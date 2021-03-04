@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @SpringBootTest
-public class LibrarianControllerTest {
+class LibrarianControllerTest {
     @Autowired
     private WebApplicationContext context;
 

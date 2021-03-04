@@ -20,7 +20,7 @@ import java.util.Base64;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class MemberAdminControllerIntegrationTest {
+class MemberAdminControllerIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -53,7 +53,7 @@ public class MemberAdminControllerIntegrationTest {
     }
 
     @Test
-    public void selfDeleteThenReturnSuccess() {
+    void selfDeleteThenReturnSuccess() {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION,
                 authorizationToken(

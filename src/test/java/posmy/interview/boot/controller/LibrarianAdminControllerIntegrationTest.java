@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LibrarianAdminControllerIntegrationTest {
+class LibrarianAdminControllerIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -70,7 +70,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN add MEMBER")
-    public void whenAdminMemberAddThenSuccess() {
+    void whenAdminMemberAddThenSuccess() {
         MemberAddRequest request = MemberAddRequest.builder()
                 .user("user100")
                 .pass("pass100")
@@ -93,7 +93,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN add Duplicate MEMBER")
-    public void givenDuplicateUserWhenAdminMemberAddThenError() {
+    void givenDuplicateUserWhenAdminMemberAddThenError() {
         MyUser existingUser = setupExistingUser();
         MemberAddRequest request = MemberAddRequest.builder()
                 .user(existingUser.getUsername())
@@ -114,7 +114,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN patch MEMBER username")
-    public void whenAdminMemberPatchUsernameThenSuccess() {
+    void whenAdminMemberPatchUsernameThenSuccess() {
         MyUser existingUser = setupExistingUser();
         String oldUsername = existingUser.getUsername();
         String newUsername = oldUsername + "_NEW";
@@ -143,7 +143,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN patch MEMBER password")
-    public void whenAdminMemberPatchPasswordThenSuccess() {
+    void whenAdminMemberPatchPasswordThenSuccess() {
         MyUser existingUser = setupExistingUser();
         String newPassword = existingPassword + "_NEW";
         MemberPatchRequest request = MemberPatchRequest.builder()
@@ -175,7 +175,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN patch MEMBER role")
-    public void whenAdminMemberPatchRoleThenSuccess() {
+    void whenAdminMemberPatchRoleThenSuccess() {
         MyUser existingUser = setupExistingUser();
         MyRole newRole = MyRole.LIBRARIAN;
         MemberPatchRequest request = MemberPatchRequest.builder()
@@ -202,7 +202,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN get all MEMBER")
-    public void whenAdminMemberGetThenSuccess() {
+    void whenAdminMemberGetThenSuccess() {
         MemberGetResponse expectedResponse = setupGetExistingWithExpected();
 
         HttpEntity<MemberAddRequest> httpEntity = new HttpEntity<>(null, headers);
@@ -219,7 +219,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN delete MEMBER")
-    public void whenAdminMemberDeleteByIdThenSuccess() {
+    void whenAdminMemberDeleteByIdThenSuccess() {
         MyUser existingUser = setupExistingUser();
 
         assertThat(myUserRepository.existsById(existingUser.getId()))
@@ -238,7 +238,7 @@ public class LibrarianAdminControllerIntegrationTest {
 
     @Test
     @DisplayName("Users with role LIBRARIAN delete non-existing MEMBER")
-    public void givenNonExistingIdWhenAdminMemberDeleteUserByIdThenDoNothing() {
+    void givenNonExistingIdWhenAdminMemberDeleteUserByIdThenDoNothing() {
         Long deleteId = 999L;
 
         assertThat(myUserRepository.existsById(deleteId))
