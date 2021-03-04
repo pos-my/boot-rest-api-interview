@@ -26,18 +26,27 @@ public class BookReturnService implements BaseService<BookReturnRequest, EmptyRe
     @Override
     @Transactional
     public EmptyResponse execute(BookReturnRequest request) {
-        Book book = bookRepository.findById(request.getBookId()).orElseThrow();
-        if (book.getStatus().equals(BookStatus.AVAILABLE))
-            throw new BookAlreadyReturnedException(request.getBookId());
+        Book book = validateBook(request.getBookId());
+        updateBorrowRecord(book, request);
         book.setStatus(BookStatus.AVAILABLE);
+        bookRepository.save(book);
+        return new EmptyResponse();
+    }
+
+    private Book validateBook(String id) {
+        Book book = bookRepository.findById(id).orElseThrow();
+        if (book.getStatus().equals(BookStatus.AVAILABLE))
+            throw new BookAlreadyReturnedException(id);
+        return book;
+    }
+
+    private void updateBorrowRecord(Book book, BookReturnRequest request) {
         BorrowRecord record = book.getBorrowRecords().stream()
-                .sorted()
+                .sorted()   //DESC by borrowTimestamp
                 .findFirst()
                 .filter(it -> StringUtils.equals(it.getUsername(), request.getUsername()))
                 .filter(it -> BooleanUtils.isFalse(it.getIsReturn()))
                 .orElseThrow(() -> new BorrowRecordMismatchException(request.getBookId(), request.getUsername()));
         record.setIsReturn(true);
-        bookRepository.save(book);
-        return new EmptyResponse();
     }
 }
