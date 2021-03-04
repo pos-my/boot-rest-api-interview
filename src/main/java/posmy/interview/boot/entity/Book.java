@@ -8,6 +8,7 @@ import posmy.interview.boot.enums.BookStatus;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Table(indexes = @Index(name = "idx_name", columnList = "name"))
@@ -30,6 +31,9 @@ public class Book {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private BookStatus status;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<BorrowRecord> borrowRecords;
 
     @Column(nullable = false)
     private ZonedDateTime lastUpdateDt;

@@ -21,6 +21,7 @@ import posmy.interview.boot.repos.MyUserRepository;
 import posmy.interview.boot.util.Constants;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -131,6 +132,7 @@ public class LibrarianControllerIntegrationTest {
         Book expectedBook = Book.builder()
                 .name(bookAddRequest.getName())
                 .status(BookStatus.AVAILABLE)
+                .borrowRecords(new ArrayList<>())
                 .build();
 
         HttpEntity<BookAddRequest> httpEntity = new HttpEntity<>(bookAddRequest, headers);
@@ -162,6 +164,7 @@ public class LibrarianControllerIntegrationTest {
                 .desc(bookPutRequest.getDesc())
                 .imageUrl(bookPutRequest.getImageUrl())
                 .status(bookPutRequest.getStatus())
+                .borrowRecords(new ArrayList<>())
                 .build();
 
         HttpEntity<BookPutRequest> httpEntity = new HttpEntity<>(bookPutRequest, headers);

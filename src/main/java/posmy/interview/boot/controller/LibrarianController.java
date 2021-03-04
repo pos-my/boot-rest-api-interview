@@ -28,7 +28,7 @@ public class LibrarianController {
     }
 
     @GetMapping
-    public String get() {
+    public String healthCheck() {
         return "success";
     }
 
