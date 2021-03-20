@@ -15,7 +15,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Entity
 @Table(name = "member")
-public class Member implements JpaEntity<Long> {
+public class Member implements JpaEntity<Long>, UserAware<Long> {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -35,5 +35,20 @@ public class Member implements JpaEntity<Long> {
     @Override
     public Long getId() {
         return this.id;
+    }
+
+    @Override
+    public boolean isMember() {
+        return true;
+    }
+
+    @Override
+    public boolean isLibrarian() {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return getUsername();
     }
 }

@@ -8,7 +8,7 @@ import posmy.interview.boot.entity.UserAware;
 import posmy.interview.boot.security.IAuthenticationFacade;
 import posmy.interview.boot.security.UserPrincipal;
 
-public class BaseService {
+public abstract class BaseService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 

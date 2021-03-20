@@ -14,39 +14,26 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @Entity
-@Table(name = "librarian")
-public class Librarian implements JpaEntity<Long>, UserAware<Long> {
+@Table(name = "book")
+public class Book implements JpaEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @NotNull
-    private String username;
+    private String title;
 
     @NotNull
-    private String password;
-
-    @NotNull
-    private String token;
+    private Status status;
 
     @Override
     public Long getId() {
-        return this.id;
+        return id;
     }
 
-    @Override
-    public boolean isMember() {
-        return false;
-    }
-
-    @Override
-    public boolean isLibrarian() {
-        return true;
-    }
-
-    @Override
-    public String getName() {
-        return getUsername();
+    public enum Status {
+        AVAILABLE,
+        BORROWED
     }
 }

@@ -1,5 +1,6 @@
 package posmy.interview.boot.services;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 import posmy.interview.boot.entity.IEntity;
@@ -25,15 +26,15 @@ public abstract class BaseEntityService<E extends IEntity<ID>, ID extends Serial
     }
 
     @Transactional
-    public void delete(E entity) {
-        assert entity != null;
-        final E pEntity = getById(entity.getId());
+    public void delete(ID id) {
+        final E pEntity = this.getById(id);
+        doDelete(pEntity);
         getRepository().delete(pEntity);
     }
 
     protected abstract void doCreate(E entity);
 
-    protected abstract E doUpdate(E entity, E changeSet);
+    protected abstract void doUpdate(E entity, E changeSet);
 
     protected abstract void doDelete(E entity);
 
@@ -50,11 +51,11 @@ public abstract class BaseEntityService<E extends IEntity<ID>, ID extends Serial
         if (persistentObj == null && incoming == null) {
             return false;
         }
-        if (persistentObj == null && incoming != null) {
+        if (persistentObj == null) {
             return true;
         }
         // If incoming change is NULL, assume no change!
-        if (persistentObj != null && incoming == null) {
+        if (incoming == null) {
             return false;
         }
 
@@ -65,5 +66,19 @@ public abstract class BaseEntityService<E extends IEntity<ID>, ID extends Serial
         }
         // sound reasonable for now
         return false;
+    }
+
+    protected void failIfBlankOrNull(String argsName, Object item) {
+        if (item instanceof String) {
+            String _item = (String) item;
+            if (StringUtils.isBlank(_item)) {
+                throw new IllegalArgumentException(String.format("%s cannot be empty", argsName));
+            }
+        } else {
+            if (item == null) {
+                throw new IllegalArgumentException(String.format("%s cannot be null", argsName));
+            }
+        }
+
     }
 }

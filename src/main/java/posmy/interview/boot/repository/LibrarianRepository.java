@@ -6,4 +6,6 @@ import posmy.interview.boot.entity.Librarian;
 
 @Repository
 public interface LibrarianRepository extends JpaRepository<Librarian, Long> {
+
+    Librarian findByToken(String token);
 }

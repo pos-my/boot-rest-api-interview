@@ -6,4 +6,6 @@ import posmy.interview.boot.entity.Member;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
+
+    Member findByToken(String token);
 }
