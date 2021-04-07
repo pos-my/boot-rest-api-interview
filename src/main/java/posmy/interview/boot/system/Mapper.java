@@ -7,4 +7,5 @@ public interface Mapper<E extends BaseDto, T extends BaseModel> {
 
     E convertToDto(T model);
 
+    T convertToModel(E dto);
 }

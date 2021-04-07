@@ -23,4 +23,15 @@ public class BookMapper implements Mapper<BookDto, Book> {
         }
         return dto;
     }
+
+    @Override
+    public Book convertToModel(BookDto dto) {
+        Book book;
+        try {
+            book = modelMapper.map(dto, Book.class);
+        } catch (ConfigurationException ce) {
+            book = new Book();
+        }
+        return book;
+    }
 }
