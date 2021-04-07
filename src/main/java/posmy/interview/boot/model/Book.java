@@ -22,7 +22,6 @@ public class Book extends BaseModel {
     @Column(name = "NAME")
     private String name;
 
-    @NotBlank(message = "Book status cannot be blank")
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
     private Constant.BookState status;
