@@ -1,5 +1,6 @@
 package posmy.interview.boot.service;
 
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,9 +11,9 @@ import posmy.interview.boot.repository.BookRepository;
 import posmy.interview.boot.system.BookMapper;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Setter
 @Service
 @Transactional
 public class BookServiceImpl implements BookService {
@@ -33,8 +34,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto findById(String id) {
-        Optional<Book> book = bookRepository.findById(id);
-        return book.map(bookMapper::convertToDto).orElse(null);
+        Book book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+        return bookMapper.convertToDto(book);
     }
 
     @Override
@@ -48,8 +49,12 @@ public class BookServiceImpl implements BookService {
     public BookDto updateBook(BookDto bookDto, String id) {
         Book book = bookRepository.findById(id)
                 .map(bk -> {
-                    bk.setName(bookDto.getName());
-                    bk.setStatus(bookDto.getStatus());
+                    if (bookDto.getName() != null) {
+                        bk.setName(bookDto.getName());
+                    }
+                    if (bookDto.getStatus() != null) {
+                        bk.setStatus(bookDto.getStatus());
+                    }
                     return bk;
                 })
                 .orElseThrow(() -> new BookNotFoundException(id));

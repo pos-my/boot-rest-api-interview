@@ -1,13 +1,19 @@
 package posmy.interview.boot.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "USERS")
 public class User extends BaseModel {
@@ -18,18 +24,16 @@ public class User extends BaseModel {
     @Column(name = "ID")
     private String id;
 
-    @NotBlank(message = "Login ID cannot be blank")
     @Column(name = "LOGINID")
     private String loginId;
 
-    @NotBlank(message = "User name cannot be blank")
     @Column(name = "NAME")
     private String name;
 
-    @NotBlank(message = "Password cannot be blank")
     @Column(name = "PASS")
     private String pass;
 
+    @JsonManagedReference
     @OneToMany
     @JoinTable(name = "AUTHORITIES",
             joinColumns = @JoinColumn(name = "USERID", referencedColumnName = "ID"),

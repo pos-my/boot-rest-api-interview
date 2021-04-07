@@ -1,13 +1,18 @@
 package posmy.interview.boot.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import posmy.interview.boot.system.Constant;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "BOOKS")
 public class Book extends BaseModel {
@@ -18,7 +23,6 @@ public class Book extends BaseModel {
     @Column(name = "ID")
     private String id;
 
-    @NotBlank(message = "Book name cannot be blank")
     @Column(name = "NAME")
     private String name;
 

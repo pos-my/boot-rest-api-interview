@@ -1,12 +1,14 @@
 package posmy.interview.boot.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+@Builder
 @Data
 @Entity
 @Table(name = "ROLES")
@@ -18,10 +20,10 @@ public class Role extends BaseModel {
     @Column(name = "ID")
     private String id;
 
-    @NotBlank(message = "Role name cannot be blank")
     @Column(name = "NAME")
     private String name;
 
+    @JsonBackReference
     @OneToMany
     @JoinTable(name = "AUTHORITIES",
             joinColumns = @JoinColumn(name = "ROLEID", referencedColumnName = "ID"),
