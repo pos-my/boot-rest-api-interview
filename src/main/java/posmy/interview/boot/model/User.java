@@ -39,4 +39,10 @@ public class User extends BaseModel {
             joinColumns = @JoinColumn(name = "USERID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "ROLEID"))
     private List<Role> roles;
+
+    @OneToMany
+    @JoinTable(name = "BORROWED_BOOKS",
+            joinColumns = @JoinColumn(name = "USERID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "BOOKID"))
+    private List<Book> borrowedBooks;
 }

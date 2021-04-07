@@ -10,10 +10,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import posmy.interview.boot.dto.UserDto;
 import posmy.interview.boot.exception.UserNotFoundException;
+import posmy.interview.boot.model.Book;
 import posmy.interview.boot.model.Role;
 import posmy.interview.boot.model.User;
+import posmy.interview.boot.repository.BookRepository;
 import posmy.interview.boot.repository.RoleRepository;
 import posmy.interview.boot.repository.UserRepository;
+import posmy.interview.boot.system.Constant;
 import posmy.interview.boot.system.UserMapper;
 
 import java.util.ArrayList;
@@ -38,6 +41,8 @@ class UserServiceImplTest {
     private UserRepository userRepository;
     @Mock
     private RoleRepository roleRepository;
+    @Mock
+    private BookRepository bookRepository;
 
     @Test
     void loadUserByUsername_withValidUser_returnUser() {
@@ -152,9 +157,19 @@ class UserServiceImplTest {
 
     @Test
     void deleteMember_withValidMember_deleteMember() {
-        User member = User.builder().loginId("m1").build();
+        Book book1 = Book.builder().id("bk1").name("Book 1").status(Constant.BookState.BORROWED).build();
+        Book book2 = Book.builder().id("bk1").name("Book 1").status(Constant.BookState.BORROWED).build();
+        List<Book> books = Stream.of(book1, book2).collect(Collectors.toList());
+
+        User member = User.builder().loginId("m1").borrowedBooks(books).build();
         Mockito.doReturn(Optional.of(member)).when(userRepository).findFirstByLoginId("m1");
+
+        ArgumentCaptor<List<Book>> captor = ArgumentCaptor.forClass(ArgumentMatchers.any());
+
         userService.deleteMember("m1");
+        Mockito.verify(bookRepository, times(1)).saveAll(captor.capture());
+        List<Book> borrowedBooks = captor.getValue();
+        assertTrue(borrowedBooks.stream().allMatch(bb -> bb.getStatus() == Constant.BookState.AVAILABLE));
         Mockito.verify(userRepository, times(1)).delete(member);
     }
 

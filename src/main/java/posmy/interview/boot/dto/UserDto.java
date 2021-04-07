@@ -21,4 +21,5 @@ public class UserDto extends BaseDto {
     private String name;
     private String pass;
     private List<RoleDto> roles;
+    private List<BookDto> borrowedBooks;
 }

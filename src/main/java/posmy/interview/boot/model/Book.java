@@ -1,5 +1,6 @@
 package posmy.interview.boot.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import posmy.interview.boot.system.Constant;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @Data
@@ -29,4 +31,11 @@ public class Book extends BaseModel {
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
     private Constant.BookState status;
+
+    @JsonBackReference
+    @OneToMany
+    @JoinTable(name = "BORROWED_BOOKS",
+            joinColumns = @JoinColumn(name = "BOOKID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "USERID"))
+    private List<User> users;
 }

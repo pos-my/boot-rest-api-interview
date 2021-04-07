@@ -12,6 +12,7 @@ import posmy.interview.boot.dto.UserDto;
 import posmy.interview.boot.exception.UserNotFoundException;
 import posmy.interview.boot.model.Role;
 import posmy.interview.boot.model.User;
+import posmy.interview.boot.repository.BookRepository;
 import posmy.interview.boot.repository.RoleRepository;
 import posmy.interview.boot.repository.UserRepository;
 import posmy.interview.boot.system.Constant;
@@ -30,6 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Autowired
     private UserMapper userMapper;
@@ -78,6 +82,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteMember(String loginId) {
         User member = userRepository.findFirstByLoginId(loginId).orElseThrow(() -> new UserNotFoundException(loginId));
+        // When member gets deleted, the borrowed books are automatically set back to AVAILABLE
+        member.getBorrowedBooks().forEach(bb -> bb.setStatus(Constant.BookState.AVAILABLE));
+        bookRepository.saveAll(member.getBorrowedBooks());
         userRepository.delete(member);
     }
 }
