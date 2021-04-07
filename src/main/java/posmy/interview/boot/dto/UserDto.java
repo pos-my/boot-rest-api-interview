@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class UserDto {
+public class UserDto extends BaseDto {
     private String id;
     private String loginId;
     private String name;
