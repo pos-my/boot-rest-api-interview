@@ -21,11 +21,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private MessageSource errorMessageSource;
 
     @ExceptionHandler({BaseRuntimeException.class})
-    public <T extends BaseRuntimeException> ResponseEntity<?> handleBaseRuntimeException(T ex) {
+    public <T extends BaseRuntimeException> ResponseEntity<String> handleBaseRuntimeException(T ex) {
         log.error(ex.getMessage());
 
         String exceptionName = ex.getClass().getSimpleName();
-        return new ResponseEntity<Object>(getErrorMessage(exceptionName, ex.getMessageParams()), getErrorHttpStatus(exceptionName));
+        return new ResponseEntity<>(getErrorMessage(exceptionName, ex.getMessageParams()), getErrorHttpStatus(exceptionName));
     }
 
     private String getErrorMessage(String exceptionName, Object[] messageParams) {

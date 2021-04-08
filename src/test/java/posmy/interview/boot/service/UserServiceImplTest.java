@@ -47,16 +47,22 @@ class UserServiceImplTest {
     @Test
     void loadUserByUsername_withValidUser_returnUser() {
         String pass = passwordEncoder.encode("password");
+        Role librarianRole = Role.builder().id("member").name("MEMBER").build();
+        List<Role> roles = Stream.of(librarianRole).collect(Collectors.toList());
         User user = User.builder().id("u1").loginId("user1").name("User 1").pass(pass).build();
+        user.setRoles(roles);
         Mockito.doReturn(Optional.of(user)).when(userRepository).findFirstByLoginId("user1");
         UserDetails userDetails = userService.loadUserByUsername("user1");
         assertNotNull(userDetails);
         assertEquals("user1", userDetails.getUsername());
         assertEquals(pass, userDetails.getPassword());
+        assertNotNull(userDetails.getAuthorities());
+        assertEquals(1, userDetails.getAuthorities().size());
+        assertEquals("ROLE_MEMBER", new ArrayList<>(userDetails.getAuthorities()).get(0).getAuthority());
     }
 
     @Test
-    void loadUserByUsername_withInValidUser_throwUserNotFoundException() {
+    void loadUserByUsername_withInvalidUser_throwUserNotFoundException() {
         Mockito.doReturn(Optional.empty()).when(userRepository).findFirstByLoginId("user1");
         assertThrows(UserNotFoundException.class, () -> userService.loadUserByUsername("user1"));
     }
@@ -152,7 +158,10 @@ class UserServiceImplTest {
     @Test
     void updateMember_withInvalidMember_throwUserNotFoundException() {
         Mockito.doReturn(Optional.empty()).when(userRepository).findFirstByLoginId("m1");
-        assertThrows(UserNotFoundException.class, () -> userService.updateMember(UserDto.builder().build(), "m1"));
+        UserDto userDto = UserDto.builder().build();
+        assertThrows(UserNotFoundException.class, () -> {
+            userService.updateMember(userDto, "m1");
+        });
     }
 
     @Test

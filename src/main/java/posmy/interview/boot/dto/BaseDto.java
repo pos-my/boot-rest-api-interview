@@ -14,5 +14,6 @@ public class BaseDto implements Serializable {
     private Date createdDate = new Date();
     private String updatedBy;
     private Date updatedDate;
+    private Long version;
 
 }

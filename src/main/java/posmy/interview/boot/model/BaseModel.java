@@ -2,10 +2,7 @@ package posmy.interview.boot.model;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -30,4 +27,7 @@ public class BaseModel implements Serializable {
     @Column(name = "UPDATED_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
+
+    @Version
+    private Long version;
 }

@@ -10,7 +10,5 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, String> {
 
-    List<Book> findByName(String name);
-
     List<Book> findByStatus(Constant.BookState status);
 }

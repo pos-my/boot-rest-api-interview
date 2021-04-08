@@ -17,8 +17,7 @@ import posmy.interview.boot.dto.UserDto;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -46,6 +45,17 @@ public class AccountControllerTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.loginId", is("newmember66")))
                 .andExpect(jsonPath("$.name", is("New Member 66")));
+    }
+
+    @Test
+    public void userCreatesAccountWithExistingLoginId() throws Exception {
+        UserDto userDto = UserDto.builder().loginId("member1").name("Member 1").pass("password").build();
+        mockMvc.perform(post(ACCOUNT_API + "/")
+                .content(objectMapper.writeValueAsString(userDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("User with login ID member1 already exists!"));
     }
 
     @WithMockUser(username = "member1", roles = "MEMBER")
