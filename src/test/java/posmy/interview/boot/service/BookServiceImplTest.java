@@ -31,15 +31,12 @@ class BookServiceImplTest {
 
     @InjectMocks
     private final BookServiceImpl bookService = new BookServiceImpl();
-
-    @Mock
-    private BookRepository bookRepository;
-
-    @Mock
-    private UserRepository userRepository;
-
     @Spy
     private final BookMapper bookMapper = new BookMapper(new ModelMapper());
+    @Mock
+    private BookRepository bookRepository;
+    @Mock
+    private UserRepository userRepository;
 
     @Test
     void findAll_with3Books_return3Books() {
@@ -86,14 +83,14 @@ class BookServiceImplTest {
 
     @Test
     void createBook_withValidBook_createBookAndReturn() {
-        BookDto bookDto = BookDto.builder().id("bk1").name("Book #1").status(Constant.BookState.BORROWED).build();
-        Book book = Book.builder().id("bk1").name("Book #1").status(Constant.BookState.BORROWED).build();
+        BookDto bookDto = BookDto.builder().id("bk1").name("Book #1").build();
+        Book book = Book.builder().id("bk1").name("Book #1").status(Constant.BookState.AVAILABLE).build();
         Mockito.doReturn(book).when(bookRepository).save(book);
         BookDto createdBookDto = bookService.createBook(bookDto);
         assertNotNull(createdBookDto);
         assertEquals("bk1", createdBookDto.getId());
         assertEquals("Book #1", createdBookDto.getName());
-        assertEquals(Constant.BookState.BORROWED, createdBookDto.getStatus());
+        assertEquals(Constant.BookState.AVAILABLE, createdBookDto.getStatus());
     }
 
     @Test

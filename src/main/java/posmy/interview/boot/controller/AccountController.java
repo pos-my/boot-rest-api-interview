@@ -18,7 +18,7 @@ public class AccountController extends BaseController {
 
     @PreAuthorize("permitAll()")
     @PostMapping("/")
-    public UserDto createAccount(@RequestBody UserDto userDto, Principal principal) {
+    public UserDto createAccount(@RequestBody UserDto userDto) {
         UserDto existingUser = userService.findByLoginId(userDto.getLoginId());
         if (existingUser != null) {
             throw new UserAlreadyExistsException(userDto.getLoginId());
@@ -27,7 +27,7 @@ public class AccountController extends BaseController {
         return userService.createMember(userDto);
     }
 
-    @PreAuthorize("hasRole(ROLE_MEMBER)")
+    @PreAuthorize("hasRole('ROLE_MEMBER')")
     @DeleteMapping("/")
     public void deleteAccount(Principal principal) {
         userService.deleteMember(principal.getName());

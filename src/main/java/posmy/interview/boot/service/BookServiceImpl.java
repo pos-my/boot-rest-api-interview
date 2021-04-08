@@ -57,6 +57,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto createBook(BookDto bookDto) {
         Book book = bookMapper.convertToModel(bookDto);
+        // Default the book to AVAILABLE status
+        book.setStatus(Constant.BookState.AVAILABLE);
         Book createdBook = bookRepository.save(book);
         return bookMapper.convertToDto(createdBook);
     }

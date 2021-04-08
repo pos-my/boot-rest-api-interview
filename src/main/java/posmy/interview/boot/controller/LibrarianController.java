@@ -7,7 +7,6 @@ import posmy.interview.boot.dto.UserDto;
 import posmy.interview.boot.service.BookService;
 import posmy.interview.boot.service.UserService;
 
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -26,14 +25,19 @@ public class LibrarianController extends BaseController {
         return bookService.findAll();
     }
 
+    @GetMapping("/books/{id}")
+    public BookDto getBook(@PathVariable String id) {
+        return bookService.findById(id);
+    }
+
     @PostMapping("/books")
-    public BookDto createBook(@Valid @RequestBody BookDto bookDto, Principal principal) {
+    public BookDto createBook(@RequestBody BookDto bookDto, Principal principal) {
         setCreatedByAndDate(bookDto, principal);
         return bookService.createBook(bookDto);
     }
 
     @PutMapping("/books/{id}")
-    public BookDto updateBook(@Valid @RequestBody BookDto bookDto, @PathVariable String id, Principal principal) {
+    public BookDto updateBook(@RequestBody BookDto bookDto, @PathVariable String id, Principal principal) {
         setUpdatedByAndDate(bookDto, principal);
         return bookService.updateBook(bookDto, id);
     }
