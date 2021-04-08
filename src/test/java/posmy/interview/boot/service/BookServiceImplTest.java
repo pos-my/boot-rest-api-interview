@@ -2,16 +2,18 @@ package posmy.interview.boot.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import posmy.interview.boot.dto.BookDto;
+import posmy.interview.boot.exception.BookAlreadyBorrowedException;
+import posmy.interview.boot.exception.BookAlreadyReturnedException;
 import posmy.interview.boot.exception.BookNotFoundException;
+import posmy.interview.boot.exception.UserNotFoundException;
 import posmy.interview.boot.model.Book;
+import posmy.interview.boot.model.User;
 import posmy.interview.boot.repository.BookRepository;
+import posmy.interview.boot.repository.UserRepository;
 import posmy.interview.boot.system.BookMapper;
 import posmy.interview.boot.system.Constant;
 
@@ -32,6 +34,9 @@ class BookServiceImplTest {
 
     @Mock
     private BookRepository bookRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @Spy
     private final BookMapper bookMapper = new BookMapper(new ModelMapper());
@@ -129,4 +134,83 @@ class BookServiceImplTest {
         Mockito.doReturn(Optional.empty()).when(bookRepository).findById("bk1");
         assertThrows(BookNotFoundException.class, () -> bookService.deleteBook("bk1"));
     }
+
+    @Test
+    void borrowBook_withValidMemberAndBook_returnBookWithBorrower() {
+        User member = User.builder().loginId("member1").build();
+        Mockito.doReturn(Optional.of(member)).when(userRepository).findFirstByLoginId("member1");
+
+        Book book = Book.builder().id("bk1").name("Book 1").status(Constant.BookState.AVAILABLE).build();
+        Mockito.doReturn(Optional.of(book)).when(bookRepository).findById("bk1");
+
+        Book updatedBook = Book.builder().id("bk1").name("Book 1").status(Constant.BookState.BORROWED).build();
+        Mockito.doReturn(updatedBook).when(bookRepository).save(ArgumentMatchers.any(Book.class));
+        bookService.borrowBook("member1", "bk1");
+        ArgumentCaptor<Book> bookCaptor = ArgumentCaptor.forClass(Book.class);
+        Mockito.verify(bookRepository).save(bookCaptor.capture());
+        Book capturedBook = bookCaptor.getValue();
+        assertNotNull(capturedBook);
+        assertEquals("bk1", capturedBook.getId());
+        assertEquals("Book 1", capturedBook.getName());
+        assertEquals(Constant.BookState.BORROWED, capturedBook.getStatus());
+        assertNotNull(capturedBook.getUser());
+        assertEquals("member1", capturedBook.getUser().getLoginId());
+    }
+
+    @Test
+    void borrowBook_withInvalidMember_throwUserNotFoundException() {
+        Mockito.doReturn(Optional.empty()).when(userRepository).findFirstByLoginId("member1");
+        assertThrows(UserNotFoundException.class, () -> bookService.borrowBook("member1", "bk1"));
+    }
+
+    @Test
+    void borrowBook_withValidMemberAndInvalidBook_throwBookNotFoundException() {
+        User member = User.builder().loginId("member1").build();
+        Mockito.doReturn(Optional.of(member)).when(userRepository).findFirstByLoginId("member1");
+
+        Mockito.doReturn(Optional.empty()).when(bookRepository).findById("bk1");
+        assertThrows(BookNotFoundException.class, () -> bookService.borrowBook("member1", "bk1"));
+    }
+
+    @Test
+    void borrowBook_withBorrowedBook_throwBookAlreadyBorrowedException() {
+        User member = User.builder().loginId("member1").build();
+        Mockito.doReturn(Optional.of(member)).when(userRepository).findFirstByLoginId("member1");
+
+        Book book = Book.builder().id("bk1").name("Book 1").status(Constant.BookState.BORROWED).build();
+        Mockito.doReturn(Optional.of(book)).when(bookRepository).findById("bk1");
+        assertThrows(BookAlreadyBorrowedException.class, () -> bookService.borrowBook("member1", "bk1"));
+    }
+
+    @Test
+    void returnBook_withValidMemberAndBook_returnWithBookReturned() {
+        Book book = Book.builder().id("bk1").name("Book 1").status(Constant.BookState.BORROWED).build();
+        Mockito.doReturn(Optional.of(book)).when(bookRepository).findById("bk1");
+
+        Book updatedBook = Book.builder().id("bk1").name("Book 1").status(Constant.BookState.AVAILABLE).build();
+        Mockito.doReturn(updatedBook).when(bookRepository).save(ArgumentMatchers.any(Book.class));
+        bookService.returnBook("bk1");
+        ArgumentCaptor<Book> bookCaptor = ArgumentCaptor.forClass(Book.class);
+        Mockito.verify(bookRepository).save(bookCaptor.capture());
+        Book capturedBook = bookCaptor.getValue();
+        assertNotNull(capturedBook);
+        assertEquals("bk1", capturedBook.getId());
+        assertEquals("Book 1", capturedBook.getName());
+        assertEquals(Constant.BookState.AVAILABLE, capturedBook.getStatus());
+        assertNull(capturedBook.getUser());
+    }
+
+    @Test
+    void returnBook_withInvalidBook_throwBookNotFoundException() {
+        Mockito.doReturn(Optional.empty()).when(bookRepository).findById("bk1");
+        assertThrows(BookNotFoundException.class, () -> bookService.returnBook("bk1"));
+    }
+
+    @Test
+    void returnBook_withReturnedBook_throwBookAlreadyReturnedException() {
+        Book book = Book.builder().id("bk1").name("Book 1").status(Constant.BookState.AVAILABLE).build();
+        Mockito.doReturn(Optional.of(book)).when(bookRepository).findById("bk1");
+        assertThrows(BookAlreadyReturnedException.class, () -> bookService.returnBook("bk1"));
+    }
+
 }

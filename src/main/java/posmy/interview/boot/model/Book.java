@@ -9,7 +9,6 @@ import org.hibernate.annotations.GenericGenerator;
 import posmy.interview.boot.system.Constant;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Builder
 @Data
@@ -33,9 +32,9 @@ public class Book extends BaseModel {
     private Constant.BookState status;
 
     @JsonBackReference
-    @OneToMany
+    @ManyToOne
     @JoinTable(name = "BORROWED_BOOKS",
             joinColumns = @JoinColumn(name = "BOOKID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "USERID"))
-    private List<User> users;
+    private User user;
 }

@@ -10,9 +10,15 @@ public interface BookService {
 
     BookDto findById(String id);
 
+    List<BookDto> findAvailableBooks();
+
     BookDto createBook(BookDto bookDto);
 
     BookDto updateBook(BookDto bookDto, String id);
 
     void deleteBook(String id);
+
+    BookDto borrowBook(String loginId, String bookId);
+
+    BookDto returnBook(String bookId);
 }

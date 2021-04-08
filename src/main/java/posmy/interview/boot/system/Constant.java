@@ -14,4 +14,17 @@ public class Constant {
         LIBRARIAN,
         MEMBER
     }
+
+    public enum BookAction {
+        BORROW,
+        RETURN;
+
+        public static boolean isBorrow(String action) {
+            return BORROW.name().equalsIgnoreCase(action);
+        }
+
+        public static boolean isReturn(String action) {
+            return RETURN.name().equalsIgnoreCase(action);
+        }
+    }
 }

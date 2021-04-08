@@ -42,7 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/v1/librarian/**").hasAnyRole(Constant.UserRole.ADMIN.name(), Constant.UserRole.LIBRARIAN.name())
-                .antMatchers("/api/v1/member/**").hasAnyRole(Constant.UserRole.ADMIN.name(), Constant.UserRole.LIBRARIAN.name(), Constant.UserRole.MEMBER.name())
+                .antMatchers("/api/v1/member/**").hasAnyRole(Constant.UserRole.ADMIN.name(), Constant.UserRole.MEMBER.name())
+                .antMatchers("/api/v1/account/**").permitAll()
                 .anyRequest().authenticated().and().httpBasic();
     }
 

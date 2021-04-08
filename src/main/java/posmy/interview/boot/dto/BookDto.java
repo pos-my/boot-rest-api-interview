@@ -8,8 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import posmy.interview.boot.system.Constant;
 
-import java.util.List;
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,5 +18,5 @@ public class BookDto extends BaseDto {
     private String id;
     private String name;
     private Constant.BookState status;
-    private List<UserDto> users;
+    private UserDto user;
 }

@@ -43,7 +43,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
-        User user = userRepository.findFirstByLoginId(loginId).orElseThrow(() -> new UserNotFoundException(loginId));
+        User user = userRepository.findFirstByLoginId(loginId)
+                .orElseThrow(() -> new UserNotFoundException(loginId));
         UserDto userDto = userMapper.convertToDto(user);
         return new MyUserPrincipal(userDto);
     }
@@ -55,9 +56,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto findByLoginId(String loginId) {
+        return userRepository.findFirstByLoginId(loginId)
+                .map(userMapper::convertToDto).orElse(null);
+    }
+
+    @Override
     public UserDto createMember(UserDto userDto) {
         User newMember = userMapper.convertToModel(userDto);
-        List<Role> roleList = roleRepository.findFirstByName(Constant.UserRole.MEMBER.name()).stream().collect(Collectors.toList());
+        List<Role> roleList = roleRepository
+                .findFirstByName(Constant.UserRole.MEMBER.name())
+                .stream().collect(Collectors.toList());
         newMember.setRoles(roleList);
         newMember.setPass(passwordEncoder.encode(userDto.getPass()));
         User createdMember = userRepository.save(newMember);
@@ -81,7 +90,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteMember(String loginId) {
-        User member = userRepository.findFirstByLoginId(loginId).orElseThrow(() -> new UserNotFoundException(loginId));
+        User member = userRepository.findFirstByLoginId(loginId)
+                .orElseThrow(() -> new UserNotFoundException(loginId));
         // When member gets deleted, the borrowed books are automatically set back to AVAILABLE
         member.getBorrowedBooks().forEach(bb -> bb.setStatus(Constant.BookState.AVAILABLE));
         bookRepository.saveAll(member.getBorrowedBooks());
