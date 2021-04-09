@@ -49,9 +49,12 @@ public class MemberController {
     }
 
     @PatchMapping("/book/borrow/{id}")
-    public ResponseEntity<Book> borrowBook(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Book> borrowBook(
+        @RequestHeader(name = AUTHORIZATION_HEADER) String token,
+        @PathVariable(value = "id") Long id
+    ) {
         return new ResponseEntity<>(
-            bookService.borrowBook(id),
+            bookService.borrowBook(id, getUsername(token)),
             HttpStatus.OK
         );
     }
@@ -68,8 +71,11 @@ public class MemberController {
     public ResponseEntity<String> deleteOwnAccount(
         @RequestHeader(name = AUTHORIZATION_HEADER) String token
     ) {
-        // Getting the username from the jwt token
-        userService.deleteUserBy(jwtTokenUtil.getUsernameFromToken(token.substring(7)));
+        userService.deleteUserBy(getUsername(token));
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private String getUsername(String token) {
+        return jwtTokenUtil.getUsernameFromToken(token.substring(7)); // Remove 'Bearer '
     }
 }

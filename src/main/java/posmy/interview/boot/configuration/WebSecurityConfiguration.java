@@ -59,7 +59,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+        // To display h2-console in the browser
         httpSecurity.headers().frameOptions().disable();
+
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

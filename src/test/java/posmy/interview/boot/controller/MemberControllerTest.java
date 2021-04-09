@@ -97,7 +97,7 @@ class MemberControllerTest {
     void shouldBorrowBook() throws Exception {
         Book mockBook = BookFactory.getInstance().constructBook(BookStatus.BORROWED);
 
-        when(bookService.borrowBook(anyLong())).thenReturn(mockBook);
+        when(bookService.borrowBook(anyLong(), anyString())).thenReturn(mockBook);
 
         mockMvc
             .perform(
@@ -107,7 +107,7 @@ class MemberControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status", is("BORROWED")));
 
-        verify(bookService, times(1)).borrowBook(anyLong());
+        verify(bookService, times(1)).borrowBook(anyLong(), anyString());
     }
 
     @Test

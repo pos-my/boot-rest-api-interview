@@ -1,6 +1,7 @@
 package posmy.interview.boot.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,10 +22,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import posmy.interview.boot.dto.request.SearchBookDto;
 import posmy.interview.boot.entity.Book;
+import posmy.interview.boot.entity.User;
 import posmy.interview.boot.enums.BookStatus;
 import posmy.interview.boot.exception.ValidationException;
 import posmy.interview.boot.repository.BookRepository;
+import posmy.interview.boot.repository.UserRepository;
 import posmy.interview.boot.testutils.factories.BookFactory;
+import posmy.interview.boot.testutils.factories.UserFactory;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
@@ -34,6 +38,9 @@ class BookServiceTest {
 
     @Mock
     private BookRepository bookRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @Test
     @DisplayName("Should get a list of book in page")
@@ -102,11 +109,13 @@ class BookServiceTest {
     void shouldBorrowBook() {
         Book mockBook = BookFactory.getInstance().constructBook(BookStatus.AVAILABLE);
         Book mockBorrowedBook = BookFactory.getInstance().constructBook(BookStatus.BORROWED);
+        User mockUser = UserFactory.getInstance().constructUser();
 
         when(bookRepository.findById(any())).thenReturn(Optional.of(mockBook));
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(mockUser));
         when(bookRepository.save(any())).thenReturn(mockBorrowedBook);
 
-        Book book = bookService.borrowBook(1L);
+        Book book = bookService.borrowBook(1L, "username");
 
         verify(bookRepository, times(1)).save(any(Book.class));
         Assertions.assertEquals(BookStatus.BORROWED, book.getStatus());
@@ -116,12 +125,14 @@ class BookServiceTest {
     @DisplayName("Should not borrow a book if not available")
     void shouldNotBorrowBookIfNotAvailable() {
         Book mockBook = BookFactory.getInstance().constructBook(BookStatus.BORROWED);
+        User mockUser = UserFactory.getInstance().constructUser();
 
         when(bookRepository.findById(any())).thenReturn(Optional.of(mockBook));
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(mockUser));
 
         Assertions.assertThrows(
             ValidationException.class,
-            () -> bookService.borrowBook(1L)
+            () -> bookService.borrowBook(1L, "username")
         );
     }
 

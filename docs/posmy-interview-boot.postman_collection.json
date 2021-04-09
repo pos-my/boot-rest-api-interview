@@ -6,209 +6,402 @@
 	},
 	"item": [
 		{
-			"name": "Get Books",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/posmy/books?size=10&page=0&title=Book",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posmy",
-						"books"
-					],
-					"query": [
-						{
-							"key": "size",
-							"value": "10"
+			"name": "librarian",
+			"item": [
+				{
+					"name": "Create Book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTczOTA4LCJpYXQiOjE2MTc5NzI5MDh9.EQWq6ovG1L3u_DEYMvqR8df5pNnTdNfAxYT_TkBtHq6W1JvhhSCGhnDKHwsMP3GAdWX-p4PDCPSCdzLd7Twb0Q",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "page",
-							"value": "0"
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"New Book\",\r\n    \"author\": \"New Author\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						{
-							"key": "title",
-							"value": "Book"
+						"url": {
+							"raw": "http://localhost:8080/api/posmy/librarian/book",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posmy",
+								"librarian",
+								"book"
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create Book",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"New Book\",\r\n    \"author\": \"New Author\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/api/posmy/book",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posmy",
-						"book"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Book",
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"New Book\",\r\n    \"author\": \"New Author\",\r\n    \"status\": \"BORROWED\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Update Book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTczOTA4LCJpYXQiOjE2MTc5NzI5MDh9.EQWq6ovG1L3u_DEYMvqR8df5pNnTdNfAxYT_TkBtHq6W1JvhhSCGhnDKHwsMP3GAdWX-p4PDCPSCdzLd7Twb0Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"New Book\",\r\n    \"author\": \"New Author\",\r\n    \"status\": \"BORROWED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/posmy/librarian/book/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posmy",
+								"librarian",
+								"book",
+								"2"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/api/posmy/book/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posmy",
-						"book",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Book",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/posmy/book/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posmy",
-						"book",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create User",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"pass1\",\r\n    \"firstName\": \"junee\",\r\n    \"lastName\": \"tan\",\r\n    \"roleId\": 1\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Delete Book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTczOTA4LCJpYXQiOjE2MTc5NzI5MDh9.EQWq6ovG1L3u_DEYMvqR8df5pNnTdNfAxYT_TkBtHq6W1JvhhSCGhnDKHwsMP3GAdWX-p4PDCPSCdzLd7Twb0Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/posmy/librarian/book/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posmy",
+								"librarian",
+								"book",
+								"2"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/api/posmy/user",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posmy",
-						"user"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update User",
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"firstName\": \"je2\",\r\n    \"lastName\": \"tan1\",\r\n    \"roleId\": 2\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Create User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTczOTA4LCJpYXQiOjE2MTc5NzI5MDh9.EQWq6ovG1L3u_DEYMvqR8df5pNnTdNfAxYT_TkBtHq6W1JvhhSCGhnDKHwsMP3GAdWX-p4PDCPSCdzLd7Twb0Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"pass1\",\r\n    \"firstName\": \"junee\",\r\n    \"lastName\": \"tan\",\r\n    \"roleIds\": [1, 2]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/posmy/librarian/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posmy",
+								"librarian",
+								"user"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/api/posmy/user/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posmy",
-						"user",
-						"1"
-					]
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTczOTA4LCJpYXQiOjE2MTc5NzI5MDh9.EQWq6ovG1L3u_DEYMvqR8df5pNnTdNfAxYT_TkBtHq6W1JvhhSCGhnDKHwsMP3GAdWX-p4PDCPSCdzLd7Twb0Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"je2\",\r\n    \"lastName\": \"tan1\",\r\n    \"username\": \"username\",\r\n    \"password\": \"password\",\r\n    \"roleIds\": [2]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/posmy/librarian/user/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posmy",
+								"librarian",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTc0MDU4LCJpYXQiOjE2MTc5NzMwNTh9.hjzxTBUhr0aZFN-jpjr9nu5QWCa_ykDI6rTbqI7HzWu6iWd5MHNNSLV5fy4Y35-fGmqptkOFj2ZjQaH1ShE-Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/posmy/librarian/user/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posmy",
+								"librarian",
+								"user",
+								"2"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Delete User",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/posmy/user/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posmy",
-						"user",
-						"1"
-					]
+			"name": "member",
+			"item": [
+				{
+					"name": "Get Books",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTc0MDU4LCJpYXQiOjE2MTc5NzMwNTh9.hjzxTBUhr0aZFN-jpjr9nu5QWCa_ykDI6rTbqI7HzWu6iWd5MHNNSLV5fy4Y35-fGmqptkOFj2ZjQaH1ShE-Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/posmy/member/books?size=10&page=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posmy",
+								"member",
+								"books"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrow Book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTc0MDU4LCJpYXQiOjE2MTc5NzMwNTh9.hjzxTBUhr0aZFN-jpjr9nu5QWCa_ykDI6rTbqI7HzWu6iWd5MHNNSLV5fy4Y35-fGmqptkOFj2ZjQaH1ShE-Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/posmy/member/book/borrow/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posmy",
+								"member",
+								"book",
+								"borrow",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Return book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTc0MDU4LCJpYXQiOjE2MTc5NzMwNTh9.hjzxTBUhr0aZFN-jpjr9nu5QWCa_ykDI6rTbqI7HzWu6iWd5MHNNSLV5fy4Y35-fGmqptkOFj2ZjQaH1ShE-Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/posmy/member/book/return/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posmy",
+								"member",
+								"book",
+								"return",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTc0MDU4LCJpYXQiOjE2MTc5NzMwNTh9.hjzxTBUhr0aZFN-jpjr9nu5QWCa_ykDI6rTbqI7HzWu6iWd5MHNNSLV5fy4Y35-fGmqptkOFj2ZjQaH1ShE-Yg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/posmy/member/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posmy",
+								"member",
+								"user"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "Get Roles",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTczOTA4LCJpYXQiOjE2MTc5NzI5MDh9.EQWq6ovG1L3u_DEYMvqR8df5pNnTdNfAxYT_TkBtHq6W1JvhhSCGhnDKHwsMP3GAdWX-p4PDCPSCdzLd7Twb0Q",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -222,6 +415,36 @@
 						"api",
 						"posmy",
 						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"librarian\",\r\n    \"password\": \"password\",\r\n    \"expiration\": 1000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/posmy/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posmy",
+						"token"
 					]
 				}
 			},

@@ -16,17 +16,20 @@ import posmy.interview.boot.dto.request.CreateBookDto;
 import posmy.interview.boot.dto.request.SearchBookDto;
 import posmy.interview.boot.dto.request.UpdateBookDto;
 import posmy.interview.boot.entity.Book;
+import posmy.interview.boot.entity.User;
 import posmy.interview.boot.enums.BookStatus;
 import posmy.interview.boot.exception.NotFoundException;
 import posmy.interview.boot.exception.ValidationException;
 import posmy.interview.boot.mapper.BookMapper;
 import posmy.interview.boot.repository.BookRepository;
+import posmy.interview.boot.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
     private final BookMapper bookMapper = BookMapper.getInstance();
 
     public Page<Book> getBooks(SearchBookDto searchBookDto, Pageable pageable) {
@@ -78,11 +81,13 @@ public class BookService {
     }
 
     @Transactional
-    public Book borrowBook(Long id) {
+    public Book borrowBook(Long id, String username) {
         Book book = findBookBy(id);
+        User user = findUserByUsername(username);
 
         if (validateBookStatus(book.getStatus())) {
             book.setStatus(BookStatus.BORROWED);
+            book.setUser(user);
             return bookRepository.save(book);
         }
 
@@ -98,12 +103,18 @@ public class BookService {
         }
 
         book.setStatus(BookStatus.AVAILABLE);
+        book.setUser(null);
         return bookRepository.save(book);
     }
 
     private Book findBookBy(Long id) {
         return bookRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Book not found for id: " + id));
+    }
+
+    private User findUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new NotFoundException("User not found for username: " + username));
     }
 
     private boolean validateBookStatus(BookStatus status) {
