@@ -16,7 +16,7 @@ public class BookMapper {
         return bookMapperInstance;
     }
 
-    public Book mapBookDtoToEntity(CreateBookDto createBookDto) {
+    public Book mapCreteBookDtoToEntity(CreateBookDto createBookDto) {
         return Book.builder()
             .title(createBookDto.getTitle())
             .author(createBookDto.getAuthor())

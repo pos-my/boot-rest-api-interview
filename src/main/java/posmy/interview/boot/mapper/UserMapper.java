@@ -18,7 +18,7 @@ public class UserMapper {
         return userMapperInstance;
     }
 
-    public User mapUserDtoToEntity(
+    public User mapCreateUserDtoToEntity(
         CreateUserDto createUserDto,
         String encodedPassword,
         List<Role> roles

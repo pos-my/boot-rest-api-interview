@@ -30,7 +30,7 @@ public class UserService {
         List<Role> roles = new ArrayList<>();
         createUserDto.getRoleIds().forEach(roleId -> roles.add(findRoleBy(roleId)));
 
-        User user = userMapper.mapUserDtoToEntity(
+        User user = userMapper.mapCreateUserDtoToEntity(
             createUserDto,
             bCryptEncoder.encode(createUserDto.getPassword()),
             roles

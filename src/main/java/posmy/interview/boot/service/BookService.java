@@ -67,7 +67,7 @@ public class BookService {
 
     @Transactional
     public Book createBook(CreateBookDto createBookDto) {
-        Book book = bookMapper.mapBookDtoToEntity(createBookDto);
+        Book book = bookMapper.mapCreteBookDtoToEntity(createBookDto);
         book.setStatus(BookStatus.AVAILABLE);
         return bookRepository.save(book);
     }
