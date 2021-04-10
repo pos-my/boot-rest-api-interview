@@ -8,4 +8,5 @@ import lombok.Data;
 public class SearchBookDto {
 
     private String title;
+    private String author;
 }

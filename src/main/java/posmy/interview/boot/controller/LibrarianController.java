@@ -49,7 +49,7 @@ public class LibrarianController {
     }
 
     @DeleteMapping("/book/{id}")
-    public ResponseEntity<String> deleteBook(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> deleteBook(@PathVariable(value = "id") Long id) {
         bookService.deleteBook(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -74,7 +74,7 @@ public class LibrarianController {
     }
 
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") Long id) {
         userService.deleteUserBy(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

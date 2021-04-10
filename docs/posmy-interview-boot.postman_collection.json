@@ -253,7 +253,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTc0MDU4LCJpYXQiOjE2MTc5NzMwNTh9.hjzxTBUhr0aZFN-jpjr9nu5QWCa_ykDI6rTbqI7HzWu6iWd5MHNNSLV5fy4Y35-fGmqptkOFj2ZjQaH1ShE-Yg",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE4MDI0NDM5LCJpYXQiOjE2MTgwMjM0Mzl9.lMGtnXMevgMXtd6CSihxfzEy19R3JB2Dx8OUuI2wlAUvaHu9yNKCPcwnRro8JtMLxB-Vf3UOjoaq85PXGKEKcQ",
 									"type": "string"
 								}
 							]
@@ -295,12 +295,12 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTc0MDU4LCJpYXQiOjE2MTc5NzMwNTh9.hjzxTBUhr0aZFN-jpjr9nu5QWCa_ykDI6rTbqI7HzWu6iWd5MHNNSLV5fy4Y35-fGmqptkOFj2ZjQaH1ShE-Yg",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE4MDI0NDM5LCJpYXQiOjE2MTgwMjM0Mzl9.lMGtnXMevgMXtd6CSihxfzEy19R3JB2Dx8OUuI2wlAUvaHu9yNKCPcwnRro8JtMLxB-Vf3UOjoaq85PXGKEKcQ",
 									"type": "string"
 								}
 							]
 						},
-						"method": "PATCH",
+						"method": "POST",
 						"header": [],
 						"url": {
 							"raw": "http://localhost:8080/api/posmy/member/book/borrow/1",
@@ -329,12 +329,12 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE3OTc0MDU4LCJpYXQiOjE2MTc5NzMwNTh9.hjzxTBUhr0aZFN-jpjr9nu5QWCa_ykDI6rTbqI7HzWu6iWd5MHNNSLV5fy4Y35-fGmqptkOFj2ZjQaH1ShE-Yg",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJST0xFIjpbIlJPTEVfTElCUkFSSUFOIiwiUk9MRV9NRU1CRVIiXSwic3ViIjoibGlicmFyaWFuIiwiZXhwIjoxNjE4MDI0NDM5LCJpYXQiOjE2MTgwMjM0Mzl9.lMGtnXMevgMXtd6CSihxfzEy19R3JB2Dx8OUuI2wlAUvaHu9yNKCPcwnRro8JtMLxB-Vf3UOjoaq85PXGKEKcQ",
 									"type": "string"
 								}
 							]
 						},
-						"method": "PATCH",
+						"method": "POST",
 						"header": [],
 						"url": {
 							"raw": "http://localhost:8080/api/posmy/member/book/return/1",

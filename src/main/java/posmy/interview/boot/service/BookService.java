@@ -34,6 +34,7 @@ public class BookService {
 
     public Page<Book> getBooks(SearchBookDto searchBookDto, Pageable pageable) {
         String title = searchBookDto.getTitle();
+        String author = searchBookDto.getAuthor();
 
         Specification<Book> specification = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -41,6 +42,12 @@ public class BookService {
             if (isNotBlank(title)) {
                 predicates.add(
                     criteriaBuilder.like(root.get("title"), "%" + title + "%")
+                );
+            }
+
+            if (isNotBlank(author)) {
+                predicates.add(
+                    criteriaBuilder.like(root.get("author"), "%" + author + "%")
                 );
             }
 

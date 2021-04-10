@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,12 +35,14 @@ public class MemberController {
     @GetMapping("/books")
     public ResponseEntity<Page<Book>> getBooks(
         @RequestParam(value = "title", required = false) String title,
+        @RequestParam(value = "author", required = false) String author,
         Pageable pageable
     ) {
         return new ResponseEntity<>(
             bookService.getBooks(
                 SearchBookDto.builder()
                     .title(title)
+                    .author(author)
                     .build(),
                 pageable
             ),
@@ -48,7 +50,7 @@ public class MemberController {
         );
     }
 
-    @PatchMapping("/book/borrow/{id}")
+    @PostMapping("/book/borrow/{id}")
     public ResponseEntity<Book> borrowBook(
         @RequestHeader(name = AUTHORIZATION_HEADER) String token,
         @PathVariable(value = "id") Long id
@@ -59,7 +61,7 @@ public class MemberController {
         );
     }
 
-    @PatchMapping("/book/return/{id}")
+    @PostMapping("/book/return/{id}")
     public ResponseEntity<Book> returnBook(@PathVariable(value = "id") Long id) {
         return new ResponseEntity<>(
             bookService.returnBook(id),
@@ -68,7 +70,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/user")
-    public ResponseEntity<String> deleteOwnAccount(
+    public ResponseEntity<Object> deleteOwnAccount(
         @RequestHeader(name = AUTHORIZATION_HEADER) String token
     ) {
         userService.deleteUserBy(getUsername(token));
