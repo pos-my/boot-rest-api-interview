@@ -48,7 +48,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .csrf()
             .disable()
             .authorizeRequests()
-            .antMatchers("/h2-console/**", "/api/posmy/token")
+            .antMatchers("/h2-console/**", "/api/posmy/token") // To access h2 console and the URL to retrieve token
             .permitAll()
             .anyRequest()
             .authenticated()
