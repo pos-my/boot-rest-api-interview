@@ -10,11 +10,11 @@ import posmy.interview.boot.model.result.BaseResult;
 
 /**
  * @author Bennett
- * @version $Id: UserApiResponse.java, v 0.1 2021-05-24 12:39 PM Bennett Exp $$
+ * @version $Id: BaseApiResponse.java, v 0.1 2021-05-24 12:39 PM Bennett Exp $$
  */
 @Getter
 @Setter
-public class UserApiResponse {
+public class BaseApiResponse {
 
     private String message;
 

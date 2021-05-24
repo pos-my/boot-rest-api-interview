@@ -4,6 +4,10 @@
  */
 package posmy.interview.boot.model.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import posmy.interview.boot.model.enums.BookStatusEnum;
+
 import javax.persistence.*;
 
 /**
@@ -12,6 +16,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "book_table")
+@Getter
+@Setter
 public class Book {
 
     @Id
@@ -19,33 +25,15 @@ public class Book {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "book_name")
-    private String bookName;
+    @Column(name = "book_title")
+    private String bookTitle;
+
+    @Column(name = "author")
+    private String author;
 
     @Column(name = "user_borrow")
     private String userBorrow;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getBookName() {
-        return bookName;
-    }
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
-    }
-
-    public String getUserBorrow() {
-        return userBorrow;
-    }
-
-    public void setUserBorrow(String userBorrow) {
-        this.userBorrow = userBorrow;
-    }
+    @Column(name = "book_status")
+    private String bookStatus;
 }

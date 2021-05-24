@@ -15,7 +15,16 @@ public enum ErrorCodeEnum {
     /** available status*/
     IDEMPOTENT_USER("IDEMPOTENT_USER", "User is already created."),
 
-    USER_NOT_FOUND("USER_NOT_FOUND", "user not found in system");
+    USER_NOT_FOUND("USER_NOT_FOUND", "user not found in system"),
+
+    BOOK_NOT_FOUND("BOOK_NOT_FOUND", "book not found in system"),
+
+    BOOK_NOT_AVAILABLE("BOOK_NOT_AVAILABLE", "book not available"),
+
+    BOOK_EXIST("BOOK_EXIST", "book already exist"),
+
+    BOOK_ALREADY_RETURN("BOOK_ALREADY_RETURN","book already returned")
+    ;
 
 
     /**

@@ -10,3 +10,9 @@ INSERT INTO user_role (user_id, role_id) VALUES
 (1, 1),
 (1, 2),
 (2, 2);
+
+INSERT INTO book_table (book_title, author, user_borrow, book_status) VALUES
+('Book 1', 'author 1', 'NONE','AVAILABLE'),
+('Book 2', 'author 2', 'NONE','AVAILABLE'),
+('Book 3', 'author 3', 'NONE','AVAILABLE'),
+('Book 4', 'author 4', 'member','BORROWED');

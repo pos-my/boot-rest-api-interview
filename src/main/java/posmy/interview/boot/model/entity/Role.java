@@ -4,6 +4,9 @@
  */
 package posmy.interview.boot.model.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 /**
@@ -12,6 +15,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "role_table")
+@Getter
+@Setter
 public class Role {
 
     @Id
@@ -21,20 +26,4 @@ public class Role {
 
     @Column(name = "role_name")
     private String roleName;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
 }

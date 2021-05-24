@@ -4,7 +4,7 @@
  */
 package posmy.interview.boot.controller;
 
-import posmy.interview.boot.model.apiresponse.UserApiResponse;
+import posmy.interview.boot.model.apiresponse.BaseApiResponse;
 import posmy.interview.boot.model.result.BaseResult;
 
 /**
@@ -13,15 +13,15 @@ import posmy.interview.boot.model.result.BaseResult;
  */
 public class BaseController {
 
-    protected UserApiResponse composeUserApiSuccessResponse(String message, BaseResult result){
-        UserApiResponse response = new UserApiResponse();
+    protected Object composeUserApiSuccessResponse(String message, BaseResult result){
+        BaseApiResponse response = new BaseApiResponse();
         response.setMessage(message);
         response.setResult(result);
         return response;
     }
 
-    protected UserApiResponse composeUserApiFailedResponse(String message,BaseResult result) {
-        UserApiResponse response = new UserApiResponse();
+    protected Object composeUserApiFailedResponse(String message,BaseResult result) {
+        BaseApiResponse response = new BaseApiResponse();
         response.setMessage(message);
         response.setResult(result);
         return response;
