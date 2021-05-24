@@ -33,6 +33,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
+                .headers().frameOptions().disable()
+                .and()
                 .csrf().disable()
                 .authorizeRequests()
 //            .antMatchers("/api/**").hasRole(UserRole.LIBRARIAN.name())
