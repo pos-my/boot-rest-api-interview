@@ -4,6 +4,7 @@
  */
 package posmy.interview.boot.service;
 
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,8 +62,22 @@ public class UserService {
         List<Role> roleList = new ArrayList<>();
 
         for(String roleName: list) {
-            roleList.add(roleRepository.findByRoleName(roleName));
+            if(null == findRoleByName(roleName)) {
+                throw new NullPointerException();
+            }
+            roleList.add(findRoleByName(roleName));
+
         }
         return roleList;
+    }
+
+    private Role findRoleByName(String roleName) {
+        try {
+            return roleRepository.findByRoleName(roleName)
+                    .orElseThrow(() -> new NotFoundException("Role not found: "+ roleName));
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
