@@ -7,6 +7,7 @@ package posmy.interview.boot.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,6 +31,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -45,36 +49,29 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic();
     }
 
+
     @Override
-    @Bean
-    protected UserDetailsService userDetailsService() {
-        UserDetails bennettUser = User.builder()
-                .username("bennett")
-                .password(passwordEncoder.encode("123"))
-                .roles(RolePermissionEnum.LIBRARIAN.name())
-                .build();
-
-        UserDetails secondUser = User.builder()
-                .username("member")
-                .password(passwordEncoder.encode("123"))
-                .roles(RolePermissionEnum.MEMBER.name())
-                .build();
-
-        return new InMemoryUserDetailsManager(
-                bennettUser,
-                secondUser);
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
     }
 
 //    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.authenticationProvider(daoAuthenticationProvider());
-//    }
-//
 //    @Bean
-//    public DaoAuthenticationProvider daoAuthenticationProvider(){
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
-//        daoAuthenticationProvider.setUserDetailsService(applicationUserService);
-//        return daoAuthenticationProvider;
+//    protected UserDetailsService userDetailsService() {
+//        UserDetails bennettUser = User.builder()
+//                .username("bennett")
+//                .password(passwordEncoder.encode("123"))
+//                .roles(RolePermissionEnum.LIBRARIAN.name())
+//                .build();
+//
+//        UserDetails secondUser = User.builder()
+//                .username("member")
+//                .password(passwordEncoder.encode("123"))
+//                .roles(RolePermissionEnum.MEMBER.name())
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(
+//                bennettUser,
+//                secondUser);
 //    }
 }
