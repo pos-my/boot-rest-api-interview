@@ -29,7 +29,7 @@ import posmy.interview.boot.model.enums.RolePermissionEnum;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordConfiguration passwordConfiguration;
 
     @Autowired
     private UserDetailsService userDetailsService;
