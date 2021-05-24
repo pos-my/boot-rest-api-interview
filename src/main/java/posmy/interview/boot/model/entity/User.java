@@ -4,6 +4,9 @@
  */
 package posmy.interview.boot.model.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,6 +16,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "user_table")
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -22,6 +27,12 @@ public class User {
 
     @Column(name = "username")
     private String username;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "mobile_no")
+    private String mobileNo;
 
     @Column(name = "password")
     private String password;
@@ -33,35 +44,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
 }

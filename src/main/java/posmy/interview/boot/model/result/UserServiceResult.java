@@ -9,11 +9,11 @@ import lombok.Setter;
 
 /**
  * @author Bennett
- * @version $Id: CreateUserResult.java, v 0.1 2021-05-24 1:33 PM Bennett Exp $$
+ * @version $Id: UserServiceResult.java, v 0.1 2021-05-24 1:33 PM Bennett Exp $$
  */
 @Getter
 @Setter
-public class CreateUserResult extends BaseResult{
+public class UserServiceResult extends BaseResult{
 
     private String username;
 }

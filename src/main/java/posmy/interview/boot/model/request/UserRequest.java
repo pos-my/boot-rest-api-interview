@@ -12,15 +12,19 @@ import java.util.List;
 
 /**
  * @author Bennett
- * @version $Id: CreateUserRequest.java, v 0.1 2021-05-24 1:28 PM Bennett Exp $$
+ * @version $Id: UserRequest.java, v 0.1 2021-05-24 1:28 PM Bennett Exp $$
  */
 @Getter
 @Setter
-public class CreateUserRequest {
+public class UserRequest {
 
     private String username;
 
     private String password;
+
+    private String name;
+
+    private String mobileNo;
 
     private List<String> roles;
 }

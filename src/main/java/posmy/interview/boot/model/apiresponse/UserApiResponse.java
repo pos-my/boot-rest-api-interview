@@ -16,11 +16,7 @@ import posmy.interview.boot.model.result.BaseResult;
 @Setter
 public class UserApiResponse {
 
-    private String username;
-
     private String message;
-
-    private boolean success;
 
     private BaseResult result;
 }

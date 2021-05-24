@@ -13,17 +13,15 @@ import posmy.interview.boot.model.result.BaseResult;
  */
 public class BaseController {
 
-    protected UserApiResponse composeUserApiSuccessResponse(String username, String message){
+    protected UserApiResponse composeUserApiSuccessResponse(String message, BaseResult result){
         UserApiResponse response = new UserApiResponse();
-        response.setUsername(username);
-        response.setSuccess(true);
         response.setMessage(message);
+        response.setResult(result);
         return response;
     }
 
-    protected UserApiResponse composeUserApiFailedResponse(String username,String message,BaseResult result) {
+    protected UserApiResponse composeUserApiFailedResponse(String message,BaseResult result) {
         UserApiResponse response = new UserApiResponse();
-        response.setUsername(username);
         response.setMessage(message);
         response.setResult(result);
         return response;
