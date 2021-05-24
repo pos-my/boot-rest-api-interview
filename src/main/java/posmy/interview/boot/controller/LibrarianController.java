@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import posmy.interview.boot.model.apiresponse.UserApiResponse;
 import posmy.interview.boot.model.entity.User;
+import posmy.interview.boot.model.request.CreateUserRequest;
 import posmy.interview.boot.service.UserService;
 
 /**
@@ -24,8 +25,11 @@ public class LibrarianController {
 
     @PostMapping("create")
     @PreAuthorize("hasAnyRole('ROLE_LIBRARIAN')")
-    public UserApiResponse createUser(@RequestBody User user) {
-        return null;
+    public UserApiResponse createUser(@RequestBody CreateUserRequest request) {
+        UserApiResponse response = new UserApiResponse();
+        if(userService.createUser(request).isSuccess()){
+        }
+        return response;
     }
 
     @PostMapping("update")
