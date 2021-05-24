@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import posmy.interview.boot.model.apiresponse.UserApiResponse;
 import posmy.interview.boot.model.entity.User;
 import posmy.interview.boot.model.request.CreateUserRequest;
+import posmy.interview.boot.model.result.BaseResult;
 import posmy.interview.boot.service.UserService;
 
 /**
@@ -18,7 +19,7 @@ import posmy.interview.boot.service.UserService;
  */
 @RestController
 @RequestMapping("api/v1/librarian")
-public class LibrarianController {
+public class LibrarianController extends BaseController{
 
     @Autowired
     private UserService userService;
@@ -26,10 +27,11 @@ public class LibrarianController {
     @PostMapping("create")
     @PreAuthorize("hasAnyRole('ROLE_LIBRARIAN')")
     public UserApiResponse createUser(@RequestBody CreateUserRequest request) {
-        UserApiResponse response = new UserApiResponse();
-        if(userService.createUser(request).isSuccess()){
+        BaseResult result = userService.createUser(request);
+        if(result.isSuccess()){
+            return composeUserApiSuccessResponse(request.getUsername(), "User created");
         }
-        return response;
+        return composeUserApiFailedResponse(request.getUsername(),"User creation failed", result);
     }
 
     @PostMapping("update")

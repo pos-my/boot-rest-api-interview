@@ -17,7 +17,7 @@ import posmy.interview.boot.service.BookService;
  */
 @RestController
 @RequestMapping("api/v1/member")
-public class MemberController {
+public class MemberController extends BaseController {
     @Autowired
     private BookService bookService;
 
