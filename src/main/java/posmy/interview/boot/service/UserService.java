@@ -7,12 +7,15 @@ package posmy.interview.boot.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import posmy.interview.boot.model.entity.Role;
 import posmy.interview.boot.model.entity.User;
 import posmy.interview.boot.model.request.CreateUserRequest;
 import posmy.interview.boot.model.result.CreateUserResult;
 import posmy.interview.boot.repository.RoleRepository;
 import posmy.interview.boot.repository.UserRespository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,7 +47,7 @@ public class UserService {
             User newUser = new User();
             newUser.setUsername(request.getUsername());
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-            newUser.setRoles(request.getRoles());
+            newUser.setRoles(buildUserRole(request.getRoles()));
 
             userRespository.save(newUser);
 
@@ -52,5 +55,14 @@ public class UserService {
             result.setUsername(request.getUsername());
         }
         return result;
+    }
+
+    private List<Role> buildUserRole(List<String> list) {
+        List<Role> roleList = new ArrayList<>();
+
+        for(String roleName: list) {
+            roleList.add(roleRepository.findByRoleName(roleName));
+        }
+        return roleList;
     }
 }

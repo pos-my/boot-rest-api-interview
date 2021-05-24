@@ -22,5 +22,5 @@ public class CreateUserRequest {
 
     private String password;
 
-    private List<Role> roles;
+    private List<String> roles;
 }
