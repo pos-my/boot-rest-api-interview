@@ -13,14 +13,14 @@ import posmy.interview.boot.model.result.BaseResult;
  */
 public class BaseController {
 
-    protected Object composeUserApiSuccessResponse(String message, BaseResult result){
+    protected Object composeApiSuccessResponse(String message, BaseResult result){
         BaseApiResponse response = new BaseApiResponse();
         response.setMessage(message);
         response.setResult(result);
         return response;
     }
 
-    protected Object composeUserApiFailedResponse(String message,BaseResult result) {
+    protected Object composeApiFailedResponse(String message, BaseResult result) {
         BaseApiResponse response = new BaseApiResponse();
         response.setMessage(message);
         response.setResult(result);

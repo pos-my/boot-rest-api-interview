@@ -26,7 +26,7 @@ public class BookController extends BaseController{
     @PreAuthorize("hasAnyRole('ROLE_LIBRARIAN')")
     public BaseApiResponse addBook(@RequestBody BookRequest request) {
         BaseResult result = bookService.addBook(request);
-        return (BaseApiResponse) composeUserApiSuccessResponse("Book added successfully", result);
+        return (BaseApiResponse) composeApiSuccessResponse("Book added successfully", result);
     }
 
     @PostMapping("update")
@@ -34,15 +34,15 @@ public class BookController extends BaseController{
     public BaseApiResponse updateBook(@RequestBody BookRequest request) {
         BaseResult result = bookService.updateBook(request);
         if(result.isSuccess()){
-            return(BaseApiResponse)composeUserApiSuccessResponse("book updated success", result);
+            return(BaseApiResponse) composeApiSuccessResponse("book updated success", result);
         }
-        return (BaseApiResponse)composeUserApiFailedResponse("book update failed", result);
+        return (BaseApiResponse) composeApiFailedResponse("book update failed", result);
     }
 
     @DeleteMapping("delete/{bookTitle}")
     @PreAuthorize("hasAnyRole('ROLE_LIBRARIAN')")
     public BaseApiResponse deleteBook(@PathVariable String bookTitle) {
         BaseResult result = bookService.deleteBookByBookTitle(bookTitle);
-        return (BaseApiResponse)composeUserApiSuccessResponse("book deleted", result);
+        return (BaseApiResponse) composeApiSuccessResponse("book deleted", result);
     }
 }

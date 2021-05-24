@@ -30,9 +30,9 @@ public class LibrarianController extends BaseController{
     public BaseApiResponse createUser(@RequestBody UserRequest request) {
         BaseResult result = userService.createUser(request);
         if(result.isSuccess()){
-            return (BaseApiResponse) composeUserApiSuccessResponse("User created", result);
+            return (BaseApiResponse) composeApiSuccessResponse("User created", result);
         }
-        return (BaseApiResponse) composeUserApiFailedResponse("User creation failed", result);
+        return (BaseApiResponse) composeApiFailedResponse("User creation failed", result);
     }
 
     @PostMapping("update")
@@ -40,9 +40,9 @@ public class LibrarianController extends BaseController{
     public BaseApiResponse updateUser(@RequestBody UserRequest request) {
         BaseResult result = userService.updateUser(request);
         if(result.isSuccess()){
-            return(BaseApiResponse) composeUserApiSuccessResponse("User update success", result);
+            return(BaseApiResponse) composeApiSuccessResponse("User update success", result);
         }
-        return(BaseApiResponse) composeUserApiFailedResponse("User update failed", result);
+        return(BaseApiResponse) composeApiFailedResponse("User update failed", result);
     }
 
     @GetMapping("view/{username}")
@@ -50,22 +50,22 @@ public class LibrarianController extends BaseController{
     public BaseApiResponse getUserByUsername(@PathVariable String username) {
         UserQueryResult result = userService.getUserByUserName(username);
         if(result.isSuccess()){
-            return(BaseApiResponse)composeUserApiSuccessResponse("User query success", result);
+            return(BaseApiResponse) composeApiSuccessResponse("User query success", result);
         }
-        return (BaseApiResponse)composeUserApiFailedResponse("User query failed", result);
+        return (BaseApiResponse) composeApiFailedResponse("User query failed", result);
     }
 
     @GetMapping("view/all")
     @PreAuthorize("hasAnyRole('ROLE_LIBRARIAN')")
     public BaseApiResponse getAllUsers() {
         UserQueryResult result = userService.getAllUsers();
-        return (BaseApiResponse)composeUserApiSuccessResponse("Query all users success", result);
+        return (BaseApiResponse) composeApiSuccessResponse("Query all users success", result);
     }
 
     @DeleteMapping("delete/{username}")
     @PreAuthorize("hasAnyRole('ROLE_LIBRARIAN')")
     public BaseApiResponse removeUser(@PathVariable String username) {
         UserServiceResult result = userService.deleteUserByUserName(username);
-        return (BaseApiResponse)composeUserApiSuccessResponse("user deleted", result);
+        return (BaseApiResponse) composeApiSuccessResponse("user deleted", result);
     }
 }

@@ -10,11 +10,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import posmy.interview.boot.model.apiresponse.BaseApiResponse;
-import posmy.interview.boot.model.request.BookReturnRequest;
 import posmy.interview.boot.model.result.BaseResult;
 import posmy.interview.boot.model.result.UserServiceResult;
 import posmy.interview.boot.service.BookService;
 import posmy.interview.boot.service.UserService;
+
 
 /**
  * @author Bennett
@@ -36,9 +36,9 @@ public class MemberController extends BaseController {
         String currentPrincipalName = authentication.getName();
         BaseResult result = bookService.borrowBook(bookTitle, currentPrincipalName);
         if(result.isSuccess()){
-            return(BaseApiResponse)composeUserApiSuccessResponse("book borrow success", result);
+            return(BaseApiResponse) composeApiSuccessResponse("book borrow success", result);
         }
-        return (BaseApiResponse)composeUserApiFailedResponse("book borrow failed", result);
+        return (BaseApiResponse) composeApiFailedResponse("book borrow failed", result);
     }
 
     @PostMapping("returnBook/{bookTitle}")
@@ -48,16 +48,16 @@ public class MemberController extends BaseController {
         String currentPrincipalName = authentication.getName();
         BaseResult result = bookService.returnBook(bookTitle, currentPrincipalName);
         if(result.isSuccess()){
-            return(BaseApiResponse)composeUserApiSuccessResponse("book return success", result);
+            return(BaseApiResponse) composeApiSuccessResponse("book return success", result);
         }
-        return (BaseApiResponse)composeUserApiFailedResponse("book return failed", result);
+        return (BaseApiResponse) composeApiFailedResponse("book return failed", result);
     }
 
     @GetMapping("viewBooks")
     @PreAuthorize("hasAnyRole('ROLE_MEMBER')")
     public BaseApiResponse getAllBooks() {
         BaseResult result = bookService.getAllBooks();
-        return (BaseApiResponse)composeUserApiSuccessResponse("Query all books success", result);
+        return (BaseApiResponse) composeApiSuccessResponse("Query all books success", result);
     }
 
     @DeleteMapping("delete")
@@ -66,7 +66,7 @@ public class MemberController extends BaseController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         UserServiceResult result = userService.deleteUserByUserName(currentPrincipalName);
-        return (BaseApiResponse)composeUserApiSuccessResponse("user deleted", result);
+        return (BaseApiResponse) composeApiSuccessResponse("user deleted", result);
     }
 
 }
