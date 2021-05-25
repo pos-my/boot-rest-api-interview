@@ -71,12 +71,12 @@ public class BookServiceImpl implements BookService {
             updateBook.setBookTitle(request.getBookTitle());
             updateBook.setAuthor(request.getAuthor());
             updateBook.setBookStatus(request.getStatus());
-            updateBook.setUserBorrow(request.getUserBorrow());
+            updateBook.setUsername(request.getUsername());
             bookRepository.save(updateBook);
 
             result.setSuccess(true);
             result.setBookTitle(request.getBookTitle());
-            result.setBorrowedUser(request.getUserBorrow());
+            result.setBorrowedUser(request.getUsername());
         }
         return result;
     }
@@ -122,7 +122,7 @@ public class BookServiceImpl implements BookService {
         }
 
         Book borrowBook = book.get();
-        borrowBook.setUserBorrow(user.get().getUsername());
+        borrowBook.setUsername(user.get().getUsername());
         borrowBook.setBookStatus(BookStatusEnum.BORROWED.getCode());
 
         bookRepository.save(borrowBook);
@@ -156,7 +156,7 @@ public class BookServiceImpl implements BookService {
 
         Book returnBook = book.get();
         returnBook.setBookStatus(BookStatusEnum.AVAILABLE.getCode());
-        returnBook.setUserBorrow("NONE");
+        returnBook.setUsername("NONE");
 
         bookRepository.save(returnBook);
 

@@ -21,6 +21,6 @@ public class BookRequest {
 
     private String status;
 
-    private String userBorrow;
+    private String username;
 
 }

@@ -6,7 +6,6 @@ package posmy.interview.boot.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import posmy.interview.boot.model.enums.BookStatusEnum;
 
 import javax.persistence.*;
 
@@ -31,8 +30,8 @@ public class Book {
     @Column(name = "author")
     private String author;
 
-    @Column(name = "user_borrow")
-    private String userBorrow;
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "book_status")
     private String bookStatus;

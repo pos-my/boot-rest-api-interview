@@ -6,7 +6,6 @@ package posmy.interview.boot.model.request;
 
 import lombok.Getter;
 import lombok.Setter;
-import posmy.interview.boot.model.entity.Role;
 
 import java.util.List;
 
