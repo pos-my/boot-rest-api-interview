@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import posmy.interview.boot.entity.Book;
-import posmy.interview.boot.entity.User;
 import posmy.interview.boot.enums.BookOperation;
 import posmy.interview.boot.enums.BookState;
 import posmy.interview.boot.repository.BookRepository;

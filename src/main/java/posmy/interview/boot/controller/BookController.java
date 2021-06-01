@@ -2,7 +2,6 @@ package posmy.interview.boot.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -13,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import posmy.interview.boot.entity.Book;
-import posmy.interview.boot.entity.User;
-import posmy.interview.boot.enums.BookOperation;
 import posmy.interview.boot.request.BookRequest;
 import posmy.interview.boot.response.BaseServiceResponse;
 import posmy.interview.boot.service.BookService;
@@ -34,8 +29,6 @@ import posmy.interview.boot.service.BookService;
 @RestController
 @RequestMapping("/api/v1")
 public class BookController {
-	
-//	private final String tagName = "Book Management";
 	
 	@Autowired
 	private BookService bookService;

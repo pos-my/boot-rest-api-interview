@@ -1,6 +1,5 @@
 package posmy.interview.boot.service;
 
-import posmy.interview.boot.enums.BookOperation;
 import posmy.interview.boot.request.BookRequest;
 import posmy.interview.boot.response.BaseServiceResponse;
 
