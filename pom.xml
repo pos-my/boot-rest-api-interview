@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>posmy.interview</groupId>
-    <artifactId>boot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>boot</name>
+    <artifactId>library</artifactId>
+    <version>0.0.1</version>
+    <name>library</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -57,6 +57,11 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
