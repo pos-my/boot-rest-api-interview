@@ -23,8 +23,8 @@ The are two roles in the system; `LIBRARIAN` and `MEMBER`
   
 #### As a Member
   - I can view, borrow, and return available Books
-  - Once a book is borrowed, its status will change to `BORROWED`
-  - Once a book is returned, its status will change to `AVAILABLE`
+  - Once a bookDto is borrowed, its status will change to `BORROWED`
+  - Once a bookDto is returned, its status will change to `AVAILABLE`
   - I can delete my own account
 
 ## Nice to Have:
