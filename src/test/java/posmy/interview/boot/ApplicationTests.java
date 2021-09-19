@@ -30,8 +30,37 @@ class ApplicationTests {
     @Test
     @DisplayName("Users must be authorized in order to perform actions")
     void contextLoads() throws Exception {
-        mvc.perform(get("/"))
+        mvc.perform(get("/lib"))
                 .andExpect(status().isUnauthorized());
+    }
+    
+    @Test
+    @WithMockUser(username = "test", roles={"LIBRARIAN"})
+    void contextLoadst_lib_sucess() throws Exception {
+        mvc.perform(get("/lib/book"))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    @WithMockUser(username = "test", roles={"LIBRARIAN"})
+    void contextLoadst_lib_fail() throws Exception {
+        mvc.perform(get("/mem/book"))
+                .andExpect(status().isForbidden());
+        
+    }
+    
+    @Test
+    @WithMockUser(username = "test2", roles={"MEMBER"})
+    void contextLoadsTest_member_sucess() throws Exception {
+        mvc.perform(get("/mem/book/available"))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    @WithMockUser(username = "test2", roles={"MEMBER"})
+    void contextLoadsTest_member_fail() throws Exception {
+        mvc.perform(get("/lib/book"))
+                .andExpect(status().isForbidden());
     }
 
 }
