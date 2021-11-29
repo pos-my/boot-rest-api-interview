@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface BookRepository extends PagingAndSortingRepository<Book, String> {
     Optional<Book> findByIsbn(String isbn);
+
     Optional<Book> findByBorrower(String borrower);
 }

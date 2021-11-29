@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, String> {
     Optional<User> findByUsername(String username);
+
     Optional<User> findByUsernameAndStatus(String username, String status);
 
     Page<User> findAllByRole(String role, Pageable pageable);

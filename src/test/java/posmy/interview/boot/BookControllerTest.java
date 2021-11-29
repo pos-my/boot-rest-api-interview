@@ -9,7 +9,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import posmy.interview.boot.entity.Book;
-import posmy.interview.boot.entity.User;
 
 import java.io.File;
 
@@ -133,7 +132,7 @@ class BookControllerTest {
 
     @Test
     @Order(11)
-    @WithMockUser(username = "test1",password = "12345",authorities = "MEMBER")
+    @WithMockUser(username = "test1", password = "12345", authorities = "MEMBER")
     @DisplayName("Member to borrow book")
     void borrowBookForMember() throws Exception {
         Book book = objectMapper.readValue(new File("src/main/resources/json/integration/existingBook.json"), Book.class);
@@ -143,7 +142,7 @@ class BookControllerTest {
 
     @Test
     @Order(12)
-    @WithMockUser(username = "test1",password = "12345",authorities = "MEMBER")
+    @WithMockUser(username = "test1", password = "12345", authorities = "MEMBER")
     @DisplayName("Member to borrow book that someone else has borrowed")
     void borrowBookThatSomeoneHasBorrowedForMember() throws Exception {
         Book book = objectMapper.readValue(new File("src/main/resources/json/integration/existingBook.json"), Book.class);
@@ -153,7 +152,7 @@ class BookControllerTest {
 
     @Test
     @Order(13)
-    @WithMockUser(username = "test2",password = "12345",authorities = "MEMBER")
+    @WithMockUser(username = "test2", password = "12345", authorities = "MEMBER")
     @DisplayName("Member to return book that someone else has borrowed")
     void returnBookThatSomeoneHasBorrowedForMember() throws Exception {
         Book book = objectMapper.readValue(new File("src/main/resources/json/integration/existingBook.json"), Book.class);
@@ -173,7 +172,7 @@ class BookControllerTest {
 
     @Test
     @Order(15)
-    @WithMockUser(username = "test1",password = "12345",authorities = "MEMBER")
+    @WithMockUser(username = "test1", password = "12345", authorities = "MEMBER")
     @DisplayName("Member to return book")
     void returnBookForMember() throws Exception {
         Book book = objectMapper.readValue(new File("src/main/resources/json/integration/existingBook.json"), Book.class);
@@ -183,7 +182,7 @@ class BookControllerTest {
 
     @Test
     @Order(16)
-    @WithMockUser(username = "test1",password = "12345",authorities = "MEMBER")
+    @WithMockUser(username = "test1", password = "12345", authorities = "MEMBER")
     @DisplayName("Member to return book that is still available")
     void returnBookThatIsNotBorrowedForMember() throws Exception {
         Book book = objectMapper.readValue(new File("src/main/resources/json/integration/existingBook.json"), Book.class);

@@ -11,16 +11,11 @@ import posmy.interview.boot.constant.Constant;
 import posmy.interview.boot.entity.Book;
 import posmy.interview.boot.entity.User;
 import posmy.interview.boot.impl.UserImpl;
-import posmy.interview.boot.repo.BookRepository;
-import posmy.interview.boot.repo.UserRepository;
 import posmy.interview.boot.service.BookService;
 import posmy.interview.boot.service.UserService;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

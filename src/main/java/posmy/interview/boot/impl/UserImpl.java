@@ -116,7 +116,7 @@ public class UserImpl implements UserService, UserDetailsService {
 
     @Override
     public Page<User> getMembers(int page) {
-        if(Constant.MIN_PAGE > page ){
+        if (Constant.MIN_PAGE > page) {
             log.error(Constant.PAGE_ERROR);
             throw new RuntimeException(Constant.PAGE_ERROR);
         }
