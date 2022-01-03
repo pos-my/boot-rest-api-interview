@@ -19,7 +19,7 @@ public class BookEntity {
     private String description;
 
     @Column(name = "status")
-    private long status; //it is in sens
+    private String status;
 
     @Column(name = "record_create_date")
     private Timestamp recordCreateDate;
@@ -51,11 +51,11 @@ public class BookEntity {
         this.description = description;
     }
 
-    public long getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(long status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
