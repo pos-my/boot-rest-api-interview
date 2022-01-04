@@ -1,4 +1,4 @@
-package posmy.interview.boot.model;
+package posmy.interview.boot.model.book;
 
 public class Book {
     int bookId;

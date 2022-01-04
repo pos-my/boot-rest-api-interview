@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import posmy.interview.boot.model.database.BookEntity;
 
+import java.util.Optional;
+
 @Repository
 public interface BookDao extends JpaRepository<BookEntity, Long> {
 
@@ -20,4 +22,6 @@ public interface BookDao extends JpaRepository<BookEntity, Long> {
             @Param("description") String description,
             @Param("status") String status,
             Pageable pageable);
+
+    BookEntity findByBookId(Integer id);
 }
