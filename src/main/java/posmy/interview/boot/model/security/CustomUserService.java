@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import posmy.interview.boot.constant.Constants;
 import posmy.interview.boot.database.UserDao;
 import posmy.interview.boot.model.database.UserEntity;
 import posmy.interview.boot.util.Json;
@@ -19,12 +20,9 @@ public class CustomUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userDao.findUserEntityByUserName(username);
 
-        System.out.println(Json.toString(userEntity));
-        if (userEntity == null) {
+        if (userEntity == null || userEntity.getStatus().equals(Constants.UserStatus.REMOVED.getType())) {
             throw new UsernameNotFoundException(username);
         }
-
-        System.out.println("Verified");
 
         return new CustomUserDetail(userEntity);
     }
