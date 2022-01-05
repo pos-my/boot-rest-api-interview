@@ -4,9 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
+import posmy.interview.boot.constant.Constants;
 import posmy.interview.boot.database.BookDao;
 import posmy.interview.boot.database.TransactionDao;
+import posmy.interview.boot.database.UserDao;
+import posmy.interview.boot.exception.BookNotAvailableException;
 import posmy.interview.boot.exception.InvalidArgumentException;
+import posmy.interview.boot.exception.UnauthorisedException;
 import posmy.interview.boot.model.book.Book;
 import posmy.interview.boot.model.book.BookCreatedResponse;
 import posmy.interview.boot.model.book.BookResponse;
@@ -14,6 +21,7 @@ import posmy.interview.boot.model.book.UpdateBookResponse;
 import posmy.interview.boot.model.common.Pagination;
 import posmy.interview.boot.model.database.BookEntity;
 import posmy.interview.boot.model.database.TransactionEntity;
+import posmy.interview.boot.model.security.CustomUserDetail;
 import posmy.interview.boot.util.DateUtil;
 import posmy.interview.boot.util.PaginationUtil;
 import posmy.interview.boot.util.ValidationUtil;
@@ -28,12 +36,14 @@ public class BookServiceImpl implements BookService {
 
     BookDao bookDao;
     TransactionDao transactionDao;
+    UserDao userDao;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public BookServiceImpl(BookDao bookDao, TransactionDao transactionDao){
+    public BookServiceImpl(BookDao bookDao, TransactionDao transactionDao, UserDao userDao){
         this.bookDao = bookDao;
         this.transactionDao = transactionDao;
+        this.userDao = userDao;
     }
 
 
@@ -91,25 +101,57 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public UpdateBookResponse updateBook(Integer id, String name, String description, String status) throws InvalidArgumentException{
+    public UpdateBookResponse updateBook(Integer id, String name, String description, String status) throws InvalidArgumentException, UnauthorisedException{
         BookEntity existingBookEntity = bookDao.findByBookId(id);
-        if (existingBookEntity == null){
-            throw new InvalidArgumentException();
-        }
+        String bookOriginalStatus = existingBookEntity.getStatus();
+        String role = getCurrentUserRole();
+        checkIfUserHasAuthority(getCurrentUserRole(), status);
+        checkIfBookAlreadyBorrowed(existingBookEntity, status);
 
-        if (!ValidationUtil.isStringEmpty(name)){
-            existingBookEntity.setName(name);
-        }
+        //only librarian can update this
+        if (role.equals(Constants.ROLE_LIBRARIAN)) {
+            if (existingBookEntity == null) {
+                throw new InvalidArgumentException();
+            }
 
-        if (!ValidationUtil.isStringEmpty(description)){
-            existingBookEntity.setDescription(description);
+            if (!ValidationUtil.isStringEmpty(name)) {
+                existingBookEntity.setName(name);
+            }
+
+            if (!ValidationUtil.isStringEmpty(description)) {
+                existingBookEntity.setDescription(description);
+            }
         }
 
         if (!ValidationUtil.isStringEmpty(status)){
             existingBookEntity.setStatus(status);
         }
 
-        return updateBookInDb(existingBookEntity);
+        UpdateBookResponse updateBookResponse = updateBookInDb(existingBookEntity);
+
+        if (status.length() > 0 && !bookOriginalStatus.equals(status)) {
+            updateTransactionInDb(existingBookEntity, status);
+        }
+
+        return updateBookResponse;
+    }
+
+    private void checkIfBookAlreadyBorrowed(BookEntity bookEntity, String status) throws BookNotAvailableException{
+        if (!status.equals(Constants.BookStatus.BORROWED.getType())) return;
+
+        if (!bookEntity.getStatus().equals(Constants.BookStatus.AVAILABLE.getType())){
+            throw new BookNotAvailableException();
+        }
+    }
+
+    private void checkIfUserHasAuthority(String role, String status) throws UnauthorisedException{
+        if (role.equals(Constants.ROLE_LIBRARIAN) ){
+            return;
+        } else if (role.equals(Constants.ROLE_MEMBER) &&
+                (status.equals(Constants.BookStatus.AVAILABLE.getType()) || status.equals(Constants.BookStatus.BORROWED.getType()))){
+            return;
+        }
+        throw new UnauthorisedException();
     }
 
     private UpdateBookResponse updateBookInDb(BookEntity existingBookEntity) {
@@ -126,6 +168,27 @@ public class BookServiceImpl implements BookService {
         return updateBookResponse;
     }
 
+    private void updateTransactionInDb(BookEntity bookEntity, String bookStatus) {
+        Calendar currentDateTime = Calendar.getInstance();
+        TransactionEntity transactionEntity = new TransactionEntity();
+        transactionEntity.setBookEntity(bookEntity);
+        transactionEntity.setUserEntity(userDao.findUserEntityByUserName(getCurrentUsername()));
+        transactionEntity.setStatus(mapBookStatusToTransactionStatus(bookStatus));
+        transactionEntity.setRecordCreateDate(new Timestamp(currentDateTime.getTime().getTime()));
+        transactionEntity.setRecordUpdateDate(new Timestamp(currentDateTime.getTime().getTime()));
+        transactionDao.save(transactionEntity);
+    }
+
+    private String mapBookStatusToTransactionStatus(String bookStatus){
+        if (bookStatus.equals(Constants.BookStatus.AVAILABLE.getType())){
+            return Constants.TransactionStatus.RETURNED.getType();
+        } else if (bookStatus.equals(Constants.BookStatus.BORROWED.getType())){
+            return Constants.TransactionStatus.BORROWED.getType();
+        } else {
+            return Constants.TransactionStatus.REMOVED.getType();
+        }
+    }
+
     private void insertTransaction(BookEntity existingBookEntity) {
         TransactionEntity transactionEntity = new TransactionEntity();
         Calendar currentDateTime = Calendar.getInstance();
@@ -139,5 +202,20 @@ public class BookServiceImpl implements BookService {
         } else {
             return "%" + input + "%";
         }
+    }
+
+    private String getCurrentUserRole(){
+        CustomUserDetail userDetail = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String role = "";
+        for (GrantedAuthority authority : userDetail.getAuthorities()) {
+            role = authority.getAuthority();
+            break;
+        }
+        return role;
+    }
+
+    private String getCurrentUsername(){
+        CustomUserDetail userDetail = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userDetail.getUsername();
     }
 }

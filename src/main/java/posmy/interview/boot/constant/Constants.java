@@ -61,4 +61,73 @@ public class Constants {
         }
     }
 
+    public enum TransactionStatus {
+        BORROWED("BORROWED"),
+        RETURNED("RETURNED"),
+        REMOVED("REMOVED");;
+
+        String type;
+
+        TransactionStatus(String type){
+            this.type = type;
+        }
+
+        public String getType() {
+            return type;
+        }
+    }
+
+    public enum UserStatus {
+        ACTIVATED("ACTIVATED"),
+        REMOVED("REMOVED");
+
+        String type;
+
+        UserStatus(String type){
+            this.type = type;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public static boolean isStatusValid(String type){
+            String result = "";
+            for (BookStatus status : BookStatus.values()) {
+                if (status.type.equals(type)){
+                    result = status.type;
+                    break;
+                }
+            }
+            return result.length() > 0;
+        }
+    }
+
+    public enum Role {
+        ROLE_LIBRARIAN("ROLE_LIBRARIAN"),
+        ROLE_MEMBER("ROLE_MEMBER"),
+        ROLE_ANONYMOUS("ROLE_ANONYMOUS");
+
+        String type;
+
+        Role(String type){
+            this.type = type;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public static boolean isRoleValid(String type){
+            String result = "";
+            for (Role status : Role.values()) {
+                if (status.type.equals(type)){
+                    result = status.type;
+                    break;
+                }
+            }
+            return result.length() > 0;
+        }
+    }
+
 }

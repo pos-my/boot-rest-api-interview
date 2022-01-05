@@ -1,5 +1,6 @@
 package posmy.interview.boot.service;
 
+import posmy.interview.boot.exception.BookNotAvailableException;
 import posmy.interview.boot.exception.InvalidArgumentException;
 import posmy.interview.boot.model.book.BookCreatedResponse;
 import posmy.interview.boot.model.book.BookResponse;
@@ -12,5 +13,5 @@ public interface BookService {
 
     BookCreatedResponse createBook(String name, String status, String description);
 
-    UpdateBookResponse updateBook(Integer id, String name, String description, String status) throws InvalidArgumentException;
+    UpdateBookResponse updateBook(Integer id, String name, String description, String status) throws InvalidArgumentException, BookNotAvailableException;
 }

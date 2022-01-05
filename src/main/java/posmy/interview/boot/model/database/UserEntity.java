@@ -12,8 +12,11 @@ public class UserEntity {
     @Column(name = "id")
     private int userId;
 
-    @Column(name = "name")
+    @Column(name = "username", nullable = false, unique = true)
     private String userName;
+
+    @Column(name = "full_name")
+    private String fullName;
 
     @Column(name = "role")
     private String userRole;
@@ -22,7 +25,7 @@ public class UserEntity {
     private String userPassword;
 
     @Column(name = "status")
-    private long status;
+    private String status;
 
     @Column(name = "record_create_date")
     private Timestamp recordCreateDate;
@@ -46,6 +49,14 @@ public class UserEntity {
         this.userName = userName;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public String getUserRole() {
         return userRole;
     }
@@ -62,11 +73,11 @@ public class UserEntity {
         this.userPassword = userPassword;
     }
 
-    public long getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(long status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

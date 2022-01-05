@@ -12,13 +12,13 @@ public class TransactionEntity {
     @Column(name = "id")
     private int transactionId;
 
-//    @OneToOne
-//    @JoinColumn(name = "book_id", referencedColumnName = "id")
-//    private BookEntity bookEntity;
-//
-//    @OneToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private UserEntity userEntity;
+    @OneToOne
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private BookEntity bookEntity;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity userEntity;
 
     @Column(name = "status")
     private String status;
@@ -37,21 +37,21 @@ public class TransactionEntity {
         this.transactionId = transactionId;
     }
 
-//    public BookEntity getBookEntity() {
-//        return bookEntity;
-//    }
-//
-//    public void setBookEntity(BookEntity bookEntity) {
-//        this.bookEntity = bookEntity;
-//    }
-//
-//    public UserEntity getUserEntity() {
-//        return userEntity;
-//    }
-//
-//    public void setUserEntity(UserEntity userEntity) {
-//        this.userEntity = userEntity;
-//    }
+    public BookEntity getBookEntity() {
+        return bookEntity;
+    }
+
+    public void setBookEntity(BookEntity bookEntity) {
+        this.bookEntity = bookEntity;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
 
     public String getStatus() {
         return status;
