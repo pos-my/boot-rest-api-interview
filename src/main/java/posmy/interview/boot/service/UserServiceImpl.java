@@ -93,21 +93,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public UpdateUserResponse updateUserRequest(UpdateUserRequest updateUserRequest){
         UserEntity userEntity = userDao.findUserEntityByUserId(updateUserRequest.getUserId());
-        checkIfUserHasAuthority(updateUserRequest.getUserId(), updateUserRequest.getStatus());
         if (userEntity == null){
             throw new InvalidArgumentException();
         }
+
+        checkIfUserHasAuthority(updateUserRequest.getUserId(), updateUserRequest.getStatus());
+
 
         if (!ValidationUtil.isStringEmpty(updateUserRequest.getFullName())){
             userEntity.setFullName(updateUserRequest.getFullName());
         }
 
-        if (!ValidationUtil.isStringEmpty(updateUserRequest.getStatus())){
-            userEntity.setStatus(updateUserRequest.getStatus());
+        if (!ValidationUtil.isStringEmpty(updateUserRequest.getRole())
+                && getCurrentUserRole().equals(Constants.ROLE_LIBRARIAN)){
+            userEntity.setUserRole(updateUserRequest.getRole());
         }
 
-        if (!ValidationUtil.isStringEmpty(updateUserRequest.getRole())){
-            userEntity.setUserRole(updateUserRequest.getRole());
+        if (!ValidationUtil.isStringEmpty(updateUserRequest.getStatus())){
+            userEntity.setStatus(updateUserRequest.getStatus());
         }
 
         return updateUserInDb(userEntity);
@@ -118,7 +121,7 @@ public class UserServiceImpl implements UserService {
         if (role.equals(Constants.ROLE_LIBRARIAN) ){
             return;
         } else if (role.equals(Constants.ROLE_MEMBER) &&
-                (status.equals(Constants.UserStatus.REMOVED.getType()))){
+                (status == null || status.equals(Constants.UserStatus.REMOVED.getType()))){
 
             //member role can only remove their own account
             UserEntity userEntity = userDao.findUserEntityByUserId(id);
