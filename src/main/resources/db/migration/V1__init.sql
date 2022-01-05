@@ -13,8 +13,9 @@ CREATE TABLE `book` (
 
 CREATE TABLE `user` (
    `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-   `name` varchar(255) DEFAULT NULL,
-   `role` bigint(20) DEFAULT NULL,
+   `full_name` varchar(255) DEFAULT NULL,
+   `username` varchar(255) DEFAULT NULL,
+   `role` varchar(255) DEFAULT NULL,
    `password` varchar(255) DEFAULT NULL,
    `status` varchar(255) DEFAULT NULL,
    `record_create_date` datetime DEFAULT NULL,
