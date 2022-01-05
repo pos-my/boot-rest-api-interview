@@ -53,6 +53,13 @@ class UserControllerTests {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(Constants.UserStatus.ACTIVATED.toString()));
 
+        registrationRequest = create2ndMemberRole();
+        mvc.perform(post("/users/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(Json.toString(registrationRequest)))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(Constants.UserStatus.ACTIVATED.toString()));
+
     }
 
     @Test
@@ -65,7 +72,7 @@ class UserControllerTests {
                         .queryParam("pageNumber", "1")
                 .with(httpBasic("admin","password123")))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.records", hasSize(2)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.records", hasSize(3)));
 
         //member
         mvc.perform(get("/users/")
@@ -90,15 +97,23 @@ class UserControllerTests {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fullName").value("Captain America"));
 
+        //Remove the user
         updateUserRequest = new UpdateUserRequest();
-        updateUserRequest.setUserId(2);
+        updateUserRequest.setUserId(3);
         updateUserRequest.setFullName("James Bond");
+        updateUserRequest.setStatus(Constants.UserStatus.REMOVED.getType());
         mvc.perform(put("/users/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(Json.toString(updateUserRequest))
                         .with(httpBasic("admin","password123")))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fullName").value("James Bond"));
+
+        mvc.perform(put("/users/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(Json.toString(updateUserRequest))
+                        .with(httpBasic("jack","password123")))
+                .andExpect(status().is4xxClientError());
     }
 
 
@@ -152,6 +167,15 @@ class UserControllerTests {
         RegistrationRequest registrationRequest = new RegistrationRequest();
         registrationRequest.setUsername("jackson");
         registrationRequest.setFullName("Jackson Wang");
+        registrationRequest.setPassword("password123");
+        registrationRequest.setRole(Constants.ROLE_MEMBER);
+        return registrationRequest;
+    }
+
+    private RegistrationRequest create2ndMemberRole(){
+        RegistrationRequest registrationRequest = new RegistrationRequest();
+        registrationRequest.setUsername("jack");
+        registrationRequest.setFullName("Jack Ma");
         registrationRequest.setPassword("password123");
         registrationRequest.setRole(Constants.ROLE_MEMBER);
         return registrationRequest;
