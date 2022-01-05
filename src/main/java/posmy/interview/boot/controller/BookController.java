@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import posmy.interview.boot.exception.InvalidArgumentException;
 import posmy.interview.boot.exception.InvalidPaginationException;
+import posmy.interview.boot.exception.UnauthorisedException;
 import posmy.interview.boot.model.book.*;
 import posmy.interview.boot.service.BookService;
 import posmy.interview.boot.util.Json;
@@ -60,6 +61,8 @@ public class BookController implements BookOperations {
             return updateBookResponse;
         } catch (InvalidArgumentException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid argument");
+        }  catch (UnauthorisedException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unauthorised access");
         }
     }
 

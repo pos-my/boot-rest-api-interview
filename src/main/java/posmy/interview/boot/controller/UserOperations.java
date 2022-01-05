@@ -9,7 +9,7 @@ public interface UserOperations {
     @PostMapping("/create")
     RegistrationResponse createUser(@RequestBody RegistrationRequest registrationRequest);
 
-    @PreAuthorize ("hasRole('ROLE_LIBRARIAN') || " + "hasRole('ROLE_MEMBER')")
+    @PreAuthorize ("hasRole('ROLE_LIBRARIAN')")
     @GetMapping("/")
     GetUserResponse getUser(@RequestParam("pageSize") Integer pageSize,
                             @RequestParam("pageNumber") Integer pageNumber,

@@ -14,7 +14,7 @@ public interface BookOperations {
                           @RequestParam(value = "description", required = false) String description,
                           @RequestParam(value = "status", required = false) String status);
 
-    @PreAuthorize ("hasRole('ROLE_LIBRARIAN') || " + "hasRole('ROLE_MEMBER')")
+    @PreAuthorize ("hasRole('ROLE_LIBRARIAN')")
     @PostMapping("/create")
     BookCreatedResponse addBooks(@RequestBody CreateBookRequest createBookRequest);
 
