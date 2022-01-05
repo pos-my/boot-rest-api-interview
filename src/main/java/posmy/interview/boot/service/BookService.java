@@ -11,7 +11,7 @@ public interface BookService {
                                          String name, String description,
                                          String status);
 
-    BookCreatedResponse createBook(String name, String status, String description);
+    BookCreatedResponse createBook(String name, String description, String status);
 
     UpdateBookResponse updateBook(Integer id, String name, String description, String status) throws InvalidArgumentException, BookNotAvailableException;
 }

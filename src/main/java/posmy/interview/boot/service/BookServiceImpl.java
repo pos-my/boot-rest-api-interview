@@ -23,6 +23,7 @@ import posmy.interview.boot.model.database.BookEntity;
 import posmy.interview.boot.model.database.TransactionEntity;
 import posmy.interview.boot.model.security.CustomUserDetail;
 import posmy.interview.boot.util.DateUtil;
+import posmy.interview.boot.util.Json;
 import posmy.interview.boot.util.PaginationUtil;
 import posmy.interview.boot.util.ValidationUtil;
 
@@ -80,7 +81,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookCreatedResponse createBook(String name, String status, String description){
+    public BookCreatedResponse createBook(String name, String description, String status){
         BookEntity createBookEntity = new BookEntity();
         Calendar currentDateTime = Calendar.getInstance();
         createBookEntity.setName(name);
@@ -103,17 +104,16 @@ public class BookServiceImpl implements BookService {
     @Override
     public UpdateBookResponse updateBook(Integer id, String name, String description, String status) throws InvalidArgumentException, UnauthorisedException{
         BookEntity existingBookEntity = bookDao.findByBookId(id);
+        if (existingBookEntity == null) {
+            throw new InvalidArgumentException();
+        }
+
         String bookOriginalStatus = existingBookEntity.getStatus();
         String role = getCurrentUserRole();
         checkIfUserHasAuthority(getCurrentUserRole(), status);
-        checkIfBookAlreadyBorrowed(existingBookEntity, status);
 
         //only librarian can update this
         if (role.equals(Constants.ROLE_LIBRARIAN)) {
-            if (existingBookEntity == null) {
-                throw new InvalidArgumentException();
-            }
-
             if (!ValidationUtil.isStringEmpty(name)) {
                 existingBookEntity.setName(name);
             }
@@ -121,6 +121,8 @@ public class BookServiceImpl implements BookService {
             if (!ValidationUtil.isStringEmpty(description)) {
                 existingBookEntity.setDescription(description);
             }
+        } else {
+            checkIfBookAlreadyBorrowed(existingBookEntity, status);
         }
 
         if (!ValidationUtil.isStringEmpty(status)){
