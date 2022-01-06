@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import posmy.interview.boot.constant.Constants;
 import posmy.interview.boot.database.UserDao;
 import posmy.interview.boot.exception.InvalidArgumentException;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     UserDao userDao;

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
+import org.springframework.stereotype.Service;
 import posmy.interview.boot.constant.Constants;
 import posmy.interview.boot.database.BookDao;
 import posmy.interview.boot.database.TransactionDao;
@@ -33,6 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class BookServiceImpl implements BookService {
 
     BookDao bookDao;

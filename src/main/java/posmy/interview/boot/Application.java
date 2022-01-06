@@ -22,13 +22,4 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    public BookService bookService(BookDao bookDao, TransactionDao transactionDao, UserDao userDao){
-        return new BookServiceImpl(bookDao, transactionDao, userDao);
-    }
-
-    @Bean
-    public UserService userService(UserDao userDao, PasswordEncoder passwordEncoder){
-        return new UserServiceImpl(userDao, passwordEncoder);
-    }
 }
