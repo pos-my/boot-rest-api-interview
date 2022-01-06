@@ -131,7 +131,7 @@ public class BookServiceImpl implements BookService {
 
         UpdateBookResponse updateBookResponse = updateBookInDb(existingBookEntity);
 
-        if (status.length() > 0 && !bookOriginalStatus.equals(status)) {
+        if (status != null && status.length() > 0 && !bookOriginalStatus.equals(status)) {
             updateTransactionInDb(existingBookEntity, status);
         }
 
