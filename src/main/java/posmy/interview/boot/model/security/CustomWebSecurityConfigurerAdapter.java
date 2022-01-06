@@ -43,9 +43,10 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
                 .antMatchers("/h2/**").permitAll() //for h2 database
                 .anyRequest().authenticated()
                 .and()
+                .csrf().ignoringAntMatchers("/h2/**")
+                .and()
                 .httpBasic();
 
-        http.csrf().disable(); // for h2
         http.headers().frameOptions().disable(); // for h2
 
         http.sessionManagement()
