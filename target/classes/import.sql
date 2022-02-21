@@ -1,0 +1,2 @@
+--Init a Librarian account. Username tan, Password tan
+INSERT INTO USERS(user_id, username, password, role, enabled) VALUES(1, 'tan', '$2a$12$4j0bmq8FBYH.sSTeh7hFI.55MExFZ.gZZ3zTZeUNgDNVmRYNzASyy', 'LIBRARIAN', 1);

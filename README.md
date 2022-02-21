@@ -43,3 +43,8 @@ Candidates can submit their assignments via:
 
 [1]: pom.xml
 [2]: https://en.wikipedia.org/wiki/SOLID
+
+## From Candidates
+This application implement with H2 Database. There is a librarian acc already init when startup.
+- Username: tan
+- Password: tan
