@@ -1,0 +1,411 @@
+{
+	"info": {
+		"_postman_id": "4e3e510b-be48-4b6c-bf51-031fd0c431e5",
+		"name": "GFK assessment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "zz",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZWFuIiwicm9sZXMiOlsiTElCUkFSSUFOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0Nzc5MzQxMn0.dV8x84ukDsqVRbcsQSoxhvfpKCLVJjxQNM8lo4tqQKQ",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/user/get-all-users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"get-all-users"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZWFuIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjQ3MTkxMTE3fQ.prONlNJXiZ7qRcsQIPpFRsvD7w0uA5C6nprEKwXf85A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/user/token/refresh",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"token",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Self remove account",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZW5zZW4iLCJyb2xlcyI6WyJST0xFX01FTUJFUiJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvbG9naW4iLCJleHAiOjE2NDcxOTM4MzJ9.r23Dtj6gRIC1PjN5ObxdvPz8J883IW-hGvHtfCHZa-A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/user/self-remove",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"self-remove"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove user",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXJyeSIsInJvbGVzIjpbIlJPTEVfTUVNQkVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0NzE5MzY2OX0.UBJcEpt3yAyYuNT68ZFYOaCV7fuvDn6yGGFTjk5myJE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/user/remove?username=jensen",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"remove"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "jensen"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6eiIsInJvbGVzIjpbIlJPTEVfTUVNQkVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0NzE5NDE4NH0.ETCoXO7C_uJUOu9n6HBEtPRH3yFWRDFjUu8cJmS9hnk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/user/get?username=jensen",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"get"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "jensen"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all books",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6eiIsInJvbGVzIjpbIk1FTUJFUiJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvbG9naW4iLCJleHAiOjE2NDc4Njk5NTZ9.Og2kiz3P2H6asjnr9RA2ZGWHX-lU_XlQPKXxv_4Z94U",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/book/get-all-books",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book",
+						"get-all-books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get book",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZWFuIiwicm9sZXMiOlsiTElCUkFSSUFOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0Nzg2OTcyNn0.aSN1znoXpgtJf3FK0dCUt6UXf20oBxrESolrYTTGsCM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/book/get?isbn=0-2098-4472-8",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book",
+						"get"
+					],
+					"query": [
+						{
+							"key": "isbn",
+							"value": "0-2098-4472-8"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save book",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZWFuIiwicm9sZXMiOlsiUk9MRV9MSUJSQVJJQU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjQ3NTI5ODgyfQ.6gD2PwSl9_NjuuBcQSCB61MZYC-gnCViAKlX178M0H0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 8,\r\n        \"title\": \"Men are from Mars Women are from Venus\",\r\n        \"author\": \"Emily Ng\",\r\n        \"status\": null,\r\n        \"borrower\": null,\r\n        \"language\": \"English\",\r\n        \"publicationYear\": 2018\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/book/save",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZWFuIiwicm9sZXMiOlsiUk9MRV9MSUJSQVJJQU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjQ3NTMzODc2fQ.7bYHo5YpGG2pRhKcl4LtcfWiFfo-HYIINf659jUdgv4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 10,\r\n    \"name\": \"Patrick\",\r\n    \"username\": \"pat\",\r\n    \"password\": \"$2a$10$wRlmNIjLw57SFFyCtqhbUuuIhHBQdmdiQxkjVEb/QyZW0TpIXAlCW\",\r\n    \"age\": 47,\r\n    \"roles\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"ROLE_LIBRARIAN\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/save",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrow book",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6eiIsInJvbGVzIjpbIlJPTEVfTUVNQkVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0NzUzOTE5OX0.deVWa1y07pTcjaX8CltdwwBJZUSDPLRjbkOxVH-zi1Y",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/book/borrow?isbn=0-9009-8552-6",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book",
+						"borrow"
+					],
+					"query": [
+						{
+							"key": "isbn",
+							"value": "0-9009-8552-6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove book",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZWFuIiwicm9sZXMiOlsiTElCUkFSSUFOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0Nzg3MDAyNX0.GW8EoPunzTfx5tapjIj9XiRu78YbsuUaNe09Bshh0gE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/book/remove?isbn=0-9009-8552-6",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book",
+						"remove"
+					],
+					"query": [
+						{
+							"key": "isbn",
+							"value": "0-9009-8552-6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Return book",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6eiIsInJvbGVzIjpbIlJPTEVfTUVNQkVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0NzUzNzkyM30.ule-RtBXMYqAhO4DfCKN4HO21QnncY-Joj-miug7WMw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/book/return?isbn=0-9009-8552-6",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book",
+						"return"
+					],
+					"query": [
+						{
+							"key": "isbn",
+							"value": "0-9009-8552-6"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
