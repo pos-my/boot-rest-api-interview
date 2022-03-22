@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -13,6 +14,9 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 
 @SpringBootTest
 class ApplicationTests {
@@ -32,6 +36,13 @@ class ApplicationTests {
     void contextLoads() throws Exception {
         mvc.perform(get("/"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("Librarian Sign In")
+    void signIn() throws Exception {
+        mvc.perform(formLogin("/login").user("SherlockHolmes").password("password"))
+                .andExpect(authenticated().withUsername("SherlockHolmes"));
     }
 
 }
