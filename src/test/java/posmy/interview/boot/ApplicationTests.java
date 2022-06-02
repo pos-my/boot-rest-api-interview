@@ -34,4 +34,12 @@ class ApplicationTests {
                 .andExpect(status().isUnauthorized());
     }
 
+    @Test
+    void testLibrarianAddBookPositive(){}
+
+    @Test
+    void testLibrarianAddBookNegative(){}
+
+    @Test
+    void testLibrarianRemoveBookPositive(){}
 }
