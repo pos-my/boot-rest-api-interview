@@ -11,8 +11,12 @@ import java.util.List;
 @RequestMapping("/bookManagement")
 public class BookManagementController {
 
+    private final BooksRepository booksRepository;
+
     @Autowired
-    private BooksRepository booksRepository;
+    public BookManagementController(BooksRepository booksRepository) {
+        this.booksRepository = booksRepository;
+    }
 
     @PostMapping("/book")
     public Books addBook(@RequestBody Books books){

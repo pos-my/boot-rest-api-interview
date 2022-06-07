@@ -10,9 +10,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/userManagement")
 public class UserManagementController {
+    private final MemberRepository memberRepository;
 
     @Autowired
-    private MemberRepository memberRepository;
+    public UserManagementController(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     @PostMapping("/user")
     public Member saveUser(@RequestBody Member member){

@@ -6,14 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Data
 @Entity
-public class Books {
+@Data
+public class BorrowActivity {
     @Id
     @GeneratedValue
     private Long id;
 
-    private String isdn;
-    private BookStatus status;
-    private String bookName;
+    private Long userId;
+    private Long bookId;
+    private BorrowStatus status;
 }
