@@ -13,4 +13,6 @@ public abstract class BaseUser {
     @Id
     @GeneratedValue
     private Long id;
+
+    private Role role;
 }
