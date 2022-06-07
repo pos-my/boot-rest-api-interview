@@ -1,5 +1,5 @@
 package posmy.interview.boot.model;
 
 public enum Role {
-    LIBRARIAN, MEMBER
+    ROLE_LIBRARIAN, ROLE_MEMBER
 }

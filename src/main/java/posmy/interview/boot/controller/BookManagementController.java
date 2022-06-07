@@ -25,7 +25,7 @@ public class BookManagementController {
 
     @GetMapping("/book/{id}")
     public Books getBook(@RequestParam("id") Long id){
-        return booksRepository.getReferenceById(id);
+        return booksRepository.findById(id).get();
     }
 
     @GetMapping("/book")
