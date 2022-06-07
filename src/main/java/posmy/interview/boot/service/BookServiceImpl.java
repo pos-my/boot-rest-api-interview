@@ -1,10 +1,12 @@
 package posmy.interview.boot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import posmy.interview.boot.model.*;
 import posmy.interview.boot.repository.BooksRepository;
 import posmy.interview.boot.repository.BorrowActivityRepository;
 
+@Service
 public class BookServiceImpl implements BookService {
 
     private final BooksRepository booksRepository;
