@@ -3,6 +3,7 @@ package posmy.interview.boot.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,16 +24,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/**").permitAll()
-//                .and().csrf().disable();
-        http
-                .httpBasic()
-                .and()
+        http.csrf().disable().httpBasic().and()
                 .authorizeRequests()
-                .anyRequest().authenticated()
-                .and().csrf().disable();
+                .antMatchers("/userManagement/user").access("hasRole('ROLE_LIBRARIAN')")
+                .antMatchers("/userManagement/user/all").access("hasRole('ROLE_LIBRARIAN')")
+                .antMatchers(HttpMethod.GET, "/bookManagement/book").access("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_MEMBER')")
+                .antMatchers(HttpMethod.GET, "/bookManagement/book/all").access("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_MEMBER')")
+                .antMatchers(HttpMethod.POST, "/bookManagement/book").access("hasRole('ROLE_LIBRARIAN')")
+                .antMatchers(HttpMethod.DELETE, "/bookManagement/book").access("hasRole('ROLE_LIBRARIAN')")
+                .antMatchers(HttpMethod.PUT, "/bookManagement/book").access("hasRole('ROLE_LIBRARIAN')")
+                .antMatchers("/borrow/book").access("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_MEMBER')")
+                .anyRequest().authenticated();
     }
 
     @Override

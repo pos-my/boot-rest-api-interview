@@ -27,7 +27,7 @@ public class UserManagementController {
         return memberRepository.save(member);
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/user")
     public Member getUser(@RequestParam("id") Long id){
         return memberRepository.findById(id).get();
     }

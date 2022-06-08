@@ -1,5 +1,7 @@
 package posmy.interview.boot.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,7 @@ import javax.annotation.PostConstruct;
 @Component
 public class InitializeStartup {
 
+    private final Logger log = LoggerFactory.getLogger(InitializeStartup.class);
     private final MemberRepository memberRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -25,6 +28,7 @@ public class InitializeStartup {
 
     @PostConstruct
     public void initLibrarian(){
+        log.info("init master librarian");
         Member masterLibrarian = new Member();
         masterLibrarian.setFirstName("zanget");
         masterLibrarian.setLastName("su");

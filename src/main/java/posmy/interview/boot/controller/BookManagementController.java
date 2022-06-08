@@ -23,12 +23,12 @@ public class BookManagementController {
         return booksRepository.save(books);
     }
 
-    @GetMapping("/book/{id}")
+    @GetMapping("/book")
     public Books getBook(@RequestParam("id") Long id){
         return booksRepository.findById(id).get();
     }
 
-    @GetMapping("/book")
+    @GetMapping("/book/all")
     public List<Books> getAllBook(){
         return booksRepository.findAll();
     }
@@ -38,7 +38,7 @@ public class BookManagementController {
         return booksRepository.save(books);
     }
 
-    @DeleteMapping("/book/{id}")
+    @DeleteMapping("/book")
     public void deleteBook(@RequestParam("id") Long id){
         booksRepository.deleteById(id);
     }
